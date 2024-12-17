@@ -2,7 +2,7 @@
 
 ### Issue Number
 
-[이슈넘버](https://github.com/honey-moa/honey-moa-server/issues/이슈넘버)
+#이슈넘버
 
 <!-- 내용 (필수) -->
 
@@ -20,7 +20,7 @@
 
 ### Related Issue Link
 
-1. [이슈넘버:설명](https://github.com/honey-moa/honey-moa-server/issues/이슈넘버)
+1. #이슈넘버
 
 <!-- 작업한 API (선택) -->
 
