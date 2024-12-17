@@ -1,0 +1,20 @@
+
+################
+# {commitType}/[${issueNumber}]: {내용} 의 형식으로 위에 작성
+# 최상단의 기본 template 은 [#{issueNumber}]/
+# 예 feat/[#1]: prepare-commit-msg
+
+# types
+################
+# deploy: 배포 관련 작업
+# auto: 자동화 작업
+# setup: 세팅 관련 작업
+# doc: 문서 작업
+# db: db 관련 작업
+# bugfix: 버그 수정 작업
+# feat: 새로운 기능 추가
+# modify: 코드 수정(기능상의 수정이 있는 경우)
+# refactor: 코드 수정(기능상의 수정이 없는 경우)
+# delete: 코드 삭제
+# test: 테스트코드 관련 작업
+################
