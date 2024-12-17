@@ -17,7 +17,7 @@ export class FindPostsQueryHandler
   ) {}
 
   execute(query: FindPostsQuery): Promise<Paginated<PostModel>> {
-    const { title, body, skip, take } = query;
+    const { title, body, skip, take, orderBy } = query;
 
     const where = {
       title,
@@ -29,6 +29,7 @@ export class FindPostsQueryHandler
         where,
         skip,
         take,
+        orderBy,
         include: {
           user: true,
         },
