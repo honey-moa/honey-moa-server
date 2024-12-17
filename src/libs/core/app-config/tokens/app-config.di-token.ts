@@ -1,0 +1,3 @@
+export const APP_CONFIG_SERVICE_DI_TOKEN = Symbol(
+  'APP_CONFIG_SERVICE_DI_TOKEN',
+);
