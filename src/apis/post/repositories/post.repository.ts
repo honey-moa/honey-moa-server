@@ -43,6 +43,7 @@ export class PostRepository implements PostRepositoryPort {
   }
 
   async create(entity: PostEntity): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { user, ...record } = this.mapper.toPersistence(entity);
 
     await this.txHost.tx.post.create({
@@ -53,6 +54,7 @@ export class PostRepository implements PostRepositoryPort {
   }
 
   async update(entity: PostEntity): Promise<PostEntity> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { user, ...record } = this.mapper.toPersistence(entity);
 
     const updatedRecord = await this.txHost.tx.post.update({

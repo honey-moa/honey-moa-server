@@ -57,6 +57,7 @@ export class PostMapper
   }
 
   toPersistence(entity: PostEntity): PostModel {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { user, postContent, ...props } = entity.getProps();
 
     const record: PostModel = {
