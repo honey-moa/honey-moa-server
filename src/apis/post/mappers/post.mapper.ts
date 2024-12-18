@@ -65,8 +65,6 @@ export class PostMapper
       ...postContent.unpack(),
     };
 
-    console.log(record);
-
     return postSchema.parse(record);
   }
 
