@@ -63,7 +63,9 @@ jobs:
 
           aws ssm get-parameters --name "appspec-app-prod" --with-decrypt | jq -r ".Parameters[0].Value" > appspec.yml
 
-          aws ssm get-parameters --name "afterInstall-app-prod" --with-decrypt | jq -r ".Parameters[0].Value" > afterInstall.sh
+          mkdir scripts
+
+          aws ssm get-parameters --name "afterInstall-app-prod" --with-decrypt | jq -r ".Parameters[0].Value" > ./scripts/afterInstall.sh
 
           aws ssm get-parameters --name "app-prod-docker-compose" --with-decrypt | jq -r ".Parameters[0].Value" > docker-compose.yaml
 
