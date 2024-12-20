@@ -18,6 +18,7 @@ async function bootstrap() {
 
   bootstrapService.setCors(app);
   bootstrapService.setLogger(app);
+  bootstrapService.setHealthCheckApi(app);
   bootstrapService.setPathPrefix(app);
   bootstrapService.setSwagger(app);
   bootstrapService.setInterceptors(app);
