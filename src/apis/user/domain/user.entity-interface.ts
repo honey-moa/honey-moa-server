@@ -18,7 +18,7 @@ export interface UserProps {
 export interface CreateUserProps {
   name: string;
   nickname: string;
-  mbti?: UserMbtiUnion;
+  mbti: UserMbtiUnion | null;
 
   loginCredential: LoginCredential;
 }

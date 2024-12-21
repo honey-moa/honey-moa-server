@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { USER_PASSWORD_REGEXP } from '@src/apis/user/types/user.constant';
-import { IsEmail, Length, Matches } from 'class-validator';
+import {
+  USER_PASSWORD_REGEXP,
+  UserMbti,
+} from '@src/apis/user/types/user.constant';
+import { UserMbtiUnion } from '@src/apis/user/types/user.type';
+import { IsEmail, IsEnum, Length, Matches } from 'class-validator';
 
 export class SignUpRequestBodyDto {
   @ApiProperty({
@@ -10,6 +14,14 @@ export class SignUpRequestBodyDto {
   })
   @Length(1, 20)
   name: string;
+
+  @ApiProperty({
+    description: '유저 닉네임',
+    minLength: 1,
+    maxLength: 20,
+  })
+  @Length(1, 20)
+  nickname: string;
 
   @ApiProperty({
     description: '유저 이메일',
@@ -30,4 +42,12 @@ export class SignUpRequestBodyDto {
   @Length(1, 255)
   @Matches(USER_PASSWORD_REGEXP)
   password: string;
+
+  @ApiProperty({
+    description: '유저 MBTI',
+    enum: UserMbti,
+  })
+  @Length(1, 255)
+  @IsEnum(UserMbti)
+  mbti: UserMbtiUnion;
 }

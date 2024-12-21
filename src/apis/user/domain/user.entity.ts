@@ -23,7 +23,6 @@ export class UserEntity extends AggregateRoot<UserProps> {
       ...create,
       role: UserRole.USER,
       isEmailVerified: false,
-      mbti: create.mbti ? create.mbti : null,
       deletedAt: null,
     };
 
