@@ -8,8 +8,8 @@ import type { UserRepositoryPort } from '@src/apis/user/repositories/user.reposi
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
-import type { AppJwtServicePort } from '@src/libs/jwt/services/app-jwt.service-port';
-import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/jwt/tokens/app-jwt.di-token';
+import type { AppJwtServicePort } from '@src/libs/app-jwt/services/app-jwt.service-port';
+import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/app-jwt/tokens/app-jwt.di-token';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler

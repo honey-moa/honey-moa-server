@@ -27,10 +27,9 @@ jobs:
             src/**
           FILES: |
             Dockerfile
-            docker-compose.prod.yaml
 
       - name: Configure AWS credentials
-        # if: env.GIT_DIFF
+        if: env.GIT_DIFF
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -38,7 +37,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        # if: env.GIT_DIFF
+        if: env.GIT_DIFF
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         with:
@@ -48,6 +47,7 @@ jobs:
           AWS_REGION: us-east-1
 
       - name: Build, tag, and push image to Amazon ECR
+        if: env.GIT_DIFF
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REGISTRY_ALIAS: ${{ secrets.ECR_REGISTRY_ALIAS }}
@@ -58,6 +58,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG
 
       - name: Upload to S3
+        if: env.GIT_DIFF
         run: |
           aws ssm get-parameters --name "app-prod-env" --with-decrypt | jq -r ".Parameters[0].Value" > .env
 
@@ -70,12 +71,13 @@ jobs:
           aws ssm get-parameters --name "app-prod-docker-compose" --with-decrypt | jq -r ".Parameters[0].Value" > docker-compose.yaml
 
           zip -r ./$GITHUB_SHA.zip ./scripts appspec.yml docker-compose.yaml .env
-          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME
+          aws s3 cp --region $AWS_REGION ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME
 
       - name: Deploy to EC2 with CodeDeploy
+        if: env.GIT_DIFF
         run: |
           aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --application-name $CODE_DEPLOY_APPLICATION_NAME \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --deployment-group-name $CODE_DEPLOY_DEPLOYMENT_GROUP_NAME \
           --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
