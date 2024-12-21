@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtModuleOptionsFactory } from '@src/libs/jwt/factories/jwt-module-options.factory';
-import { AppJwtService } from '@src/libs/jwt/services/app-jwt.service';
-import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/jwt/tokens/app-jwt.di-token';
+import { JwtModuleOptionsFactory } from '@src/libs/app-jwt/factories/jwt-module-options.factory';
+import { AppJwtService } from '@src/libs/app-jwt/services/app-jwt.service';
+import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/app-jwt/tokens/app-jwt.di-token';
 
 @Module({
   imports: [

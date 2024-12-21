@@ -6,7 +6,7 @@ import { UserMapper } from '@src/apis/user/mappers/user.mapper';
 import { FindOneUserQueryHandler } from '@src/apis/user/queries/find-one-user/find-one-user.query';
 import { UserRepository } from '@src/apis/user/repositories/user.repository';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
-import { AppJwtModule } from '@src/libs/jwt/app-jwt.module';
+import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
 
 const controllers = [UserController];
 
