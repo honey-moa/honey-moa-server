@@ -38,6 +38,12 @@ export class BootstrapService {
     app.useLogger(logger);
   }
 
+  setHealthCheckApi(app: INestApplication) {
+    app.use('/health', (_req, res) => {
+      res.status(200).send('ok');
+    });
+  }
+
   setPathPrefix(app: INestApplication) {
     app.setGlobalPrefix('api');
   }
