@@ -1,9 +1,5 @@
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import type {
-  CreateUserProps,
-  UpdateLoginCredentialProps,
-  UserProps,
-} from '@src/apis/user/domain/user.entity-interface';
+
 import { UserRole } from '@src/apis/user/types/user.constant';
 
 import { getTsid } from 'tsid-ts';
@@ -12,6 +8,11 @@ import { LoginCredential } from '@src/apis/user/domain/value-objects/login-crede
 import { config } from 'dotenv';
 import { UserLoginCredentialUpdatedDomainEvent } from '@src/apis/user/domain/events/user-login-credential-updated.event';
 import { UserCreatedDomainEvent } from '@src/apis/user/domain/events/user-created.event';
+import type {
+  UserProps,
+  CreateUserProps,
+  UpdateLoginCredentialProps,
+} from '@src/apis/user/domain/user.entity-interface';
 
 config();
 

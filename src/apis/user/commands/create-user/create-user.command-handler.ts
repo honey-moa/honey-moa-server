@@ -1,4 +1,3 @@
-import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@src/apis/user/commands/create-user/create-user.command';
@@ -10,6 +9,7 @@ import { HttpConflictException } from '@src/libs/exceptions/client-errors/except
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import type { AppJwtServicePort } from '@src/libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/app-jwt/tokens/app-jwt.di-token';
+import { Transactional } from '@nestjs-cls/transactional';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler

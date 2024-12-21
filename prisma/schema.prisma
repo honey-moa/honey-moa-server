@@ -22,7 +22,7 @@ model User {
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   posts                Post[]
-  UserEmailVerifyToken UserEmailVerifyToken[]
+  userEmailVerifyToken UserEmailVerifyToken?
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
@@ -30,9 +30,10 @@ model User {
 
 model UserEmailVerifyToken {
   id        BigInt   @id(map: "pk_user_email_verify_tokens")
-  userId    BigInt   @map("user_id") @db.BigInt()
+  userId    BigInt   @unique(map: "uq_user_email_verify_tokens_user_id") @map("user_id") @db.BigInt()
   token     String   @unique(map: "uq_user_email_verify_tokens_token") @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
   expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)

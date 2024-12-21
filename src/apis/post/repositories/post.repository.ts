@@ -1,7 +1,7 @@
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PostEntity } from '@src/apis/post/domain/post.entity';
 import { PostMapper } from '@src/apis/post/mappers/post.mapper';
 import { PostRepositoryPort } from '@src/apis/post/repositories/post.repository-port';
@@ -14,7 +14,7 @@ export class PostRepository implements PostRepositoryPort {
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
-    private readonly eventBus: EventBus,
+    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: PostMapper,
   ) {}
 
@@ -37,7 +37,7 @@ export class PostRepository implements PostRepositoryPort {
       where: { id: entity.id },
     });
 
-    await entity.publishEvents(this.eventBus);
+    await entity.publishEvents(this.eventEmitter);
 
     return result.id;
   }
@@ -50,7 +50,7 @@ export class PostRepository implements PostRepositoryPort {
       data: record,
     });
 
-    await entity.publishEvents(this.eventBus);
+    await entity.publishEvents(this.eventEmitter);
   }
 
   async update(entity: PostEntity): Promise<PostEntity> {

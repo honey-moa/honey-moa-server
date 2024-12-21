@@ -1,8 +1,10 @@
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserEmailVerifyTokenEntity } from '@src/apis/user/domain/user-email-verify-token/user-email-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
+import { UserEmailVerifyTokenMapper } from '@src/apis/user/mappers/user-email-verify-token.mapper';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { UserLoginTypeUnion } from '@src/apis/user/types/user.type';
@@ -15,8 +17,9 @@ export class UserRepository implements UserRepositoryPort {
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
-    private readonly eventBus: EventBus,
+    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: UserMapper,
+    private readonly userEmailVerifyTokenMapper: UserEmailVerifyTokenMapper,
   ) {}
 
   async findOneById(id: bigint): Promise<UserEntity | undefined> {
@@ -38,7 +41,7 @@ export class UserRepository implements UserRepositoryPort {
       where: { id: entity.id },
     });
 
-    await entity.publishEvents(this.eventBus);
+    await entity.publishEvents(this.eventEmitter);
 
     return result.id;
   }
@@ -50,7 +53,7 @@ export class UserRepository implements UserRepositoryPort {
       data: record,
     });
 
-    await entity.publishEvents(this.eventBus);
+    await entity.publishEvents(this.eventEmitter);
   }
 
   async update(entity: UserEntity): Promise<UserEntity> {
@@ -76,5 +79,15 @@ export class UserRepository implements UserRepositoryPort {
     });
 
     return existUser ? this.mapper.toEntity(existUser) : undefined;
+  }
+
+  async createUserEmailVerifyToken(
+    entity: UserEmailVerifyTokenEntity,
+  ): Promise<void> {
+    const record = this.userEmailVerifyTokenMapper.toPersistence(entity);
+
+    await this.txHost.tx.userEmailVerifyToken.create({
+      data: record,
+    });
   }
 }

@@ -10,7 +10,9 @@ CREATE TYPE "MbtiEnum" AS ENUM ('ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 
 -- AlterTable
 ALTER TABLE "users" ADD COLUMN     "is_email_verified" BOOLEAN NOT NULL DEFAULT false,
 ADD COLUMN     "mbti" "MbtiEnum",
-ADD COLUMN     "nickname" VARCHAR(20) NOT NULL;
+ADD COLUMN     "nickname" VARCHAR(20) NOT NULL DEFAULT 'temp';
+
+ALTER table "users" ALTER COLUMN "nickname" DROP DEFAULT;
 
 -- CreateTable
 CREATE TABLE "user_email_verify_tokens" (
@@ -18,10 +20,14 @@ CREATE TABLE "user_email_verify_tokens" (
     "user_id" BIGINT NOT NULL,
     "token" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "expires_at" TIMESTAMPTZ(6) NOT NULL,
 
     CONSTRAINT "pk_user_email_verify_tokens" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "uq_user_email_verify_tokens_user_id" ON "user_email_verify_tokens"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "uq_user_email_verify_tokens_token" ON "user_email_verify_tokens"("token");

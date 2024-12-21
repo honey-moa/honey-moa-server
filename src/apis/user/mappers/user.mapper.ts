@@ -1,4 +1,4 @@
-import { Mapper } from '@libs/ddd/mapper.interface';
+import type { Mapper } from '@libs/ddd/mapper.interface';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 import {
@@ -7,11 +7,11 @@ import {
   UserRole,
 } from '@src/apis/user/types/user.constant';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
-import { UserProps } from '@src/apis/user/domain/user.entity-interface';
-import { CreateEntityProps } from '@src/libs/ddd/entity.base';
+import type { CreateEntityProps } from '@src/libs/ddd/entity.base';
 import { UserResponseDto } from '@src/apis/user/dtos/response/user.response-dto';
 import { LoginCredential } from '@src/apis/user/domain/value-objects/login-credentials.value-object';
 import { baseSchema } from '@src/libs/db/base.schema';
+import type { UserProps } from '@src/apis/user/domain/user.entity-interface';
 
 export const userSchema = baseSchema.extend({
   name: z.string().min(1).max(20),
