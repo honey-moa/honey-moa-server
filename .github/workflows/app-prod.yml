@@ -27,7 +27,6 @@ jobs:
             src/**
           FILES: |
             Dockerfile
-            docker-compose.prod.yaml
 
       - name: Configure AWS credentials
         if: env.GIT_DIFF
@@ -72,13 +71,13 @@ jobs:
           aws ssm get-parameters --name "app-prod-docker-compose" --with-decrypt | jq -r ".Parameters[0].Value" > docker-compose.yaml
 
           zip -r ./$GITHUB_SHA.zip ./scripts appspec.yml docker-compose.yaml .env
-          aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME
+          aws s3 cp --region $AWS_REGION ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME
 
       - name: Deploy to EC2 with CodeDeploy
         if: env.GIT_DIFF
         run: |
           aws deploy create-deployment \
-          --application-name ${{ env.CODE_DEPLOY_APPLICATION_NAME }} \
+          --application-name $CODE_DEPLOY_APPLICATION_NAME \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
-          --deployment-group-name ${{ env.CODE_DEPLOY_DEPLOYMENT_GROUP_NAME }} \
+          --deployment-group-name $CODE_DEPLOY_DEPLOYMENT_GROUP_NAME \
           --s3-location bucket=$S3_BUCKET_NAME,key=$GITHUB_SHA.zip,bundleType=zip
