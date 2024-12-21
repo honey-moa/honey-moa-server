@@ -1,9 +1,15 @@
 import { LoginCredential } from '@src/apis/user/domain/value-objects/login-credentials.value-object';
-import type { UserRoleUnion } from '@src/apis/user/types/user.type';
+import type {
+  UserMbtiUnion,
+  UserRoleUnion,
+} from '@src/apis/user/types/user.type';
 
 export interface UserProps {
   name: string;
+  nickname: string;
   role: UserRoleUnion;
+  isEmailVerified: boolean;
+  mbti: UserMbtiUnion | null;
   deletedAt: Date | null;
 
   loginCredential: LoginCredential;
@@ -11,6 +17,8 @@ export interface UserProps {
 
 export interface CreateUserProps {
   name: string;
+  nickname: string;
+  mbti?: UserMbtiUnion;
 
   loginCredential: LoginCredential;
 }

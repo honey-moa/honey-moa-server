@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserLoginType, UserRole } from '@src/apis/user/types/user.constant';
+import {
+  UserLoginType,
+  UserMbti,
+  UserRole,
+} from '@src/apis/user/types/user.constant';
 import {
   UserLoginTypeUnion,
+  UserMbtiUnion,
   UserRoleUnion,
 } from '@src/apis/user/types/user.type';
 import {
@@ -10,13 +15,19 @@ import {
 } from '@src/libs/api/dtos/response/base.response-dto';
 
 export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
+  nickname: string;
   name: string;
   email: string;
   loginType: UserLoginTypeUnion;
   role: UserRoleUnion;
+  mbti: UserMbtiUnion | null;
+  isEmailVerified: boolean;
 }
 
-export class UserResponseDto extends BaseResponseDto {
+export class UserResponseDto
+  extends BaseResponseDto
+  implements Omit<CreateUserResponseDtoProps, keyof CreateBaseResponseDtoProps>
+{
   @ApiProperty({
     example: '홍길동',
     description: '유저 이름',
@@ -24,6 +35,14 @@ export class UserResponseDto extends BaseResponseDto {
     maxLength: 20,
   })
   readonly name: string;
+
+  @ApiProperty({
+    example: '홍길동이에오',
+    description: '유저 닉네임',
+    minLength: 1,
+    maxLength: 20,
+  })
+  readonly nickname: string;
 
   @ApiProperty({
     example: 'temp@temp.temp',
@@ -48,14 +67,32 @@ export class UserResponseDto extends BaseResponseDto {
   })
   readonly role: UserRoleUnion;
 
+  @ApiProperty({
+    example: 'ISTP',
+    description: '유저 MBTI',
+    enum: [Object.values(UserMbti)],
+    nullable: true,
+  })
+  readonly mbti: UserMbtiUnion | null;
+
+  @ApiProperty({
+    example: 'false',
+    description: '유저의 이메일 인증 여부',
+  })
+  readonly isEmailVerified: boolean;
+
   constructor(create: CreateUserResponseDtoProps) {
     super(create);
 
-    const { name, role, email, loginType } = create;
+    const { name, nickname, role, email, loginType, mbti, isEmailVerified } =
+      create;
 
     this.name = name;
+    this.nickname = nickname;
     this.email = email;
     this.loginType = loginType;
     this.role = role;
+    this.mbti = mbti;
+    this.isEmailVerified = isEmailVerified;
   }
 }

@@ -1,7 +1,11 @@
 import { Mapper } from '@libs/ddd/mapper.interface';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
-import { UserLoginType, UserRole } from '@src/apis/user/types/user.constant';
+import {
+  UserLoginType,
+  UserMbti,
+  UserRole,
+} from '@src/apis/user/types/user.constant';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import { UserProps } from '@src/apis/user/domain/user.entity-interface';
 import { CreateEntityProps } from '@src/libs/ddd/entity.base';
@@ -11,10 +15,13 @@ import { baseSchema } from '@src/libs/db/base.schema';
 
 export const userSchema = baseSchema.extend({
   name: z.string().min(1).max(20),
+  nickname: z.string().min(1).max(20),
   email: z.string().email(),
   password: z.string().min(8),
-  loginType: z.enum([UserLoginType.EMAIL]),
-  role: z.enum([UserRole.ADMIN, UserRole.USER]),
+  loginType: z.nativeEnum(UserLoginType),
+  role: z.nativeEnum(UserRole),
+  isEmailVerified: z.boolean(),
+  mbti: z.nativeEnum(UserMbti).nullable(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -32,7 +39,10 @@ export class UserMapper
       id: record.id,
       props: {
         name: record.name,
+        nickname: record.nickname,
         role: record.role,
+        mbti: record.mbti,
+        isEmailVerified: record.isEmailVerified,
         deletedAt: record.deletedAt,
 
         loginCredential: new LoginCredential({
