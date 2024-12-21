@@ -56,21 +56,21 @@ export class UserResponseDto
   @ApiProperty({
     example: 'email',
     description: '유저 로그인 타입',
-    enum: [Object.values(UserLoginType)],
+    enum: UserLoginType,
   })
   readonly loginType: UserLoginTypeUnion;
 
   @ApiProperty({
     example: 'user',
     description: '유저 역할',
-    enum: [Object.values(UserRole)],
+    enum: UserRole,
   })
   readonly role: UserRoleUnion;
 
   @ApiProperty({
     example: 'ISTP',
     description: '유저 MBTI',
-    enum: [Object.values(UserMbti)],
+    enum: UserMbti,
     nullable: true,
   })
   readonly mbti: UserMbtiUnion | null;
