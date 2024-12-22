@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { GenerateAccessTokenCommand } from '@src/apis/auth/commands/generate-access-token/generate-access-token.command';
+import { GenerateAccessTokenCommand } from '@src/apis/token/commands/generate-access-token/generate-access-token.command';
 import { AppJwtServicePort } from '@src/libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/app-jwt/tokens/app-jwt.di-token';
 

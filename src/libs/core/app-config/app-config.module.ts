@@ -21,8 +21,16 @@ import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-con
          * @todo dns 적용하면 default 제거 및 required 로 변경
          */
         [ENV_KEY.DOMAIN]: Joi.string().default('http://localhost:3000'),
+
         [ENV_KEY.HASH_ROUND]: Joi.number().required(),
+
         [ENV_KEY.JWT_SECRET]: Joi.string().required(),
+
+        [ENV_KEY.DATABASE_URL]: Joi.string().required(),
+
+        [ENV_KEY.EMAIL_SERVICE]: Joi.string().required(),
+        [ENV_KEY.EMAIL_AUTH_USER]: Joi.string().required(),
+        [ENV_KEY.EMAIL_AUTH_PASSWORD]: Joi.string().required(),
       }),
     }),
   ],

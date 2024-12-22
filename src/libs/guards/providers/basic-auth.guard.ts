@@ -8,7 +8,7 @@ import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { UserLoginType } from '@src/apis/user/types/user.constant';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { AUTH_ERROR_CODE } from '@src/libs/exceptions/types/errors/auth/auth-error-code.constant';
+import { TOKEN_ERROR_CODE } from '@src/libs/exceptions/types/errors/token/token-error-code.constant';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 
 @Injectable()
@@ -94,7 +94,7 @@ export class BasicTokenGuard implements CanActivate {
 
     if (!existingUser) {
       throw new HttpUnauthorizedException({
-        code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
       });
     }
 
@@ -108,7 +108,7 @@ export class BasicTokenGuard implements CanActivate {
 
     if (!isValidPassword) {
       throw new HttpUnauthorizedException({
-        code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
       });
     }
 

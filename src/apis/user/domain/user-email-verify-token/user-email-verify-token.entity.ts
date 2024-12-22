@@ -4,11 +4,8 @@ import type {
 } from '@src/apis/user/domain/user-email-verify-token/user-email-verify-token.entity-interface';
 
 import { getTsid } from 'tsid-ts';
-import { config } from 'dotenv';
 import { randomUUID } from 'crypto';
 import { Entity } from '@src/libs/ddd/entity.base';
-
-config();
 
 export class UserEmailVerifyTokenEntity extends Entity<UserEmailVerifyTokenProps> {
   static create(

@@ -4,9 +4,10 @@ import {
   UserMbti,
 } from '@src/apis/user/types/user.constant';
 import { UserMbtiUnion } from '@src/apis/user/types/user.type';
+import { IsNullable } from '@src/libs/api/decorators/is-nullable.decorator';
 import { IsEmail, IsEnum, Length, Matches } from 'class-validator';
 
-export class SignUpRequestBodyDto {
+export class CreateUserRequestBodyDto {
   @ApiProperty({
     description: '유저 이름',
     minLength: 1,
@@ -39,15 +40,15 @@ export class SignUpRequestBodyDto {
     maxLength: 255,
     pattern: `${USER_PASSWORD_REGEXP}`,
   })
-  @Length(1, 255)
   @Matches(USER_PASSWORD_REGEXP)
   password: string;
 
   @ApiProperty({
     description: '유저 MBTI',
     enum: UserMbti,
+    nullable: true,
   })
-  @Length(1, 255)
+  @IsNullable()
   @IsEnum(UserMbti)
-  mbti: UserMbtiUnion;
+  mbti: UserMbtiUnion | null;
 }
