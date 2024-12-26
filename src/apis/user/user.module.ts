@@ -9,6 +9,7 @@ import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
 import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/application/event-handlers/create-user-email-verify-token.domain-event-handler';
 import { UserEmailVerifyTokenMapper } from '@src/apis/user/mappers/user-email-verify-token.mapper';
+import { EmailModule } from '@src/libs/email/email.module';
 
 const controllers = [UserController];
 
@@ -27,7 +28,7 @@ const repositories: Provider[] = [
 const mappers: Provider[] = [UserMapper, UserEmailVerifyTokenMapper];
 
 @Module({
-  imports: [AppJwtModule],
+  imports: [AppJwtModule, EmailModule],
   controllers: [...controllers],
   providers: [
     ...mappers,

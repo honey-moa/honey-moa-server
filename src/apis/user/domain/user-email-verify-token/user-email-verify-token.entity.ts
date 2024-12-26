@@ -31,5 +31,9 @@ export class UserEmailVerifyTokenEntity extends Entity<UserEmailVerifyTokenProps
     return userEmailVerifyToken;
   }
 
+  get token() {
+    return this.props.token;
+  }
+
   public validate(): void {}
 }
