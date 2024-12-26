@@ -44,6 +44,7 @@ export class Command {
         code: COMMON_ERROR_CODE.SERVER_ERROR,
       });
     }
+
     const ctx = RequestContextService.getContext();
     this.id = props.id || getTsid().toBigInt();
     this.metadata = {

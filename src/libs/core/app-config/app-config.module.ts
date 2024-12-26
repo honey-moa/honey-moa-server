@@ -28,7 +28,8 @@ import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-con
 
         [ENV_KEY.DATABASE_URL]: Joi.string().required(),
 
-        [ENV_KEY.EMAIL_SERVICE]: Joi.string().required(),
+        [ENV_KEY.EMAIL_HOST]: Joi.string().required(),
+        [ENV_KEY.EMAIL_PORT]: Joi.number().required(),
         [ENV_KEY.EMAIL_AUTH_USER]: Joi.string().required(),
         [ENV_KEY.EMAIL_AUTH_PASSWORD]: Joi.string().required(),
       }),
