@@ -15,7 +15,7 @@ interface ExceptionError {
 }
 
 interface LogInfo {
-  ctx: string;
+  ctx?: string;
   stack?: any;
   request: Partial<Request> & { user?: Record<string, any> };
   response: Partial<Omit<Response, 'body'>> & { body?: Record<any, any> };

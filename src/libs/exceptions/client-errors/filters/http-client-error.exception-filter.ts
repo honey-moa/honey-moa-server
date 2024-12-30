@@ -33,6 +33,7 @@ export class HttpClientErrorExceptionFilter
   catch(exception: ClientErrorException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
     const statusCode = exception.getStatus();
     const exceptionError = exception.getResponse();
@@ -41,6 +42,14 @@ export class HttpClientErrorExceptionFilter
       statusCode,
       exceptionError,
     );
+
+    this.httpExceptionService.printLog({
+      stack: exception.stack,
+      request,
+      response: {
+        body: responseJson,
+      },
+    });
 
     response.status(statusCode).json(responseJson);
   }
