@@ -1,6 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
 import { CreateUserCommand } from '@src/apis/user/commands/create-user/create-user.command';
 import { ApiUser } from '@src/apis/user/controllers/user.swagger';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
@@ -15,6 +24,7 @@ import { GuardType } from '@src/libs/guards/types/guard.constant';
 import { CreateUserRequestBodyDto } from '@src/apis/user/dtos/request/create-user.request-body-dto';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
+import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-email/verify-user-email.command';
 
 @ApiTags('User')
 @Controller(routesV1.version)
@@ -49,12 +59,26 @@ export class UserController {
   })
   @Get(routesV1.user.findOne)
   async findOne(
-    @Param('id', ParsePositiveBigIntPipe) id: bigint,
+    @Param('id', ParsePositiveBigIntPipe) id: string,
   ): Promise<UserResponseDto> {
-    const query = new FindOneUserQuery({ id });
+    const query = new FindOneUserQuery({ id: BigInt(id) });
 
     const user: UserEntity = await this.queryBus.execute(query);
 
     return this.mapper.toResponseDto(user);
+  }
+
+  @SetGuardType(GuardType.PUBLIC)
+  @ApiExcludeEndpoint()
+  @Put(routesV1.user.verifyEmail)
+  async verifyEmail(
+    @Param('id', ParsePositiveBigIntPipe) id: string,
+    @Query('token', ParseUUIDPipe) token: string,
+  ): Promise<string> {
+    const command = new VerifyUserEmailCommand({ userId: BigInt(id), token });
+
+    await this.commandBus.execute(command);
+
+    return '인증 완료';
   }
 }

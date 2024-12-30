@@ -10,10 +10,14 @@ import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
 import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/application/event-handlers/create-user-email-verify-token.domain-event-handler';
 import { UserEmailVerifyTokenMapper } from '@src/apis/user/mappers/user-email-verify-token.mapper';
 import { EmailModule } from '@src/libs/email/email.module';
+import { VerifyUserEmailCommandHandler } from '@src/apis/user/commands/verify-user-email/verify-user-email.command-handler';
 
 const controllers = [UserController];
 
-const commandHandlers: Provider[] = [CreateUserCommandHandler];
+const commandHandlers: Provider[] = [
+  CreateUserCommandHandler,
+  VerifyUserEmailCommandHandler,
+];
 
 const queryHandlers: Provider[] = [FindOneUserQueryHandler];
 

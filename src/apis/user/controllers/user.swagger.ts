@@ -19,7 +19,7 @@ import {
   ApiOperationOptionsWithSummary,
 } from '@src/libs/types/type';
 
-export const ApiUser: ApiOperator<keyof UserController> = {
+export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
   Create: (
     apiOperationOptions: ApiOperationOptionsWithSummary,
   ): MethodDecorator => {

@@ -14,6 +14,7 @@ BigInt.prototype.toJSON = function () {
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   const bootstrapService = app.get<BootstrapService>(BootstrapService);
 
   bootstrapService.setCors(app);
@@ -21,6 +22,7 @@ async function bootstrap() {
   bootstrapService.setHealthCheckApi(app);
   bootstrapService.setPathPrefix(app);
   bootstrapService.setSwagger(app);
+  bootstrapService.setMiddleware(app);
   bootstrapService.setInterceptors(app);
   bootstrapService.setPipe(app);
   bootstrapService.setExceptionFilters(app);

@@ -7,6 +7,7 @@ import { Key } from '@src/libs/core/app-config/types/app-config.type';
 import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { EmailServicePort } from '@src/libs/email/services/email.service-port';
+import { routesV1 } from '@src/configs/app.route';
 
 @Injectable()
 export class EmailService implements EmailServicePort {
@@ -32,14 +33,15 @@ export class EmailService implements EmailServicePort {
     userId: AggregateID,
     token: string,
   ): Promise<void> {
-    const url = `${this.appConfigService.get<string>(ENV_KEY.DOMAIN)}/users/${userId}/is-email-verified?token=${token}`;
+    const url = `${this.appConfigService.get<string>(ENV_KEY.DOMAIN)}/api/${routesV1.version}/users/${userId}/is-email-verified?token=${token}`;
 
     return this.transporter.sendMail({
       to: email,
       subject: '꿀모아 가입 인증 메일',
       html: `
             가입확인 버튼을 누르시면 가입 인증이 완료됩니다.<br/>
-            <form action="${url}" method="PUT">
+            <form action="${url}" method="POST" enctype="application/x-www-form-urlencoded">
+                <input type="hidden" name="_method" value="PUT"/>
                 <button>가입확인</button>
             </form>
         `,

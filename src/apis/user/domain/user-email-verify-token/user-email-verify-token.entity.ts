@@ -35,5 +35,13 @@ export class UserEmailVerifyTokenEntity extends Entity<UserEmailVerifyTokenProps
     return this.props.token;
   }
 
+  get userId() {
+    return this.props.userId;
+  }
+
+  isExpired(): boolean {
+    return this.props.expiresAt < new Date();
+  }
+
   public validate(): void {}
 }

@@ -90,4 +90,19 @@ export class UserRepository implements UserRepositoryPort {
       data: record,
     });
   }
+
+  async findOneUserWithUserEmailVerifyTokenById(
+    userId: AggregateID,
+  ): Promise<UserEntity | undefined> {
+    const record = await this.txHost.tx.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        userEmailVerifyToken: true,
+      },
+    });
+
+    return record ? this.mapper.toEntity(record) : undefined;
+  }
 }
