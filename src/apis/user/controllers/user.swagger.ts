@@ -103,6 +103,7 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
       ]),
       HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
         USER_ERROR_CODE.ALREADY_VERIFIED_EMAIL,
+        USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
       ]),
       HttpInternalServerErrorException.swaggerBuilder(
         HttpStatus.INTERNAL_SERVER_ERROR,
