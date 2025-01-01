@@ -55,7 +55,7 @@ export class HttpExceptionService {
         method: request.method,
         url: request.url,
         body: request.body,
-        currentUser: request.user,
+        currentUser: request.user?.id,
       },
       response: {
         body: Object.assign({}, response.body),

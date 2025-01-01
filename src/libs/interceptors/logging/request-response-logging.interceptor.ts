@@ -36,7 +36,7 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
             method: method,
             url: originalUrl,
             body: request.body,
-            currentUser: request.user,
+            currentUser: request.user?.id,
             userAgent,
             ip,
           },
