@@ -14,7 +14,7 @@ export const userEmailVerifyTokenSchema = baseSchema
     expiresAt: z.date(),
   })
   .superRefine(({ createdAt, expiresAt }, ctx) => {
-    if (expiresAt.getTime() !== createdAt.getTime() + 60 * 60 * 1000) {
+    if (expiresAt.getTime() < createdAt.getTime() + 60 * 60 * 1000) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'expiresAt must be 1 hour greater than createdAt.',
@@ -45,6 +45,7 @@ export class UserEmailVerifyTokenMapper
           expiresAt: record.expiresAt,
         },
         createdAt: record.createdAt,
+        updatedAt: record.updatedAt,
       };
 
     return new UserEmailVerifyTokenEntity(userEmailVerifyTokenProps);

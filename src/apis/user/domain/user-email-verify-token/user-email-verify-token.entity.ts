@@ -6,6 +6,8 @@ import type {
 import { getTsid } from 'tsid-ts';
 import { randomUUID } from 'crypto';
 import { Entity } from '@src/libs/ddd/entity.base';
+import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
+import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 
 export class UserEmailVerifyTokenEntity extends Entity<UserEmailVerifyTokenProps> {
   static create(
@@ -41,6 +43,21 @@ export class UserEmailVerifyTokenEntity extends Entity<UserEmailVerifyTokenProps
 
   isExpired(): boolean {
     return this.props.expiresAt < new Date();
+  }
+
+  generateNewVerificationToken() {
+    const nowTime = new Date().getTime();
+
+    const anHour = 60 * 60 * 1000;
+
+    if (nowTime < this.updatedAt.getTime() + anHour) {
+      throw new HttpConflictException({
+        code: USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
+      });
+    }
+
+    this.props.token = randomUUID();
+    this.props.expiresAt = new Date(nowTime + anHour);
   }
 
   public validate(): void {}

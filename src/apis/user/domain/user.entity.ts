@@ -119,5 +119,9 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return this.props.isEmailVerified;
   }
 
+  get email() {
+    return this.props.loginCredential.email;
+  }
+
   public validate(): void {}
 }

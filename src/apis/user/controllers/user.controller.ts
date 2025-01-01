@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseUUIDPipe,
   Post,
@@ -25,6 +27,8 @@ import { CreateUserRequestBodyDto } from '@src/apis/user/dtos/request/create-use
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-email/verify-user-email.command';
+import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
+import { SendVerificationEmailCommand } from '@src/apis/user/commands/send-verification-email/send-verification-email.command';
 
 @ApiTags('User')
 @Controller(routesV1.version)
@@ -66,6 +70,17 @@ export class UserController {
     const user: UserEntity = await this.queryBus.execute(query);
 
     return this.mapper.toResponseDto(user);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiUser.SendVerificationEmail({ summary: '유저 인증 이메일 전송 API' })
+  @Post(routesV1.user.sendVerificationEmail)
+  async sendVerificationEmail(@GetUserId() userId: AggregateID): Promise<void> {
+    const command = new SendVerificationEmailCommand({
+      userId,
+    });
+
+    await this.commandBus.execute(command);
   }
 
   @SetGuardType(GuardType.PUBLIC)

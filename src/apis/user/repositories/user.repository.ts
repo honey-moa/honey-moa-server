@@ -91,6 +91,19 @@ export class UserRepository implements UserRepositoryPort {
     });
   }
 
+  async updateUserEmailVerifyToken(
+    entity: UserEmailVerifyTokenEntity,
+  ): Promise<void> {
+    const record = this.userEmailVerifyTokenMapper.toPersistence(entity);
+
+    await this.txHost.tx.userEmailVerifyToken.update({
+      where: {
+        id: record.id,
+      },
+      data: record,
+    });
+  }
+
   async findOneUserWithUserEmailVerifyTokenById(
     userId: AggregateID,
   ): Promise<UserEntity | undefined> {

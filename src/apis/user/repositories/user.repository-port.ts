@@ -12,6 +12,8 @@ export interface UserRepositoryPort extends RepositoryPort<UserEntity> {
 
   createUserEmailVerifyToken(entity: UserEmailVerifyTokenEntity): Promise<void>;
 
+  updateUserEmailVerifyToken(entity: UserEmailVerifyTokenEntity): Promise<void>;
+
   findOneUserWithUserEmailVerifyTokenById(
     userId: AggregateID,
   ): Promise<UserEntity | undefined>;

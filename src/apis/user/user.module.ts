@@ -11,12 +11,14 @@ import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/app
 import { UserEmailVerifyTokenMapper } from '@src/apis/user/mappers/user-email-verify-token.mapper';
 import { EmailModule } from '@src/libs/email/email.module';
 import { VerifyUserEmailCommandHandler } from '@src/apis/user/commands/verify-user-email/verify-user-email.command-handler';
+import { SendVerificationEmailCommandHandler } from '@src/apis/user/commands/send-verification-email/send-verification-email.command-handler';
 
 const controllers = [UserController];
 
 const commandHandlers: Provider[] = [
   CreateUserCommandHandler,
   VerifyUserEmailCommandHandler,
+  SendVerificationEmailCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [FindOneUserQueryHandler];

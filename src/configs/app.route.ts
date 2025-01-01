@@ -21,6 +21,7 @@ export const routesV1 = {
     create: userRoot,
     findOne: `${userRoot}/:id`,
     verifyEmail: `${userRoot}/:id/is-email-verified`,
+    sendVerificationEmail: `${userRoot}/me/user-email-verify-tokens`,
   } as const,
 
   token: {
