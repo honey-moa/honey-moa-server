@@ -18,7 +18,7 @@ model User {
   isEmailVerified Boolean       @default(false) @map("is_email_verified") @db.Boolean
   mbti            MbtiEnum?
   createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   posts                Post[]
@@ -33,7 +33,7 @@ model UserEmailVerifyToken {
   userId    BigInt   @unique(map: "uq_user_email_verify_tokens_user_id") @map("user_id") @db.BigInt()
   token     String   @unique(map: "uq_user_email_verify_tokens_token") @db.Uuid
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
   expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,7 +47,7 @@ model Post {
   title     String    @db.VarChar(255)
   body      String    @db.Text
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
