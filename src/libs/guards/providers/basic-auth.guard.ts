@@ -8,8 +8,9 @@ import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { UserLoginType } from '@src/apis/user/types/user.constant';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { AUTH_ERROR_CODE } from '@src/libs/exceptions/types/errors/auth/auth-error-code.constant';
+import { TOKEN_ERROR_CODE } from '@src/libs/exceptions/types/errors/token/token-error-code.constant';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { isNil } from '@src/libs/utils/util';
 
 @Injectable()
 export class BasicTokenGuard implements CanActivate {
@@ -81,7 +82,7 @@ export class BasicTokenGuard implements CanActivate {
     };
   }
 
-  async authenticateUser(user: { email: string; password: string }) {
+  private async authenticateUser(user: { email: string; password: string }) {
     /**
      * 1. 사용자가 존재하는지 확인 (email)
      * 2. 비밀번호가 맞는지 확인
@@ -92,9 +93,9 @@ export class BasicTokenGuard implements CanActivate {
       UserLoginType.EMAIL,
     );
 
-    if (!existingUser) {
+    if (isNil(existingUser)) {
       throw new HttpUnauthorizedException({
-        code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
       });
     }
 
@@ -108,7 +109,7 @@ export class BasicTokenGuard implements CanActivate {
 
     if (!isValidPassword) {
       throw new HttpUnauthorizedException({
-        code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
       });
     }
 

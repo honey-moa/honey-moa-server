@@ -8,20 +8,36 @@ datasource db {
 }
 
 model User {
-  id        BigInt        @id(map: "pk_users")
-  name      String        @db.VarChar(20)
-  email     String        @db.VarChar(255)
-  password  String        @db.VarChar(255)
-  loginType LoginTypeEnum @map("login_type")
-  role      UserRoleEnum  @default(user)
-  createdAt DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
-  deletedAt DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  id              BigInt        @id(map: "pk_users")
+  nickname        String        @db.VarChar(20)
+  email           String        @db.VarChar(255)
+  password        String        @db.VarChar(255)
+  loginType       LoginTypeEnum @map("login_type")
+  role            UserRoleEnum  @default(user)
+  isEmailVerified Boolean       @default(false) @map("is_email_verified") @db.Boolean
+  mbti            MbtiEnum?
+  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  posts Post[]
+  posts                Post[]
+  userEmailVerifyToken UserEmailVerifyToken?
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
+}
+
+model UserEmailVerifyToken {
+  id        BigInt   @id(map: "pk_user_email_verify_tokens")
+  userId    BigInt   @unique(map: "uq_user_email_verify_tokens_user_id") @map("user_id") @db.BigInt()
+  token     String   @unique(map: "uq_user_email_verify_tokens_token") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_email_verify_tokens")
 }
 
 model Post {
@@ -30,7 +46,7 @@ model Post {
   title     String    @db.VarChar(255)
   body      String    @db.Text
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -45,4 +61,23 @@ enum UserRoleEnum {
 
 enum LoginTypeEnum {
   email
+}
+
+enum MbtiEnum {
+  ISTJ
+  ISFJ
+  INFJ
+  INTJ
+  ISTP
+  ISFP
+  INFP
+  INTP
+  ESTP
+  ESFP
+  ENFP
+  ENTP
+  ESTJ
+  ESFJ
+  ENFJ
+  ENTJ
 }

@@ -12,7 +12,7 @@ import { routesV1 } from '@src/configs/app.route';
 import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@src/libs/ddd/entity.base';
-import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decroator';
+import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@src/libs/guards/types/guard.constant';
 import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { PaginationBy } from '@src/libs/interceptors/pagination/types/pagination-interceptor.enum';

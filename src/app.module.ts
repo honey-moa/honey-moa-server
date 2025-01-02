@@ -10,6 +10,7 @@ import { PrismaService } from '@src/libs/core/prisma/services/prisma.service';
 import { ApisModule } from '@src/apis/apis.module';
 import { RequestContextModule } from 'nestjs-request-context';
 import { CqrsModule } from '@nestjs/cqrs';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CqrsModule } from '@nestjs/cqrs';
       },
     }),
     CqrsModule.forRoot(),
+    EventEmitterModule.forRoot(),
 
     LibsModule,
     ApisModule,

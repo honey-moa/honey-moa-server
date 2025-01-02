@@ -22,6 +22,7 @@ export class HttpPathNotFoundExceptionFilter
   catch(exception: NotFoundException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
     const statusCode = exception.getStatus();
     const exceptionError = {
@@ -32,6 +33,14 @@ export class HttpPathNotFoundExceptionFilter
       statusCode,
       exceptionError,
     );
+
+    this.httpExceptionService.printLog({
+      stack: exception.stack,
+      request,
+      response: {
+        body: responseJson,
+      },
+    });
 
     response.status(statusCode).json(responseJson);
   }

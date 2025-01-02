@@ -7,27 +7,41 @@ import { FindOneUserQueryHandler } from '@src/apis/user/queries/find-one-user/fi
 import { UserRepository } from '@src/apis/user/repositories/user.repository';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
+import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/application/event-handlers/create-user-email-verify-token.domain-event-handler';
+import { UserEmailVerifyTokenMapper } from '@src/apis/user/mappers/user-email-verify-token.mapper';
+import { EmailModule } from '@src/libs/email/email.module';
+import { VerifyUserEmailCommandHandler } from '@src/apis/user/commands/verify-user-email/verify-user-email.command-handler';
+import { SendVerificationEmailCommandHandler } from '@src/apis/user/commands/send-verification-email/send-verification-email.command-handler';
 
 const controllers = [UserController];
 
-const commandHandlers: Provider[] = [CreateUserCommandHandler];
+const commandHandlers: Provider[] = [
+  CreateUserCommandHandler,
+  VerifyUserEmailCommandHandler,
+  SendVerificationEmailCommandHandler,
+];
 
 const queryHandlers: Provider[] = [FindOneUserQueryHandler];
+
+const eventHandlers: Provider[] = [
+  CreateUserEmailVerifyTokenDomainEventHandler,
+];
 
 const repositories: Provider[] = [
   { provide: USER_REPOSITORY_DI_TOKEN, useClass: UserRepository },
 ];
 
-const mappers: Provider[] = [UserMapper];
+const mappers: Provider[] = [UserMapper, UserEmailVerifyTokenMapper];
 
 @Module({
-  imports: [AppJwtModule],
+  imports: [AppJwtModule, EmailModule],
   controllers: [...controllers],
   providers: [
     ...mappers,
     ...repositories,
     ...commandHandlers,
     ...queryHandlers,
+    ...eventHandlers,
   ],
   exports: [...repositories, ...mappers],
 })
