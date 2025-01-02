@@ -18,7 +18,6 @@ import {
 } from '@src/apis/user/mappers/user-email-verify-token.mapper';
 
 export const userSchema = baseSchema.extend({
-  name: z.string().min(1).max(20),
   nickname: z.string().min(1).max(20),
   email: z.string().email(),
   password: z.string().min(8),
@@ -54,7 +53,6 @@ export class UserMapper
     const userProps: CreateEntityProps<UserProps> = {
       id: record.id,
       props: {
-        name: record.name,
         nickname: record.nickname,
         role: record.role,
         mbti: record.mbti,

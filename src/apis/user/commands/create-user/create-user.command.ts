@@ -6,8 +6,6 @@ import type {
 import { Command, CommandProps } from '@src/libs/ddd/command.base';
 
 export class CreateUserCommand extends Command implements ICommand {
-  readonly name: string;
-
   readonly nickname: string;
 
   readonly email: string;
@@ -21,9 +19,8 @@ export class CreateUserCommand extends Command implements ICommand {
   constructor(props: CommandProps<CreateUserCommand>) {
     super(props);
 
-    const { name, nickname, email, password, loginType, mbti } = props;
+    const { nickname, email, password, loginType, mbti } = props;
 
-    this.name = name;
     this.nickname = nickname;
     this.email = email;
     this.password = password;

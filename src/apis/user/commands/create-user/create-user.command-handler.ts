@@ -36,7 +36,6 @@ export class CreateUserCommandHandler
     }
 
     const user = await UserEntity.create({
-      name: command.name,
       nickname: command.nickname,
       mbti: command.mbti,
       loginCredential: new LoginCredential({

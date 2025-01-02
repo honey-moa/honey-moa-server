@@ -16,7 +16,6 @@ import {
 
 export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   nickname: string;
-  name: string;
   email: string;
   loginType: UserLoginTypeUnion;
   role: UserRoleUnion;
@@ -28,14 +27,6 @@ export class UserResponseDto
   extends BaseResponseDto
   implements Omit<CreateUserResponseDtoProps, keyof CreateBaseResponseDtoProps>
 {
-  @ApiProperty({
-    example: '홍길동',
-    description: '유저 이름',
-    minLength: 1,
-    maxLength: 20,
-  })
-  readonly name: string;
-
   @ApiProperty({
     example: '홍길동이에오',
     description: '유저 닉네임',
@@ -84,10 +75,8 @@ export class UserResponseDto
   constructor(create: CreateUserResponseDtoProps) {
     super(create);
 
-    const { name, nickname, role, email, loginType, mbti, isEmailVerified } =
-      create;
+    const { nickname, role, email, loginType, mbti, isEmailVerified } = create;
 
-    this.name = name;
     this.nickname = nickname;
     this.email = email;
     this.loginType = loginType;

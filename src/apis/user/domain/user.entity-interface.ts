@@ -6,7 +6,6 @@ import type {
 } from '@src/apis/user/types/user.type';
 
 export interface UserProps {
-  name: string;
   nickname: string;
   role: UserRoleUnion;
   isEmailVerified: boolean;
@@ -19,7 +18,6 @@ export interface UserProps {
 }
 
 export interface CreateUserProps {
-  name: string;
   nickname: string;
   mbti: UserMbtiUnion | null;
 
