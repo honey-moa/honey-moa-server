@@ -9,14 +9,6 @@ import { IsEmail, IsEnum, Length, Matches } from 'class-validator';
 
 export class CreateUserRequestBodyDto {
   @ApiProperty({
-    description: '유저 이름',
-    minLength: 1,
-    maxLength: 20,
-  })
-  @Length(1, 20)
-  name: string;
-
-  @ApiProperty({
     description: '유저 닉네임',
     minLength: 1,
     maxLength: 20,
