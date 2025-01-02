@@ -31,17 +31,33 @@ export const ApiPost: ApiOperator<keyof PostController> = {
         description: '게시글 정상적으로 생성됨.',
         type: IdResponseDto,
       }),
-      HttpBadRequestException.swaggerBuilder(
-        HttpStatus.BAD_REQUEST,
-        [COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER],
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description:
             '해당 필드는 request parameter 가 잘못된 경우에만 리턴됩니다.',
-          type: CustomValidationError,
+          additionalErrors: {
+            errors: [
+              {
+                reason: 'reason',
+                property: 'property',
+                value: 'value',
+              },
+              {
+                reason: 'value',
+                property: 'reere',
+                value: 'valasdue',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
         },
-      ),
+      ]),
       HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
-        COMMON_ERROR_CODE.INVALID_TOKEN,
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
       ]),
     );
   },
@@ -58,15 +74,28 @@ export const ApiPost: ApiOperator<keyof PostController> = {
         'posts',
         PostResponseDto,
       ),
-      HttpBadRequestException.swaggerBuilder(
-        HttpStatus.BAD_REQUEST,
-        [COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER],
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description:
             '해당 필드는 request parameter 가 잘못된 경우에만 리턴됩니다.',
-          type: CustomValidationError,
+          additionalErrors: {
+            errors: [
+              {
+                reason: 'reason',
+                property: 'property',
+                value: 'value',
+              },
+              {
+                reason: 'reason2',
+                property: 'property',
+                value: 'value',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
         },
-      ),
+      ]),
     );
   },
 };
