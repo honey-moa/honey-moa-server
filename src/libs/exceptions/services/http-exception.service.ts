@@ -15,7 +15,7 @@ interface ExceptionError {
 }
 
 interface LogInfo {
-  ctx: string;
+  ctx?: string;
   stack?: any;
   request: Partial<Request> & { user?: Record<string, any> };
   response: Partial<Omit<Response, 'body'>> & { body?: Record<any, any> };
@@ -55,7 +55,7 @@ export class HttpExceptionService {
         method: request.method,
         url: request.url,
         body: request.body,
-        currentUser: request.user,
+        currentUser: request.user?.id,
       },
       response: {
         body: Object.assign({}, response.body),

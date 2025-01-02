@@ -1,4 +1,3 @@
-import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@src/apis/user/commands/create-user/create-user.command';
@@ -10,10 +9,12 @@ import { HttpConflictException } from '@src/libs/exceptions/client-errors/except
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import type { AppJwtServicePort } from '@src/libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@src/libs/app-jwt/tokens/app-jwt.di-token';
+import { Transactional } from '@nestjs-cls/transactional';
+import { AggregateID } from '@src/libs/ddd/entity.base';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler
-  implements ICommandHandler<CreateUserCommand, string>
+  implements ICommandHandler<CreateUserCommand, AggregateID>
 {
   constructor(
     @Inject(USER_REPOSITORY_DI_TOKEN)
@@ -21,9 +22,8 @@ export class CreateUserCommandHandler
     @Inject(APP_JWT_SERVICE_DI_TOKEN)
     private readonly appJwtService: AppJwtServicePort,
   ) {}
-
   @Transactional()
-  async execute(command: CreateUserCommand): Promise<string> {
+  async execute(command: CreateUserCommand): Promise<AggregateID> {
     const existUser = await this.userRepository.findOneByEmailAndLoginType(
       command.email,
       command.loginType,
@@ -36,7 +36,8 @@ export class CreateUserCommandHandler
     }
 
     const user = await UserEntity.create({
-      name: command.name,
+      nickname: command.nickname,
+      mbti: command.mbti,
       loginCredential: new LoginCredential({
         email: command.email,
         password: command.password,
@@ -46,6 +47,6 @@ export class CreateUserCommandHandler
 
     await this.userRepository.create(user);
 
-    return this.appJwtService.generateAccessToken({ id: user.id });
+    return user.id;
   }
 }

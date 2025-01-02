@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { GenerateAccessTokenCommandHandler } from '@src/apis/auth/commands/generate-access-token/generate-access-token.command-handler';
-import { AuthController } from '@src/apis/auth/controllers/auth.controller';
 import { GuardModule } from '@src/libs/guards/guard.module';
 import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
+import { TokenController } from '@src/apis/token/controllers/token.controller';
+import { GenerateAccessTokenCommandHandler } from '@src/apis/token/commands/generate-access-token/generate-access-token.command-handler';
 
-const controllers = [AuthController];
+const controllers = [TokenController];
 
 const commandHandlers = [GenerateAccessTokenCommandHandler];
 
@@ -13,4 +13,4 @@ const commandHandlers = [GenerateAccessTokenCommandHandler];
   controllers: [...controllers],
   providers: [...commandHandlers],
 })
-export class AuthModule {}
+export class TokenModule {}

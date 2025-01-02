@@ -13,6 +13,6 @@
 ## Create migration
 
 1. Modify schema.prisma
-2. Run `npx prisma migrate dev --create-only --preview-feature` and check changes
-3. Run `npx prisma migrate deploy --preview-feature` for deploy
-4. Apply changes by `npx prisma generate`
+2. Run `npm run prisma:migrate:preview` and check changes
+3. Run `npm run prisma:migrate:deploy` for deploy
+4. Apply changes by `npm run prisma:generate`

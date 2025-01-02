@@ -21,8 +21,11 @@ import { HttpRemainderExceptionFilter } from '@src/libs/exceptions/server-errors
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { JwtBearerAuthGuard } from '@src/libs/guards/providers/jwt-bearer-auth.guard';
 import { ContextInterceptor } from '@src/libs/interceptors/context/context.interceptor';
+import { RequestResponseLoggingInterceptor } from '@src/libs/interceptors/logging/request-response-logging.interceptor';
 import { PaginationInterceptor } from '@src/libs/interceptors/pagination/pagination.interceptor';
+import { MethodOverrideMiddleware } from '@src/libs/middlewares/method-override.middleware';
 import { CustomValidationPipe } from '@src/libs/pipes/custom-validation.pipe';
+import bodyParser from 'body-parser';
 
 import { singularize } from 'inflection';
 
@@ -48,11 +51,21 @@ export class BootstrapService {
     app.setGlobalPrefix('api');
   }
 
+  setMiddleware(app: INestApplication) {
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+
+    app.use(new MethodOverrideMiddleware().use);
+  }
+
   setInterceptors(app: INestApplication) {
     app.useGlobalInterceptors(
+      app.get<ContextInterceptor>(ContextInterceptor),
       new ClassSerializerInterceptor(app.get(Reflector)),
       app.get<PaginationInterceptor>(PaginationInterceptor),
-      app.get<ContextInterceptor>(ContextInterceptor),
+      app.get<RequestResponseLoggingInterceptor>(
+        RequestResponseLoggingInterceptor,
+      ),
     );
   }
 
@@ -114,9 +127,9 @@ export class BootstrapService {
     const YAML_PATH = 'api-docs-yaml';
 
     const config = new DocumentBuilder()
-      .setTitle('NestJS Boilerplate')
+      .setTitle('Honey Moa Server')
       .setDescription(
-        'NestJS Boilerplate API</br>' +
+        'Honey Moa Server API</br>' +
           `<a target="_black" href="${DOMAIN}/${JSON_PATH}">json document</a></br>` +
           `<a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`,
       )

@@ -1,6 +1,6 @@
 import { RequestContextService } from '@libs/application/context/app-request.context';
 import { DomainEvent } from '@libs/ddd/base-domain.event';
-import { EventBus } from '@nestjs/cqrs';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Entity } from '@src/libs/ddd/entity.base';
 
 export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
@@ -18,7 +18,7 @@ export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
     this._domainEvents = [];
   }
 
-  public async publishEvents(eventBus: EventBus): Promise<void> {
+  public async publishEvents(eventEmitter: EventEmitter2): Promise<void> {
     await Promise.all(
       this.domainEvents.map(async (event) => {
         console.log(
@@ -29,7 +29,7 @@ export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
           }`,
         );
 
-        return eventBus.publish(event);
+        return eventEmitter.emitAsync(event.constructor.name, event);
       }),
     );
 

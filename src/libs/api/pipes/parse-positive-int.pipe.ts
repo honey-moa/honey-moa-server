@@ -12,7 +12,9 @@ interface Options {
 }
 
 @Injectable()
-export class ParsePositiveBigIntPipe implements PipeTransform<string> {
+export class ParsePositiveBigIntPipe
+  implements PipeTransform<string, bigint | string>
+{
   constructor(
     @Optional()
     private readonly options: Options = {
