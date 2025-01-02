@@ -9,7 +9,6 @@ datasource db {
 
 model User {
   id              BigInt        @id(map: "pk_users")
-  name            String        @db.VarChar(20)
   nickname        String        @db.VarChar(20)
   email           String        @db.VarChar(255)
   password        String        @db.VarChar(255)
