@@ -29,8 +29,10 @@ import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-email/verify-user-email.command';
 import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
 import { SendVerificationEmailCommand } from '@src/apis/user/commands/send-verification-email/send-verification-email.command';
+import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 
 @ApiTags('User')
+@ApiInternalServerErrorBuilder()
 @Controller(routesV1.version)
 export class UserController {
   constructor(

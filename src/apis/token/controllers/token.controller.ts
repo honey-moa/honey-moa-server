@@ -9,8 +9,10 @@ import { GuardType } from '@src/libs/guards/types/guard.constant';
 import { ApiToken } from '@src/apis/token/controllers/token.swagger';
 import { GenerateAccessTokenCommand } from '@src/apis/token/commands/generate-access-token/generate-access-token.command';
 import { JwtResponseDto } from '@src/libs/api/dtos/response/jwt.response-dto';
+import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 
 @ApiTags('Token')
+@ApiInternalServerErrorBuilder()
 @Controller(routesV1.version)
 export class TokenController {
   constructor(private readonly commandBus: CommandBus) {}

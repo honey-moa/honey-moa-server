@@ -13,7 +13,6 @@ import {
   ApiOperator,
   ApiOperationOptionsWithSummary,
 } from '@src/libs/types/type';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 
 export const ApiToken: ApiOperator<keyof Omit<TokenController, 'verifyEmail'>> =
   {
@@ -43,15 +42,6 @@ export const ApiToken: ApiOperator<keyof Omit<TokenController, 'verifyEmail'>> =
             description: '이메일 또는 비밀번호가 잘못된 경우',
           },
         ]),
-        HttpInternalServerErrorException.swaggerBuilder(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          [
-            {
-              code: COMMON_ERROR_CODE.SERVER_ERROR,
-              description: '서버 에러',
-            },
-          ],
-        ),
       );
     },
   };

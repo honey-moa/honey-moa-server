@@ -14,7 +14,6 @@ import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exce
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@src/libs/types/custom-validation-errors.type';
@@ -58,15 +57,6 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
           description: '이미 존재하는 이메일입니다.',
         },
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [
-          {
-            code: COMMON_ERROR_CODE.SERVER_ERROR,
-            description: '서버 에러',
-          },
-        ],
-      ),
     );
   },
 
@@ -104,15 +94,6 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
           description: '리소스를 찾을 수 없습니다.',
         },
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [
-          {
-            code: COMMON_ERROR_CODE.SERVER_ERROR,
-            description: '서버 에러',
-          },
-        ],
-      ),
     );
   },
 
@@ -149,15 +130,6 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
           description: '인증 이메일 재전송 불가',
         },
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [
-          {
-            code: COMMON_ERROR_CODE.SERVER_ERROR,
-            description: '서버 에러',
-          },
-        ],
-      ),
     );
   },
 };
