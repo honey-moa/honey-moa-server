@@ -9,6 +9,7 @@ import { PostResponseDto } from '@src/apis/post/dtos/response/post.response-dto'
 import { PostMapper, PostModel } from '@src/apis/post/mappers/post.mapper';
 import { FindPostsQuery } from '@src/apis/post/queries/find-posts/find-posts.query';
 import { routesV1 } from '@src/configs/app.route';
+import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@src/libs/ddd/entity.base';
@@ -19,6 +20,7 @@ import { PaginationBy } from '@src/libs/interceptors/pagination/types/pagination
 import { Paginated } from '@src/libs/types/type';
 
 @ApiTags('Post')
+@ApiInternalServerErrorBuilder()
 @Controller(routesV1.version)
 export class PostController {
   constructor(

@@ -5,7 +5,12 @@ import {
 } from '@nestjs/common';
 import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import { SchemaObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import {
+  ExampleObject,
+  ReferenceObject,
+  SchemaObject,
+} from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
+import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
 import { ERROR_MESSAGE } from '@src/libs/exceptions/types/errors/error-message.constant';
 
@@ -35,35 +40,84 @@ export class HttpException extends NestHttpException {
 
   static swaggerBuilder(
     status: ErrorHttpStatusCode,
-    codes: ValueOf<typeof ERROR_CODE>[],
-    errors?: { description: string; type: Type },
+    codeAndDescription: {
+      description: string;
+      code: ValueOf<typeof ERROR_CODE>;
+      additionalErrors?: {
+        errors: { value: unknown; reason: string; property: string }[];
+        errorType: Type;
+      };
+    }[] = [
+      {
+        description: '에러가 발생한 이유',
+        code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+      },
+    ],
   ) {
-    const ExtraModels: any[] = [];
-    let errorsProperty: unknown;
+    const timestamp = new Date().toISOString();
 
-    if (errors) {
-      errorsProperty = {
-        description: errors.description,
-        type: 'array',
-        items: {
-          type: 'object',
-          $ref: getSchemaPath(errors.type),
+    const examples = codeAndDescription.reduce<
+      Record<string, Pick<ExampleObject, 'value' | 'description'>>
+    >((acc, { description, additionalErrors, code }) => {
+      acc[description] = {
+        description,
+        value: {
+          timestamp,
+          status,
+          code,
+          message: ERROR_MESSAGE[code],
         },
       };
 
-      ExtraModels.push(ApiExtraModels(errors.type));
+      if (additionalErrors) {
+        acc[description].value.errors = additionalErrors.errors;
+      }
+
+      return acc;
+    }, {});
+
+    let errorsProperty: SchemaObject | undefined = undefined;
+
+    const hasAdditionalErrors = codeAndDescription.some(
+      ({ additionalErrors }) => additionalErrors,
+    );
+
+    const ExtraModels: any[] = [];
+
+    if (hasAdditionalErrors) {
+      const oneOf: (SchemaObject | ReferenceObject)[] = [];
+
+      codeAndDescription.forEach(({ additionalErrors }) => {
+        if (!additionalErrors) {
+          return;
+        }
+        oneOf.push({ $ref: getSchemaPath(additionalErrors.errorType) });
+        ExtraModels.push(ApiExtraModels(additionalErrors.errorType));
+      });
+
+      errorsProperty = {
+        description: '에러 목록',
+        type: 'array',
+        items: {
+          oneOf,
+        },
+      };
     }
 
-    return applyDecorators(
-      ...ExtraModels,
-      ApiResponse({
-        status,
+    console.dir(errorsProperty, { depth: null });
+
+    const content = {
+      'application/json': {
         schema: {
+          required: hasAdditionalErrors
+            ? ['timestamp', 'statusCode', 'code', 'message']
+            : undefined,
           properties: {
             timestamp: {
               type: 'string',
               format: 'date-time',
               description: '에러 발생 시각',
+              example: timestamp,
             },
             statusCode: {
               type: 'number',
@@ -75,18 +129,30 @@ export class HttpException extends NestHttpException {
             code: {
               type: 'number',
               description: 'error code',
-              example: codes[0],
-              enum: codes,
+              example: codeAndDescription[0].code,
+              enum: codeAndDescription.map(({ code }) => code),
             },
             message: {
               type: 'string',
               description: 'error message',
-              example: ERROR_MESSAGE[ERROR_CODE[codes[0]]],
-              enum: codes.map((code) => ERROR_MESSAGE[code]),
+              example: ERROR_MESSAGE[ERROR_CODE[codeAndDescription[0].code]],
+              enum: codeAndDescription.map(({ code }) => ERROR_MESSAGE[code]),
             },
-            errors: errorsProperty as SchemaObject,
           },
         },
+        examples,
+      },
+    };
+
+    if (hasAdditionalErrors) {
+      content['application/json'].schema.properties['errors'] = errorsProperty;
+    }
+
+    return applyDecorators(
+      ...ExtraModels,
+      ApiResponse({
+        status,
+        content,
       }),
     );
   }

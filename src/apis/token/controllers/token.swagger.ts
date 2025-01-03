@@ -13,7 +13,6 @@ import {
   ApiOperator,
   ApiOperationOptionsWithSummary,
 } from '@src/libs/types/type';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 
 export const ApiToken: ApiOperator<keyof Omit<TokenController, 'verifyEmail'>> =
   {
@@ -30,14 +29,19 @@ export const ApiToken: ApiOperator<keyof Omit<TokenController, 'verifyEmail'>> =
           type: JwtResponseDto,
         }),
         HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
-          COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
-          COMMON_ERROR_CODE.INVALID_TOKEN,
-          TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: '필드가 잘못된 경우',
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_TOKEN,
+            description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+          },
+          {
+            code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
+            description: '이메일 또는 비밀번호가 잘못된 경우',
+          },
         ]),
-        HttpInternalServerErrorException.swaggerBuilder(
-          HttpStatus.INTERNAL_SERVER_ERROR,
-          [COMMON_ERROR_CODE.SERVER_ERROR],
-        ),
       );
     },
   };
