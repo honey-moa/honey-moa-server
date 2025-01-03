@@ -14,7 +14,6 @@ import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exce
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@src/libs/types/custom-validation-errors.type';
@@ -35,22 +34,29 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
         description: '정상적으로 회원가입 됨.',
         type: IdResponseDto,
       }),
-      HttpBadRequestException.swaggerBuilder(
-        HttpStatus.BAD_REQUEST,
-        [COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER],
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description:
             '해당 필드는 request parameter 가 잘못된 경우에만 리턴됩니다.',
-          type: CustomValidationError,
+          additionalErrors: {
+            errors: [
+              {
+                reason: 'reason',
+                property: 'property',
+                value: 'value',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
         },
-      ),
-      HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
-        USER_ERROR_CODE.ALREADY_CREATED_USER,
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [COMMON_ERROR_CODE.SERVER_ERROR],
-      ),
+      HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
+        {
+          code: USER_ERROR_CODE.ALREADY_CREATED_USER,
+          description: '이미 존재하는 이메일입니다.',
+        },
+      ]),
     );
   },
 
@@ -65,22 +71,29 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
         description: '정상적으로 유저 상세 조회 됨.',
         type: UserResponseDto,
       }),
-      HttpBadRequestException.swaggerBuilder(
-        HttpStatus.BAD_REQUEST,
-        [COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER],
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description:
             '해당 필드는 request parameter 가 잘못된 경우에만 리턴됩니다.',
-          type: CustomValidationError,
+          additionalErrors: {
+            errors: [
+              {
+                reason: 'reason',
+                property: 'property',
+                value: 'value',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
         },
-      ),
-      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
-        COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [COMMON_ERROR_CODE.SERVER_ERROR],
-      ),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '리소스를 찾을 수 없습니다.',
+        },
+      ]),
     );
   },
 
@@ -96,19 +109,27 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
         description: '정상적으로 인증 이메일 전송됨.',
       }),
       HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
-        COMMON_ERROR_CODE.INVALID_TOKEN,
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
       ]),
       HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
-        COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '리소스를 찾을 수 없습니다.',
+        },
       ]),
       HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
-        USER_ERROR_CODE.ALREADY_VERIFIED_EMAIL,
-        USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
+        {
+          code: USER_ERROR_CODE.ALREADY_VERIFIED_EMAIL,
+          description: '이미 인증된 이메일입니다.',
+        },
+        {
+          code: USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
+          description: '인증 이메일 재전송 불가',
+        },
       ]),
-      HttpInternalServerErrorException.swaggerBuilder(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        [COMMON_ERROR_CODE.SERVER_ERROR],
-      ),
     );
   },
 };

@@ -11,6 +11,7 @@ import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/ex
 import { TOKEN_ERROR_CODE } from '@src/libs/exceptions/types/errors/token/token-error-code.constant';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@src/libs/utils/util';
+import { Request } from 'express';
 
 @Injectable()
 export class BasicTokenGuard implements CanActivate {
@@ -19,7 +20,7 @@ export class BasicTokenGuard implements CanActivate {
     private readonly userRepository: UserRepositoryPort,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const req = context.switchToHttp().getRequest();
+    const req = context.switchToHttp().getRequest<Request>();
 
     const rawToken = req.headers['authorization'];
 

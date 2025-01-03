@@ -13,11 +13,13 @@ import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-con
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
 import { Key } from '@src/libs/core/app-config/types/app-config.type';
 import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { BadRequestExceptionFilter } from '@src/libs/exceptions/client-errors/filters/bad-request.exception-filter';
 import { HttpClientErrorExceptionFilter } from '@src/libs/exceptions/client-errors/filters/http-client-error.exception-filter';
-import { HttpPathNotFoundExceptionFilter } from '@src/libs/exceptions/etc-errors/filters/http-path-not-found-exception.filter';
-import { HttpInternalServerErrorExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-internal-server-error-exception.filter';
-import { HttpProcessErrorExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-process-error-exception.filter';
-import { HttpRemainderExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-remainder-exception.filter';
+import { HttpPathNotFoundExceptionFilter } from '@src/libs/exceptions/etc-errors/filters/http-path-not-found.exception-filter';
+import { HttpInternalServerErrorExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-internal-server-error.exception-filter';
+import { HttpProcessErrorExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-process-error.exception-filter';
+import { HttpRemainderExceptionFilter } from '@src/libs/exceptions/server-errors/filters/http-remainder.exception-filter';
+import { ZodErrorExceptionFilter } from '@src/libs/exceptions/server-errors/filters/zod-error.exception-filter';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { JwtBearerAuthGuard } from '@src/libs/guards/providers/jwt-bearer-auth.guard';
 import { ContextInterceptor } from '@src/libs/interceptors/context/context.interceptor';
@@ -103,9 +105,11 @@ export class BootstrapService {
     app.useGlobalFilters(
       app.get(HttpProcessErrorExceptionFilter),
       app.get(HttpRemainderExceptionFilter),
+      app.get(ZodErrorExceptionFilter),
       app.get(HttpInternalServerErrorExceptionFilter),
       app.get(HttpClientErrorExceptionFilter),
       app.get(HttpPathNotFoundExceptionFilter),
+      app.get(BadRequestExceptionFilter),
     );
   }
 
