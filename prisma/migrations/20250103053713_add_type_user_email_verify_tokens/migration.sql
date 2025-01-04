@@ -1,6 +1,6 @@
 
 -- CreateEnum
-CREATE TYPE "UserVerifyTokenTypeEnum" AS ENUM ('email', 'change password');
+CREATE TYPE "UserVerifyTokenTypeEnum" AS ENUM ('EMAIL', 'PASSWORD_CHANGE');
 
 
 -- RenameTable
