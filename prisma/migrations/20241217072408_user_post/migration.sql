@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "UserRoleEnum" AS ENUM ('user', 'admin');
+CREATE TYPE "UserRoleEnum" AS ENUM ('USER', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "LoginTypeEnum" AS ENUM ('email');
+CREATE TYPE "LoginTypeEnum" AS ENUM ('EMAIL');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -11,7 +11,7 @@ CREATE TABLE "users" (
     "email" VARCHAR(255) NOT NULL,
     "password" VARCHAR(255) NOT NULL,
     "login_type" "LoginTypeEnum" NOT NULL,
-    "role" "UserRoleEnum" NOT NULL DEFAULT 'user',
+    "role" "UserRoleEnum" NOT NULL DEFAULT 'USER',
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" TIMESTAMPTZ(6),
