@@ -13,9 +13,10 @@ import { LoginCredential } from '@src/apis/user/domain/value-objects/login-crede
 import { baseSchema } from '@src/libs/db/base.schema';
 import type { UserProps } from '@src/apis/user/domain/user.entity-interface';
 import {
-  UserEmailVerifyTokenMapper,
-  userEmailVerifyTokenSchema,
-} from '@src/apis/user/mappers/user-email-verify-token.mapper';
+  UserVerifyTokenMapper,
+  userVerifyTokenSchema,
+} from '@src/apis/user/mappers/user-verify-token.mapper';
+import { isNil } from '@src/libs/utils/util';
 
 export const userSchema = baseSchema.extend({
   nickname: z.string().min(1).max(20),
@@ -31,25 +32,23 @@ export const userSchema = baseSchema.extend({
   ),
 });
 
-export const userWithUserEmailVerifyTokenSchema = userSchema.extend({
-  userEmailVerifyToken: z.nullable(userEmailVerifyTokenSchema).optional(),
+export const userWithUserVerifyTokensSchema = userSchema.extend({
+  userVerifyTokens: z.nullable(z.array(userVerifyTokenSchema)).optional(),
 });
 
 export type UserModel = z.TypeOf<typeof userSchema>;
 
-type UserWithUserEmailVerifyTokenModel = z.TypeOf<
-  typeof userWithUserEmailVerifyTokenSchema
+type UserWithUserVerifyTokensModel = z.TypeOf<
+  typeof userWithUserVerifyTokensSchema
 >;
 
 @Injectable()
 export class UserMapper
   implements Mapper<UserEntity, UserModel, UserResponseDto>
 {
-  constructor(
-    private readonly userEmailVerifyTokenMapper: UserEmailVerifyTokenMapper,
-  ) {}
+  constructor(private readonly userVerifyTokenMapper: UserVerifyTokenMapper) {}
 
-  toEntity(record: UserWithUserEmailVerifyTokenModel): UserEntity {
+  toEntity(record: UserWithUserVerifyTokensModel): UserEntity {
     const userProps: CreateEntityProps<UserProps> = {
       id: record.id,
       props: {
@@ -69,9 +68,10 @@ export class UserMapper
       updatedAt: record.updatedAt,
     };
 
-    if (record.userEmailVerifyToken) {
-      userProps.props.userEmailVerifyToken =
-        this.userEmailVerifyTokenMapper.toEntity(record.userEmailVerifyToken);
+    if (!isNil(record.userVerifyTokens)) {
+      userProps.props.userVerifyTokens = record.userVerifyTokens.map(
+        this.userVerifyTokenMapper.toEntity,
+      );
     }
 
     return new UserEntity(userProps);
@@ -79,8 +79,7 @@ export class UserMapper
 
   toPersistence(entity: UserEntity): UserModel {
     // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-    const { userEmailVerifyToken, loginCredential, ...props } =
-      entity.getProps();
+    const { userVerifyTokens, loginCredential, ...props } = entity.getProps();
 
     const record: UserModel = {
       ...props,

@@ -1,5 +1,4 @@
 // Root
-const authRoot = 'auth';
 const userRoot = 'users';
 const postRoot = 'posts';
 const tokenRoot = 'tokens';
@@ -10,18 +9,14 @@ const v1 = 'v1';
 export const routesV1 = {
   version: v1,
 
-  auth: {
-    root: authRoot,
-    signUp: `${authRoot}/sign-up`,
-    signIn: `${authRoot}/sign-in`,
-  },
-
   user: {
     root: userRoot,
     create: userRoot,
     findOne: `${userRoot}/:id`,
     verifyEmail: `${userRoot}/:id/is-email-verified`,
-    sendVerificationEmail: `${userRoot}/me/user-email-verify-tokens`,
+    updatePassword: `${userRoot}/:id/password`,
+    sendVerificationEmail: `${userRoot}/me/user-verify-tokens/email`,
+    sendPasswordChangeVerificationEmail: `${userRoot}/:email/user-verify-tokens/password-change`,
   } as const,
 
   token: {

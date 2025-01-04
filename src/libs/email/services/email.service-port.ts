@@ -6,4 +6,11 @@ export interface EmailServicePort {
     userId: AggregateID,
     token: string,
   ): Promise<void>;
+
+  sendPasswordChangeVerificationEmail(
+    userId: AggregateID,
+    email: string,
+    token: string,
+    connectUrl: string,
+  ): Promise<void>;
 }

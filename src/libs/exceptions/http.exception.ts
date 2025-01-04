@@ -44,7 +44,9 @@ export class HttpException extends NestHttpException {
       description: string;
       code: ValueOf<typeof ERROR_CODE>;
       additionalErrors?: {
-        errors: { value: unknown; reason: string; property: string }[];
+        errors: Array<
+          { value: unknown; reason: string; property: string } | string
+        >;
         errorType: Type;
       };
     }[] = [
@@ -103,8 +105,6 @@ export class HttpException extends NestHttpException {
         },
       };
     }
-
-    console.dir(errorsProperty, { depth: null });
 
     const content = {
       'application/json': {

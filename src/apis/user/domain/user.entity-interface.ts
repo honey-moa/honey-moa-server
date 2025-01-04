@@ -1,4 +1,4 @@
-import { UserEmailVerifyTokenEntity } from '@src/apis/user/domain/user-email-verify-token/user-email-verify-token.entity';
+import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { LoginCredential } from '@src/apis/user/domain/value-objects/login-credentials.value-object';
 import type {
   UserMbtiUnion,
@@ -14,7 +14,7 @@ export interface UserProps {
 
   loginCredential: LoginCredential;
 
-  userEmailVerifyToken?: UserEmailVerifyTokenEntity;
+  userVerifyTokens?: UserVerifyTokenEntity[];
 }
 
 export interface CreateUserProps {
