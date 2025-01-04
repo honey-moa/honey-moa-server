@@ -13,31 +13,34 @@ model User {
   email           String        @db.VarChar(255)
   password        String        @db.VarChar(255)
   loginType       LoginTypeEnum @map("login_type")
-  role            UserRoleEnum  @default(user)
+  role            UserRoleEnum  @default(USER)
   isEmailVerified Boolean       @default(false) @map("is_email_verified") @db.Boolean
   mbti            MbtiEnum?
   createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  posts                Post[]
-  userEmailVerifyToken UserEmailVerifyToken?
+  posts            Post[]
+  userVerifyTokens UserVerifyToken[]
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
 }
 
-model UserEmailVerifyToken {
-  id        BigInt   @id(map: "pk_user_email_verify_tokens")
-  userId    BigInt   @unique(map: "uq_user_email_verify_tokens_user_id") @map("user_id") @db.BigInt()
-  token     String   @unique(map: "uq_user_email_verify_tokens_token") @db.Uuid
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
-  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+model UserVerifyToken {
+  id        BigInt                  @id(map: "pk_user_verify_tokens")
+  userId    BigInt                  @map("user_id") @db.BigInt()
+  type      UserVerifyTokenTypeEnum
+  isUsed    Boolean                 @default(false) @map("is_used") @db.Boolean
+  token     String                  @unique(map: "uq_user_verify_tokens_token") @db.Uuid
+  createdAt DateTime                @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime                @default(now()) @map("updated_at") @db.Timestamptz(6)
+  expiresAt DateTime                @map("expires_at") @db.Timestamptz(6)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("user_email_verify_tokens")
+  @@unique([userId, type], name: "uq_user_verify_tokens_user_id_type")
+  @@map("user_verify_tokens")
 }
 
 model Post {
@@ -55,12 +58,12 @@ model Post {
 }
 
 enum UserRoleEnum {
-  user
-  admin
+  USER
+  ADMIN
 }
 
 enum LoginTypeEnum {
-  email
+  EMAIL
 }
 
 enum MbtiEnum {
@@ -80,4 +83,9 @@ enum MbtiEnum {
   ESFJ
   ENFJ
   ENTJ
+}
+
+enum UserVerifyTokenTypeEnum {
+  EMAIL
+  PASSWORD_CHANGE
 }

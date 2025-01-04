@@ -30,6 +30,11 @@ import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-emai
 import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
 import { SendVerificationEmailCommand } from '@src/apis/user/commands/send-verification-email/send-verification-email.command';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
+import { SendPasswordChangeVerificationEmailCommand } from '@src/apis/user/commands/send-password-change-verification-email/send-password-change-verification-email.command';
+import { ParseEmailPipe } from '@src/libs/api/pipes/parse-email.pipe';
+import { SendPasswordChangeVerificationEmailRequestDto } from '@src/apis/user/dtos/request/send-password-change-verification-email.request-dto';
+import { UpdatePasswordRequestDto } from '@src/apis/user/dtos/request/update-password.request-dto';
+import { UpdateUserPasswordCommand } from '@src/apis/user/commands/update-user-password/update-user-password.command';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -86,6 +91,24 @@ export class UserController {
   }
 
   @SetGuardType(GuardType.PUBLIC)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiUser.SendPasswordChangeVerificationEmail({
+    summary: '유저 비밀번호 변경 인증 이메일 전송 API',
+  })
+  @Post(routesV1.user.sendPasswordChangeVerificationEmail)
+  async sendPasswordChangeVerificationEmail(
+    @Param('email', ParseEmailPipe) email: string,
+    @Body() requestDto: SendPasswordChangeVerificationEmailRequestDto,
+  ): Promise<void> {
+    const command = new SendPasswordChangeVerificationEmailCommand({
+      email,
+      ...requestDto,
+    });
+
+    await this.commandBus.execute(command);
+  }
+
+  @SetGuardType(GuardType.PUBLIC)
   @ApiExcludeEndpoint()
   @Put(routesV1.user.verifyEmail)
   async verifyEmail(
@@ -97,5 +120,26 @@ export class UserController {
     await this.commandBus.execute(command);
 
     return '인증 완료';
+  }
+
+  @SetGuardType(GuardType.PUBLIC)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiUser.UpdatePassword({
+    summary:
+      '유저 비밀번호 변경 API. query parameter에 token을 필수로 보내야 함.',
+  })
+  @Put(routesV1.user.updatePassword)
+  async updatePassword(
+    @Param('id', ParsePositiveBigIntPipe) id: string,
+    @Query('token', ParseUUIDPipe) token: string,
+    @Body() requestDto: UpdatePasswordRequestDto,
+  ): Promise<void> {
+    const command = new UpdateUserPasswordCommand({
+      userId: BigInt(id),
+      token,
+      ...requestDto,
+    });
+
+    await this.commandBus.execute(command);
   }
 }

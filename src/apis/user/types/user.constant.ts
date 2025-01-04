@@ -1,10 +1,10 @@
 export const UserRole = {
-  USER: 'user',
-  ADMIN: 'admin',
+  USER: 'USER',
+  ADMIN: 'ADMIN',
 } as const;
 
 export const UserLoginType = {
-  EMAIL: 'email',
+  EMAIL: 'EMAIL',
 } as const;
 
 export const UserMbti = {
@@ -24,6 +24,11 @@ export const UserMbti = {
   ESFJ: 'ESFJ',
   ENFJ: 'ENFJ',
   ENTJ: 'ENTJ',
+} as const;
+
+export const UserVerifyTokenType = {
+  EMAIL: 'EMAIL',
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE',
 } as const;
 
 export const USER_PASSWORD_REGEXP =

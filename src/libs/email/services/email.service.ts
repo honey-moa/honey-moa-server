@@ -47,4 +47,24 @@ export class EmailService implements EmailServicePort {
         `,
     });
   }
+
+  sendPasswordChangeVerificationEmail(
+    userId: AggregateID,
+    email: string,
+    token: string,
+    connectUrl: string,
+  ): Promise<void> {
+    const url = `${connectUrl}/${token}/${userId}`;
+
+    return this.transporter.sendMail({
+      to: email,
+      subject: '꿀모아 패스워드 변경 메일',
+      html: `
+            버튼을 누르시면 패스워드 변경 페이지로 이동합니다.<br/>
+            <form action="${url}" method="GET">
+                <button>패스워드 변경</button>
+            </form>
+        `,
+    });
+  }
 }

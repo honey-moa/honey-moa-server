@@ -4,6 +4,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-email/verify-user-email.command';
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
+import { UserVerifyTokenType } from '@src/apis/user/types/user.constant';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
@@ -25,8 +26,9 @@ export class VerifyUserEmailCommandHandler
   async execute(command: VerifyUserEmailCommand): Promise<void> {
     const { userId, token } = command;
 
-    const existingUser =
-      await this.userRepository.findOneUserWithUserEmailVerifyTokenById(userId);
+    const existingUser = await this.userRepository.findOneById(userId, {
+      userVerifyTokens: true,
+    });
 
     if (isNil(existingUser)) {
       throw new HttpNotFoundException({
@@ -40,18 +42,14 @@ export class VerifyUserEmailCommandHandler
       });
     }
 
-    const userEmailVerifyToken = existingUser.userEmailVerifyToken;
+    const userEmailVerifyToken = existingUser.userVerifyTokens?.find(
+      (userVerifyToken) => userVerifyToken.type === UserVerifyTokenType.EMAIL,
+    );
 
     if (isNil(userEmailVerifyToken)) {
       throw new HttpInternalServerErrorException({
         code: COMMON_ERROR_CODE.SERVER_ERROR,
         ctx: '유저의 이메일 인증 토큰이 존재하지 않을 수 없음.',
-      });
-    }
-
-    if (userEmailVerifyToken.isExpired()) {
-      throw new HttpUnauthorizedException({
-        code: USER_ERROR_CODE.INVALID_EMAIL_VERIFY_TOKEN,
       });
     }
 
@@ -61,7 +59,23 @@ export class VerifyUserEmailCommandHandler
       });
     }
 
+    if (userEmailVerifyToken.isExpired()) {
+      throw new HttpUnauthorizedException({
+        code: USER_ERROR_CODE.INVALID_EMAIL_VERIFY_TOKEN,
+      });
+    }
+
+    if (userEmailVerifyToken.isUsed) {
+      throw new HttpConflictException({
+        code: USER_ERROR_CODE.ALREADY_USED_EMAIL_VERIFY_TOKEN,
+      });
+    }
+
+    userEmailVerifyToken.use();
+
     existingUser.treatEmailAsVerified();
+
+    await this.userRepository.updateUserVerifyToken(userEmailVerifyToken);
 
     await this.userRepository.update(existingUser);
   }
