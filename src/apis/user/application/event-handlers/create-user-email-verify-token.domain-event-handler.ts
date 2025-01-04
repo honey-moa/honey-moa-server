@@ -3,9 +3,10 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { UserCreatedDomainEvent } from '@src/apis/user/domain/events/user-created.event';
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
-import { UserEmailVerifyTokenEntity } from '@src/apis/user/domain/user-email-verify-token/user-email-verify-token.entity';
 import { EMAIL_SERVICE_DI_TOKEN } from '@src/libs/email/constants/email-service.di-token';
 import { EmailServicePort } from '@src/libs/email/services/email.service-port';
+import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
+import { UserVerifyTokenType } from '@src/apis/user/types/user.constant';
 
 @Injectable()
 export class CreateUserEmailVerifyTokenDomainEventHandler {
@@ -22,16 +23,17 @@ export class CreateUserEmailVerifyTokenDomainEventHandler {
     suppressErrors: false,
   })
   async handle(event: UserCreatedDomainEvent): Promise<void> {
-    const userEmailVerifyToken = UserEmailVerifyTokenEntity.create({
+    const userVerifyToken = UserVerifyTokenEntity.create({
       userId: event.aggregateId,
+      type: UserVerifyTokenType.EMAIL,
     });
 
-    await this.userRepository.createUserEmailVerifyToken(userEmailVerifyToken);
+    await this.userRepository.createUserVerifyToken(userVerifyToken);
 
     await this.emailService.sendVerificationEmail(
       event.email,
       event.aggregateId,
-      userEmailVerifyToken.token,
+      userVerifyToken.token,
     );
   }
 }

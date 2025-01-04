@@ -22,7 +22,7 @@ export class TokenController {
   @ApiToken.Generate({
     summary: '로그인 API',
     description:
-      'Basic Auth 방식을 통해 로그인. Header의 Authorization에 Basic email:password(Base64로 인코딩)',
+      'Basic Auth 방식을 통해 로그인. Header의 Authorization에 Basic email:password(email:password를 Base64로 인코딩)',
   })
   @Post(routesV1.token.generate)
   async generate(@GetUserId() userId: bigint): Promise<JwtResponseDto> {

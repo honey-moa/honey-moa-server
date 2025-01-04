@@ -111,8 +111,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return bcrypt.compare(plainPassword, this.props.loginCredential.password);
   }
 
-  get userEmailVerifyToken() {
-    return this.props.userEmailVerifyToken;
+  get userVerifyTokens() {
+    return this.props.userVerifyTokens;
   }
 
   get isEmailVerified() {

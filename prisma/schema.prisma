@@ -20,8 +20,8 @@ model User {
   updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  posts           Post[]
-  userVerifyToken UserVerifyToken[]
+  posts            Post[]
+  userVerifyTokens UserVerifyToken[]
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
