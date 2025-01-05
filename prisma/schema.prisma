@@ -20,8 +20,10 @@ model User {
   updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  posts            Post[]
-  userVerifyTokens UserVerifyToken[]
+  posts               Post[]
+  userVerifyTokens    UserVerifyToken[]
+  requestedConnection UserConnection?   @relation("RequestedConnection")
+  requesterConnection UserConnection?   @relation("RequesterConnection")
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
@@ -41,6 +43,23 @@ model UserVerifyToken {
 
   @@unique([userId, type], name: "uq_user_verify_tokens_user_id_type")
   @@map("user_verify_tokens")
+}
+
+model UserConnection {
+  id          BigInt                   @id(map: "pk_user_connections")
+  // 피요청자
+  requestedId BigInt                   @unique(map: "uq_user_connections_requested_id") @map("requested_id") @db.BigInt()
+  // 요청자
+  requesterId BigInt                   @unique(map: "uq_user_connections_requester_id") @map("requester_id") @db.BigInt()
+  status      UserConnectionStatusEnum @default(PENDING)
+  createdAt   DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime                 @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime?                @map("deleted_at") @db.Timestamptz(6)
+
+  requestedUser User @relation("RequestedConnection", fields: [requestedId], references: [id], onDelete: Cascade)
+  requesterUser User @relation("RequesterConnection", fields: [requesterId], references: [id], onDelete: Cascade)
+
+  @@map("user_connections")
 }
 
 model Post {
@@ -88,4 +107,10 @@ enum MbtiEnum {
 enum UserVerifyTokenTypeEnum {
   EMAIL
   PASSWORD_CHANGE
+}
+
+enum UserConnectionStatusEnum {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
