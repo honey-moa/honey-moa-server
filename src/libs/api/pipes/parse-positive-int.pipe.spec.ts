@@ -1,13 +1,13 @@
 import { ArgumentMetadata } from '@nestjs/common';
+import { ParsePositiveBigIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
 import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { ParsePositiveIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
 
-describe(ParsePositiveIntPipe.name, () => {
-  let target: ParsePositiveIntPipe;
+describe(ParsePositiveBigIntPipe.name, () => {
+  let target: ParsePositiveBigIntPipe;
 
-  describe(ParsePositiveIntPipe.prototype.transform.name, () => {
+  describe(ParsePositiveBigIntPipe.prototype.transform.name, () => {
     beforeEach(() => {
-      target = new ParsePositiveIntPipe();
+      target = new ParsePositiveBigIntPipe();
     });
 
     describe('when validation passes and transform false', () => {
@@ -51,9 +51,9 @@ describe(ParsePositiveIntPipe.name, () => {
     });
   });
 
-  describe(ParsePositiveIntPipe.prototype.transform.name, () => {
+  describe(ParsePositiveBigIntPipe.prototype.transform.name, () => {
     beforeEach(() => {
-      target = new ParsePositiveIntPipe({ transform: true });
+      target = new ParsePositiveBigIntPipe({ transform: true });
     });
 
     describe('when validation passes and transform false', () => {
