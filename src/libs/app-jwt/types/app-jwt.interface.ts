@@ -1,3 +1,3 @@
 export interface JwtPayload {
-  id: bigint;
+  sub: string;
 }

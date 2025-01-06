@@ -6,11 +6,8 @@ import {
 } from '@nestjs/common';
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
-import { UserLoginType } from '@src/apis/user/types/user.constant';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { TOKEN_ERROR_CODE } from '@src/libs/exceptions/types/errors/token/token-error-code.constant';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { isNil } from '@src/libs/utils/util';
 import { Request } from 'express';
 
 @Injectable()
@@ -34,12 +31,7 @@ export class BasicTokenGuard implements CanActivate {
 
     const { email, password } = this.decodeBasicToken(token);
 
-    const user = await this.authenticateUser({
-      email,
-      password,
-    });
-
-    req.user = user;
+    req.user = { email, password };
 
     return true;
   }
@@ -81,39 +73,5 @@ export class BasicTokenGuard implements CanActivate {
       email,
       password,
     };
-  }
-
-  private async authenticateUser(user: { email: string; password: string }) {
-    /**
-     * 1. 사용자가 존재하는지 확인 (email)
-     * 2. 비밀번호가 맞는지 확인
-     * 3. 모두 통과되면 찾은 사용자 정보 반환
-     */
-    const existingUser = await this.userRepository.findOneByEmailAndLoginType(
-      user.email,
-      UserLoginType.EMAIL,
-    );
-
-    if (isNil(existingUser)) {
-      throw new HttpUnauthorizedException({
-        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
-      });
-    }
-
-    /**
-     * 파라미터
-     *
-     * 1) 입력된 비밀번호
-     * 2) 기존 해시 (hash) -> 사용자 정보에 저장되어 있는 hash
-     */
-    const isValidPassword = await existingUser.comparePassword(user.password);
-
-    if (!isValidPassword) {
-      throw new HttpUnauthorizedException({
-        code: TOKEN_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
-      });
-    }
-
-    return existingUser;
   }
 }

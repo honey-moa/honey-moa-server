@@ -7,7 +7,7 @@ import { UserMbtiUnion } from '@src/apis/user/types/user.type';
 import { IsNullable } from '@src/libs/api/decorators/is-nullable.decorator';
 import { IsEmail, IsEnum, Length, Matches } from 'class-validator';
 
-export class CreateUserRequestBodyDto {
+export class SignUpRequestBodyDto {
   @ApiProperty({
     description: '유저 닉네임',
     minLength: 1,
