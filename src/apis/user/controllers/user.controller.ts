@@ -12,22 +12,18 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
-import { CreateUserCommand } from '@src/apis/user/commands/create-user/create-user.command';
 import { ApiUser } from '@src/apis/user/controllers/user.swagger';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import { UserResponseDto } from '@src/apis/user/dtos/response/user.response-dto';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
 import { FindOneUserQuery } from '@src/apis/user/queries/find-one-user/find-one-user.query';
-import { UserLoginType } from '@src/apis/user/types/user.constant';
 import { routesV1 } from '@src/configs/app.route';
 import { ParsePositiveBigIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
 import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@src/libs/guards/types/guard.constant';
-import { CreateUserRequestBodyDto } from '@src/apis/user/dtos/request/create-user.request-body-dto';
 import { AggregateID } from '@src/libs/ddd/entity.base';
-import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { VerifyUserEmailCommand } from '@src/apis/user/commands/verify-user-email/verify-user-email.command';
-import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
+import { User } from '@src/libs/api/decorators/user.decorator';
 import { SendVerificationEmailCommand } from '@src/apis/user/commands/send-verification-email/send-verification-email.command';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 import { SendPasswordChangeVerificationEmailCommand } from '@src/apis/user/commands/send-password-change-verification-email/send-password-change-verification-email.command';
@@ -46,25 +42,6 @@ export class UserController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @SetGuardType(GuardType.PUBLIC)
-  @ApiUser.Create({ summary: '회원가입 API' })
-  @Post(routesV1.user.create)
-  async create(
-    @Body() createUserRequestBodyDto: CreateUserRequestBodyDto,
-  ): Promise<IdResponseDto> {
-    const command = new CreateUserCommand({
-      ...createUserRequestBodyDto,
-      loginType: UserLoginType.EMAIL,
-    });
-
-    const result = await this.commandBus.execute<
-      CreateUserCommand,
-      AggregateID
-    >(command);
-
-    return new IdResponseDto(result);
-  }
-
   @ApiUser.FindOne({
     summary: '유저 상세 조회 API',
   })
@@ -82,7 +59,7 @@ export class UserController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiUser.SendVerificationEmail({ summary: '유저 인증 이메일 전송 API' })
   @Post(routesV1.user.sendVerificationEmail)
-  async sendVerificationEmail(@GetUserId() userId: AggregateID): Promise<void> {
+  async sendVerificationEmail(@User('sub') userId: AggregateID): Promise<void> {
     const command = new SendVerificationEmailCommand({
       userId,
     });
@@ -98,11 +75,11 @@ export class UserController {
   @Post(routesV1.user.sendPasswordChangeVerificationEmail)
   async sendPasswordChangeVerificationEmail(
     @Param('email', ParseEmailPipe) email: string,
-    @Body() requestDto: SendPasswordChangeVerificationEmailRequestDto,
+    @Body() requestBodyDto: SendPasswordChangeVerificationEmailRequestDto,
   ): Promise<void> {
     const command = new SendPasswordChangeVerificationEmailCommand({
       email,
-      ...requestDto,
+      ...requestBodyDto,
     });
 
     await this.commandBus.execute(command);
@@ -132,12 +109,12 @@ export class UserController {
   async updatePassword(
     @Param('id', ParsePositiveBigIntPipe) id: string,
     @Query('token', ParseUUIDPipe) token: string,
-    @Body() requestDto: UpdatePasswordRequestDto,
+    @Body() requestBodyDto: UpdatePasswordRequestDto,
   ): Promise<void> {
     const command = new UpdateUserPasswordCommand({
       userId: BigInt(id),
       token,
-      ...requestDto,
+      ...requestBodyDto,
     });
 
     await this.commandBus.execute(command);

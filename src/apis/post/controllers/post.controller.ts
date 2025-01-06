@@ -10,7 +10,7 @@ import { PostMapper, PostModel } from '@src/apis/post/mappers/post.mapper';
 import { FindPostsQuery } from '@src/apis/post/queries/find-posts/find-posts.query';
 import { routesV1 } from '@src/configs/app.route';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
-import { GetUserId } from '@src/libs/api/decorators/get-user-id.decorator';
+import { User } from '@src/libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decorator';
@@ -32,7 +32,7 @@ export class PostController {
   @ApiPost.Create({ summary: '게시글 생성 API' })
   @Post(routesV1.post.root)
   async create(
-    @GetUserId() userId: bigint,
+    @User('sub') userId: bigint,
     @Body() createPostRequestBodyDto: CreatePostRequestBodyDto,
   ) {
     const command = new CreatePostCommand({

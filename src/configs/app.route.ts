@@ -1,7 +1,7 @@
 // Root
 const userRoot = 'users';
 const postRoot = 'posts';
-const tokenRoot = 'tokens';
+const authRoot = 'auth';
 
 // Api Versions
 const v1 = 'v1';
@@ -19,9 +19,10 @@ export const routesV1 = {
     sendPasswordChangeVerificationEmail: `${userRoot}/:email/user-verify-tokens/password-change`,
   } as const,
 
-  token: {
-    root: tokenRoot,
-    generate: tokenRoot,
+  auth: {
+    root: authRoot,
+    signIn: `${authRoot}/sign-in`,
+    signUp: `${authRoot}/sign-up`,
   },
 
   post: {

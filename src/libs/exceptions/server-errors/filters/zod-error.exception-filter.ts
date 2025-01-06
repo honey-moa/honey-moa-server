@@ -47,7 +47,7 @@ export class ZodErrorExceptionFilter implements ExceptionFilter<ZodError> {
           method: request.method,
           url: request.url,
           body: request.body,
-          currentUser: request.user?.id,
+          currentUser: request.user?.sub,
         },
         response: {
           body: responseJson,
