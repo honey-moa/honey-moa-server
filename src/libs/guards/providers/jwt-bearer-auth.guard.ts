@@ -31,12 +31,13 @@ export class JwtBearerAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest<UserEntity>(err, user: UserEntity) {
-    if (err || !user) {
+  handleRequest<JwtPayload>(err, payload: JwtPayload) {
+    if (err || !payload) {
       throw new HttpUnauthorizedException({
         code: COMMON_ERROR_CODE.INVALID_TOKEN,
       });
     }
-    return user;
+
+    return payload;
   }
 }

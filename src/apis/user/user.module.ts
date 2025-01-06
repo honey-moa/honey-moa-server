@@ -6,7 +6,6 @@ import { UserMapper } from '@src/apis/user/mappers/user.mapper';
 import { FindOneUserQueryHandler } from '@src/apis/user/queries/find-one-user/find-one-user.query';
 import { UserRepository } from '@src/apis/user/repositories/user.repository';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
-import { AppJwtModule } from '@src/libs/app-jwt/app-jwt.module';
 import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/application/event-handlers/create-user-email-verify-token.domain-event-handler';
 import { EmailModule } from '@src/libs/email/email.module';
 import { VerifyUserEmailCommandHandler } from '@src/apis/user/commands/verify-user-email/verify-user-email.command-handler';
@@ -38,7 +37,7 @@ const repositories: Provider[] = [
 const mappers: Provider[] = [UserMapper, UserVerifyTokenMapper];
 
 @Module({
-  imports: [AppJwtModule, EmailModule],
+  imports: [EmailModule],
   controllers: [...controllers],
   providers: [
     ...mappers,

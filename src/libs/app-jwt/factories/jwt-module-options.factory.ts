@@ -15,6 +15,9 @@ export class JwtModuleOptionsFactory implements JwtOptionsFactory {
   createJwtOptions(): JwtModuleOptions {
     return {
       secret: this.appConfigService.get<string>(ENV_KEY.JWT_SECRET),
+      signOptions: {
+        issuer: this.appConfigService.get<string>(ENV_KEY.DOMAIN),
+      },
     };
   }
 }
