@@ -16,7 +16,7 @@ DROP INDEX "uq_user_email_verify_tokens_user_id";
 ALTER INDEX "uq_user_email_verify_tokens_token" RENAME TO "uq_user_verify_tokens_token";
 
 -- AddColumn
-ALTER TABLE "user_verify_tokens" ADD COLUMN "type" "UserVerifyTokenTypeEnum" NOT NULL DEFAULT 'email';
+ALTER TABLE "user_verify_tokens" ADD COLUMN "type" "UserVerifyTokenTypeEnum" NOT NULL DEFAULT 'EMAIL';
 
 
 -- DropDefault
