@@ -9,7 +9,6 @@ import {
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import type { CreateEntityProps } from '@src/libs/ddd/entity.base';
 import { UserResponseDto } from '@src/apis/user/dtos/response/user.response-dto';
-import { LoginCredential } from '@src/apis/user/domain/value-objects/login-credentials.value-object';
 import { baseSchema } from '@src/libs/db/base.schema';
 import type { UserProps } from '@src/apis/user/domain/user.entity-interface';
 import {
@@ -57,12 +56,9 @@ export class UserMapper
         mbti: record.mbti,
         isEmailVerified: record.isEmailVerified,
         deletedAt: record.deletedAt,
-
-        loginCredential: new LoginCredential({
-          email: record.email,
-          password: record.password,
-          loginType: record.loginType,
-        }),
+        email: record.email,
+        password: record.password,
+        loginType: record.loginType,
       },
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -79,11 +75,10 @@ export class UserMapper
 
   toPersistence(entity: UserEntity): UserModel {
     // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-    const { userVerifyTokens, loginCredential, ...props } = entity.getProps();
+    const { userVerifyTokens, ...props } = entity.getProps();
 
     const record: UserModel = {
       ...props,
-      ...loginCredential.unpack(),
     };
 
     return userSchema.parse(record);
@@ -94,7 +89,6 @@ export class UserMapper
 
     return new UserResponseDto({
       ...props,
-      ...props.loginCredential.unpack(),
     });
   }
 }

@@ -1,10 +1,10 @@
 import { DomainEvent, DomainEventProps } from '@libs/ddd/base-domain.event';
 
-export class UserIsEmailVerifiedModify extends DomainEvent {
+export class UserIsEmailVerifiedUpdatedDomainEvent extends DomainEvent {
   readonly oldIsEmailVerified: boolean;
   readonly newIsEmailVerified: boolean;
 
-  constructor(props: DomainEventProps<UserIsEmailVerifiedModify>) {
+  constructor(props: DomainEventProps<UserIsEmailVerifiedUpdatedDomainEvent>) {
     super(props);
 
     const { oldIsEmailVerified, newIsEmailVerified } = props;

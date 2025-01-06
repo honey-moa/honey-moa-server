@@ -1,25 +1,24 @@
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 
 import {
-  USER_PASSWORD_REGEXP,
+  USER_EMAIL_REGEXP,
+  UserLoginType,
   UserRole,
 } from '@src/apis/user/types/user.constant';
 
 import { getTsid } from 'tsid-ts';
 import bcrypt from 'bcrypt';
-import { LoginCredential } from '@src/apis/user/domain/value-objects/login-credentials.value-object';
 import { config } from 'dotenv';
-import { UserLoginCredentialUpdatedDomainEvent } from '@src/apis/user/domain/events/user-login-credential-updated.event';
 import { UserCreatedDomainEvent } from '@src/apis/user/domain/events/user-created.event';
 import type {
   UserProps,
   CreateUserProps,
-  UpdateLoginCredentialProps,
 } from '@src/apis/user/domain/user.entity-interface';
 import { Guard } from '@src/libs/guard';
 import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { UserIsEmailVerifiedModify } from '@src/apis/user/domain/events/user-is-email-verified-modified.event';
+import { UserIsEmailVerifiedUpdatedDomainEvent } from '@src/apis/user/domain/events/user-is-email-verified-modified.event';
+import { UserPasswordUpdatedDomainEvent } from '@src/apis/user/domain/events/user-password-updated.event';
 
 config();
 
@@ -36,53 +35,50 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
     const user = new UserEntity({ id, props });
 
-    await user.updateLoginCredential({
-      password: user.props.loginCredential.password,
-    });
-
     user.addEvent(
       new UserCreatedDomainEvent({
         aggregateId: id,
-        ...props.loginCredential.unpack(),
+        ...props,
       }),
     );
 
     return user;
   }
 
-  async updateLoginCredential(props: UpdateLoginCredentialProps) {
-    if (props.password) {
-      if (!this.isValidPassword(props.password)) {
-        throw new HttpInternalServerErrorException({
-          code: COMMON_ERROR_CODE.SERVER_ERROR,
-          ctx: '업데이트하는 비밀번호가 조건을 만족하지 않음.',
-        });
-      }
-    }
-
-    const password = props.password
-      ? await this.hashPassword(props.password)
-      : this.props.loginCredential.password;
-
-    const newLoginCredential = new LoginCredential({
-      ...this.props.loginCredential.unpack(),
-      ...props,
-      password,
-    });
-
-    this.props.loginCredential = newLoginCredential;
-
+  private updatePassword(newPassword: string) {
     this.addEvent(
-      new UserLoginCredentialUpdatedDomainEvent({
+      new UserPasswordUpdatedDomainEvent({
         aggregateId: this.id,
-        password: this.props.loginCredential.password,
+        oldPassword: this.props.password,
+        newPassword,
       }),
     );
+
+    this.props.password = newPassword;
+  }
+
+  async validateAndChangePassword(
+    plainPassword: string,
+    hashedPassword: string,
+  ) {
+    const isPasswordCorrect = await bcrypt.compare(
+      plainPassword,
+      hashedPassword,
+    );
+
+    if (!isPasswordCorrect) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'Password is incorrect',
+      });
+    }
+
+    this.updatePassword(hashedPassword);
   }
 
   private modifyIsEmailVerified(newIsEmailVerified: boolean) {
     this.addEvent(
-      new UserIsEmailVerifiedModify({
+      new UserIsEmailVerifiedUpdatedDomainEvent({
         aggregateId: this.id,
         oldIsEmailVerified: this.props.isEmailVerified,
         newIsEmailVerified,
@@ -96,19 +92,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
     this.modifyIsEmailVerified(true);
   }
 
-  private isValidPassword(password: string): boolean {
-    return Guard.isMatch(password, USER_PASSWORD_REGEXP);
-  }
-
-  private hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(
-      password,
-      +(process.env.HASH_ROUND as unknown as string),
-    );
-  }
-
   comparePassword(plainPassword: string): Promise<boolean> {
-    return bcrypt.compare(plainPassword, this.props.loginCredential.password);
+    return bcrypt.compare(plainPassword, this.props.password);
   }
 
   get userVerifyTokens() {
@@ -119,9 +104,36 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return this.props.isEmailVerified;
   }
 
-  get email() {
-    return this.props.loginCredential.email;
+  get email(): string {
+    return this.props.email;
   }
 
-  public validate(): void {}
+  get password(): string {
+    return this.props.password;
+  }
+
+  get loginType(): string {
+    return this.props.loginType;
+  }
+
+  public validate(): void {
+    if (!Guard.isMatch(this.props.email, USER_EMAIL_REGEXP)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'Not in email format',
+      });
+    }
+    if (!Guard.lengthIsBetween(this.props.password, 8)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'Passwords must be at least 8 characters long',
+      });
+    }
+    if (!Guard.isIn(this.props.loginType, Object.values(UserLoginType))) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: `loginType must be ${Object.values(UserLoginType).join(', ')} only`,
+      });
+    }
+  }
 }
