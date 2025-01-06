@@ -5,6 +5,10 @@ import { UpdateUserPasswordCommand } from '@src/apis/user/commands/update-user-p
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { UserVerifyTokenType } from '@src/apis/user/types/user.constant';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-config.service-port';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -12,7 +16,7 @@ import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/ex
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import { isNil } from '@src/libs/utils/util';
-
+import bcrypt from 'bcrypt';
 @CommandHandler(UpdateUserPasswordCommand)
 export class UpdateUserPasswordCommandHandler
   implements ICommandHandler<UpdateUserPasswordCommand, void>
@@ -20,6 +24,8 @@ export class UpdateUserPasswordCommandHandler
   constructor(
     @Inject(USER_REPOSITORY_DI_TOKEN)
     private readonly userRepository: UserRepositoryPort,
+    @Inject(APP_CONFIG_SERVICE_DI_TOKEN)
+    private readonly appConfigService: AppConfigServicePort<Key>,
   ) {}
 
   @Transactional()
@@ -67,9 +73,12 @@ export class UpdateUserPasswordCommandHandler
 
     userPasswordChangeVerifyToken.use();
 
-    await existingUser.updateLoginCredential({
-      password: newPassword,
-    });
+    const hashedPassword = await bcrypt.hash(
+      newPassword,
+      this.appConfigService.get<number>(ENV_KEY.HASH_ROUND),
+    );
+
+    await existingUser.validateAndChangePassword(newPassword, hashedPassword);
 
     await this.userRepository.updateUserVerifyToken(
       userPasswordChangeVerifyToken,

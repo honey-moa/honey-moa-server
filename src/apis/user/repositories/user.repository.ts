@@ -56,6 +56,8 @@ export class UserRepository implements UserRepositoryPort {
   }
 
   async create(entity: UserEntity): Promise<void> {
+    entity.validate();
+
     const record = this.mapper.toPersistence(entity);
 
     await this.txHost.tx.user.create({

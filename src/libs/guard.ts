@@ -69,4 +69,8 @@ export class Guard {
   static isMatch(value: string, pattern: RegExp) {
     return pattern.test(value);
   }
+
+  static isPositiveInt(value: number | bigint) {
+    return Number.isInteger(value) && value > 0;
+  }
 }
