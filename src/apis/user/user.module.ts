@@ -13,8 +13,11 @@ import { SendVerificationEmailCommandHandler } from '@src/apis/user/commands/sen
 import { UserVerifyTokenMapper } from '@src/apis/user/mappers/user-verify-token.mapper';
 import { UpdateUserPasswordCommandHandler } from '@src/apis/user/commands/update-user-password/update-user-password.command-handler';
 import { SendPasswordChangeVerificationEmailCommandHandler } from '@src/apis/user/commands/send-password-change-verification-email/send-password-change-verification-email.command-handler';
+import { UserConnectionController } from '@src/apis/user/controllers/user-connection/user-connection.controller';
+import { CreateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/create-user-connection/create-user-connection.command-handler';
+import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 
-const controllers = [UserController];
+const controllers = [UserController, UserConnectionController];
 
 const commandHandlers: Provider[] = [
   CreateUserCommandHandler,
@@ -22,6 +25,7 @@ const commandHandlers: Provider[] = [
   SendVerificationEmailCommandHandler,
   SendPasswordChangeVerificationEmailCommandHandler,
   UpdateUserPasswordCommandHandler,
+  CreateUserConnectionCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [FindOneUserQueryHandler];
@@ -34,7 +38,11 @@ const repositories: Provider[] = [
   { provide: USER_REPOSITORY_DI_TOKEN, useClass: UserRepository },
 ];
 
-const mappers: Provider[] = [UserMapper, UserVerifyTokenMapper];
+const mappers: Provider[] = [
+  UserMapper,
+  UserConnectionMapper,
+  UserVerifyTokenMapper,
+];
 
 @Module({
   imports: [EmailModule],

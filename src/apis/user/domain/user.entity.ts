@@ -100,6 +100,14 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return this.props.userVerifyTokens;
   }
 
+  get requestedConnection() {
+    return this.props.requestedConnection;
+  }
+
+  get requesterConnection() {
+    return this.props.requesterConnection;
+  }
+
   get isEmailVerified() {
     return this.props.isEmailVerified;
   }

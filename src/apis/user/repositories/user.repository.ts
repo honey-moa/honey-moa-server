@@ -2,8 +2,10 @@ import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
+import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { UserVerifyTokenMapper } from '@src/apis/user/mappers/user-verify-token.mapper';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
 import {
@@ -23,6 +25,7 @@ export class UserRepository implements UserRepositoryPort {
     private readonly eventEmitter: EventEmitter2,
     private readonly mapper: UserMapper,
     private readonly userVerifyTokenMapper: UserVerifyTokenMapper,
+    private readonly userConnectionMapper: UserConnectionMapper,
   ) {}
 
   async findOneById(
@@ -94,6 +97,22 @@ export class UserRepository implements UserRepositoryPort {
     return existUser ? this.mapper.toEntity(existUser) : undefined;
   }
 
+  async findByIds(
+    ids: AggregateID[],
+    include?: UserInclude,
+  ): Promise<UserEntity[]> {
+    const records = await this.txHost.tx.user.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      include,
+    });
+
+    return records.map((record) => this.mapper.toEntity(record));
+  }
+
   async createUserVerifyToken(entity: UserVerifyTokenEntity): Promise<void> {
     const record = this.userVerifyTokenMapper.toPersistence(entity);
 
@@ -109,6 +128,14 @@ export class UserRepository implements UserRepositoryPort {
       where: {
         id: record.id,
       },
+      data: record,
+    });
+  }
+
+  async createUserConnection(entity: UserConnectionEntity): Promise<void> {
+    const record = this.userConnectionMapper.toPersistence(entity);
+
+    await this.txHost.tx.userConnection.create({
       data: record,
     });
   }
