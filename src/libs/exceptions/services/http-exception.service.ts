@@ -12,6 +12,7 @@ interface ExceptionError {
   code: ValueOf<typeof ERROR_CODE>;
   errors?: unknown[];
   stack?: any;
+  customMessage?: string;
 }
 
 interface LogInfo {
@@ -33,12 +34,12 @@ export class HttpExceptionService {
     exceptionError: ExceptionError,
   ): ExceptionResponseDto {
     const isProduction = this.appConfigService.isProduction();
-    const { code, errors } = exceptionError;
+    const { code, errors, customMessage } = exceptionError;
 
     return new ExceptionResponseDto({
       statusCode,
       code,
-      message: ERROR_MESSAGE[code],
+      message: customMessage ?? ERROR_MESSAGE[code],
       errors: errors ?? [],
       stack:
         statusCode >= 500 && isProduction ? exceptionError.stack : undefined,

@@ -24,15 +24,18 @@ export class HttpException extends NestHttpException {
 
   public readonly errors?: unknown[];
 
+  public readonly customMessage?: string;
+
   constructor(
     error: HttpError<HttpException> & { statusCode: ErrorHttpStatusCode },
   ) {
-    const { statusCode, code, errors } = error;
+    const { statusCode, code, errors, customMessage } = error;
 
     super(
       {
         code,
         errors,
+        customMessage,
       },
       statusCode,
     );
@@ -43,6 +46,7 @@ export class HttpException extends NestHttpException {
     codeAndDescription: {
       description: string;
       code: ValueOf<typeof ERROR_CODE>;
+      customMessage?: string;
       additionalErrors?: {
         errors: Array<
           { value: unknown; reason: string; property: string } | string
@@ -60,14 +64,14 @@ export class HttpException extends NestHttpException {
 
     const examples = codeAndDescription.reduce<
       Record<string, Pick<ExampleObject, 'value' | 'description'>>
-    >((acc, { description, additionalErrors, code }) => {
+    >((acc, { description, additionalErrors, code, customMessage }) => {
       acc[description] = {
         description,
         value: {
           timestamp,
           status,
           code,
-          message: ERROR_MESSAGE[code],
+          message: customMessage ?? ERROR_MESSAGE[code],
         },
       };
 
@@ -135,8 +139,13 @@ export class HttpException extends NestHttpException {
             message: {
               type: 'string',
               description: 'error message',
-              example: ERROR_MESSAGE[ERROR_CODE[codeAndDescription[0].code]],
-              enum: codeAndDescription.map(({ code }) => ERROR_MESSAGE[code]),
+              example:
+                codeAndDescription[0].customMessage ??
+                ERROR_MESSAGE[ERROR_CODE[codeAndDescription[0].code]],
+              enum: codeAndDescription.map(
+                ({ code, customMessage }) =>
+                  customMessage ?? ERROR_MESSAGE[code],
+              ),
             },
           },
         },
