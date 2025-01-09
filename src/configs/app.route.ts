@@ -12,7 +12,7 @@ export const routesV1 = {
   user: {
     root: userRoot,
     create: userRoot,
-    findOne: `${userRoot}/:id`,
+    findUsers: `${userRoot}`,
     verifyEmail: `${userRoot}/:id/is-email-verified`,
     updatePassword: `${userRoot}/:id/password`,
     sendVerificationEmail: `${userRoot}/me/user-verify-tokens/email`,

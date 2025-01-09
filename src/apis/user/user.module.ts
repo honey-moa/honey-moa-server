@@ -3,7 +3,6 @@ import { Provider } from '@nestjs/common/interfaces';
 import { CreateUserCommandHandler } from '@src/apis/user/commands/create-user/create-user.command-handler';
 import { UserController } from '@src/apis/user/controllers/user.controller';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
-import { FindOneUserQueryHandler } from '@src/apis/user/queries/find-one-user/find-one-user.query';
 import { UserRepository } from '@src/apis/user/repositories/user.repository';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { CreateUserEmailVerifyTokenDomainEventHandler } from '@src/apis/user/application/event-handlers/create-user-email-verify-token.domain-event-handler';
@@ -16,6 +15,7 @@ import { SendPasswordChangeVerificationEmailCommandHandler } from '@src/apis/use
 import { UserConnectionController } from '@src/apis/user/controllers/user-connection/user-connection.controller';
 import { CreateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/create-user-connection/create-user-connection.command-handler';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
+import { FindUsersQueryHandler } from '@src/apis/user/queries/find-users/find-users.query';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -28,7 +28,7 @@ const commandHandlers: Provider[] = [
   CreateUserConnectionCommandHandler,
 ];
 
-const queryHandlers: Provider[] = [FindOneUserQueryHandler];
+const queryHandlers: Provider[] = [FindUsersQueryHandler];
 
 const eventHandlers: Provider[] = [
   CreateUserEmailVerifyTokenDomainEventHandler,

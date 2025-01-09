@@ -16,7 +16,6 @@ import { ApiUser } from '@src/apis/user/controllers/user.swagger';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import { UserResponseDto } from '@src/apis/user/dtos/response/user.response-dto';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
-import { FindOneUserQuery } from '@src/apis/user/queries/find-one-user/find-one-user.query';
 import { routesV1 } from '@src/configs/app.route';
 import { ParsePositiveBigIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
 import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decorator';
@@ -31,6 +30,10 @@ import { ParseEmailPipe } from '@src/libs/api/pipes/parse-email.pipe';
 import { SendPasswordChangeVerificationEmailRequestDto } from '@src/apis/user/dtos/request/send-password-change-verification-email.request-dto';
 import { UpdatePasswordRequestDto } from '@src/apis/user/dtos/request/update-password.request-dto';
 import { UpdateUserPasswordCommand } from '@src/apis/user/commands/update-user-password/update-user-password.command';
+import { FindUsersRequestQueryDto } from '@src/apis/user/dtos/request/find-users.request-query-dto';
+import { FindUsersQuery } from '@src/apis/user/queries/find-users/find-users.query';
+import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
+import { Paginated } from '@src/libs/types/type';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -42,18 +45,24 @@ export class UserController {
     private readonly commandBus: CommandBus,
   ) {}
 
-  @ApiUser.FindOne({
-    summary: '유저 상세 조회 API',
+  @ApiUser.FindUsers({
+    summary: '유저 전체 조회 API(Pagination)',
   })
-  @Get(routesV1.user.findOne)
-  async findOne(
-    @Param('id', ParsePositiveBigIntPipe) id: string,
-  ): Promise<UserResponseDto> {
-    const query = new FindOneUserQuery({ id: BigInt(id) });
+  @SetPagination()
+  @Get(routesV1.user.findUsers)
+  async findUsers(
+    @Query() requestQueryDto: FindUsersRequestQueryDto,
+  ): Promise<[UserResponseDto[], number]> {
+    const query = new FindUsersQuery({
+      ...requestQueryDto,
+    });
 
-    const user: UserEntity = await this.queryBus.execute(query);
+    const [users, count] = await this.queryBus.execute<
+      FindUsersQuery,
+      Paginated<UserEntity>
+    >(query);
 
-    return this.mapper.toResponseDto(user);
+    return [users.map((user) => this.mapper.toResponseDto(user)), count];
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

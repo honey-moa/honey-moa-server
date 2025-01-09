@@ -9,7 +9,7 @@ import {
 
 export class OffsetPaginationResponseDto {
   @ApiProperty({
-    description: '총 페이지 수',
+    description: '데이터의 총 개수',
     minimum: 1,
     format: 'integer',
   })
@@ -55,6 +55,29 @@ export class OffsetPaginationResponseDto {
     status: Exclude<HttpStatus, ErrorHttpStatusCode>,
     key: string,
     type: Type,
+  ): ReturnType<typeof applyDecorators>;
+
+  static swaggerBuilder(
+    status: Exclude<HttpStatus, ErrorHttpStatusCode>,
+    key: string,
+    type: Type,
+    getOnlyType?: false,
+    options?: ApiPropertyOptions, // eslint-disable-next-line @typescript-eslint/ban-types
+  ): ReturnType<typeof applyDecorators>;
+
+  static swaggerBuilder(
+    status: Exclude<HttpStatus, ErrorHttpStatusCode>,
+    key: string,
+    type: Type,
+    getOnlyType: true,
+    options?: ApiPropertyOptions, // eslint-disable-next-line @typescript-eslint/ban-types
+  ): Function;
+
+  static swaggerBuilder(
+    status: Exclude<HttpStatus, ErrorHttpStatusCode>,
+    key: string,
+    type: Type,
+    getOnlyType: boolean = false,
     options: ApiPropertyOptions = {},
   ) {
     class Temp extends this {
@@ -70,6 +93,10 @@ export class OffsetPaginationResponseDto {
     Object.defineProperty(Temp, 'name', {
       value: `${key[0].toUpperCase()}${key.slice(1)}${this.name}`,
     });
+
+    if (getOnlyType) {
+      return Temp;
+    }
 
     return applyDecorators(
       ApiExtraModels(type),

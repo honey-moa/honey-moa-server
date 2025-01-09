@@ -6,13 +6,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { OffsetPaginationRequestQueryDto } from '@src/libs/api/dtos/request/offset-pagination.request-query-dto';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { BaseModel } from '@src/libs/db/base.schema';
 import { PaginationResponseBuilder } from '@src/libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
 import { SET_PAGINATION } from '@src/libs/interceptors/pagination/types/pagination-interceptor.constant';
 
-import { PaginationBy } from '@src/libs/interceptors/pagination/types/pagination-interceptor.enum';
 import { PaginationInterceptorArgs } from '@src/libs/interceptors/pagination/types/pagination-interceptor.type';
+import { isNil } from '@src/libs/utils/util';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,18 +26,22 @@ export class PaginationInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data: unknown) => {
-        const paginationBy = this.reflector.get<
+        const usePagination = this.reflector.get<
           PaginationInterceptorArgs | undefined
         >(SET_PAGINATION, context.getHandler());
 
         // paginationBy 가 없으면 해당 인터셉터를 사용하지 않는다고 판별한다.
-        if (!paginationBy) return data;
+        if (!usePagination) return data;
 
-        // Offset-base pagination response
-        if (paginationBy === PaginationBy.Offset) {
-          const request = context.switchToHttp().getRequest();
-          const { query } = request;
-          const { page, limit }: OffsetPaginationRequestQueryDto = query;
+        const { query } = context.switchToHttp().getRequest();
+
+        /**
+         * Offset-base pagination response
+         * @description page가 존재하고, cursor가 없다면 Offset-base pagination 을 적용한다.
+         */
+        if (isNil(query.cursor) && query.page) {
+          const { page, limit }: OffsetPaginationRequestQueryDto<BaseModel> =
+            query;
 
           return this.paginationResponseBuilder.offsetPaginationResponseBuild(
             { data },
@@ -46,13 +49,17 @@ export class PaginationInterceptor implements NestInterceptor {
           );
         }
 
-        // Cursor-base pagination response
-        if (paginationBy === PaginationBy.Cursor) {
-          throw new HttpInternalServerErrorException({
-            ctx: 'Not implemented',
-            code: COMMON_ERROR_CODE.SERVER_ERROR,
-          });
-        }
+        /**
+         * Cursor-base pagination response
+         * @description page가 존재하고, cursor가 없는 상황 외의 모든 상황에서 Cursor-base pagination 을 적용한다.
+         */
+
+        const { limit }: OffsetPaginationRequestQueryDto<BaseModel> = query;
+
+        return this.paginationResponseBuilder.cursorPaginationResponseBuild(
+          { data },
+          { limit },
+        );
 
         return data;
       }),

@@ -8,12 +8,13 @@ import { HttpError } from '@src/libs/exceptions/types/exceptions.type';
  */
 export class HttpBadRequestException extends HttpException {
   constructor(error: HttpError<HttpBadRequestException>) {
-    const { code, errors } = error;
+    const { code, errors, customMessage } = error;
 
     super({
       code,
       statusCode: HttpStatus.BAD_REQUEST,
       errors,
+      customMessage,
     });
   }
 
