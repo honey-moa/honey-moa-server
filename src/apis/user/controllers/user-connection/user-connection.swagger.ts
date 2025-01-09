@@ -117,6 +117,33 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
         'userConnections',
         UserConnectionResponseDto,
       ),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_JSON_FORMAT,
+          description: '잘못된 json format',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description:
+            'orderBy 값에 유효하지 않은 키 이거나 값의 포맷, enum이 잘못됨',
+          customMessage:
+            'Invalid value: a  sc for key: id. Allowed values are asc, desc',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'requestedId가 양의 정수여야 함.',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'requestedId',
+                value: '-1',
+                reason: 'requestedId must be greater than 1',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+      ]),
       HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
         {
           code: COMMON_ERROR_CODE.INVALID_TOKEN,
