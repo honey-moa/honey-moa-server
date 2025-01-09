@@ -48,9 +48,9 @@ export class FindUserConnectionsRequestQueryDto extends OffsetPaginationRequestQ
     description:
       '필터링할 상태.<br>' +
       'ACCEPTED: 수락된 커넥션<br>' +
-      'PENDING: 대기중인 커넥션<br>',
+      'PENDING: 대기중인 커넥션<br>' +
+      '여러 값을 보낼 때 ?status=PENDING&status=ACCEPTED 같이 중복 키로 값을 보내면 됨.',
     enum: [UserConnectionStatus.ACCEPTED, UserConnectionStatus.PENDING],
-    isArray: true,
     minItems: 1,
     uniqueItems: true,
   })
