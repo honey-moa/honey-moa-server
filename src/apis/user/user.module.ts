@@ -15,7 +15,9 @@ import { SendPasswordChangeVerificationEmailCommandHandler } from '@src/apis/use
 import { UserConnectionController } from '@src/apis/user/controllers/user-connection/user-connection.controller';
 import { CreateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/create-user-connection/create-user-connection.command-handler';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
-import { FindUsersQueryHandler } from '@src/apis/user/queries/find-users/find-users.query';
+import { FindUsersQueryHandler } from '@src/apis/user/queries/find-users/find-users.query-handler';
+import { FindUserConnectionsQueryHandler } from '@src/apis/user/queries/user-connection/find-user-connections/find-user-connections.query-handler';
+import { UpdateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/update-user-connection/update-user-connection.command-handler';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -26,9 +28,13 @@ const commandHandlers: Provider[] = [
   SendPasswordChangeVerificationEmailCommandHandler,
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
+  UpdateUserConnectionCommandHandler,
 ];
 
-const queryHandlers: Provider[] = [FindUsersQueryHandler];
+const queryHandlers: Provider[] = [
+  FindUsersQueryHandler,
+  FindUserConnectionsQueryHandler,
+];
 
 const eventHandlers: Provider[] = [
   CreateUserEmailVerifyTokenDomainEventHandler,
