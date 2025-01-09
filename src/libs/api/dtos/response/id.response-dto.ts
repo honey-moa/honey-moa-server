@@ -5,6 +5,7 @@ export class IdResponseDto {
   @ApiProperty({
     example: '554965628120837912',
     description: '고유 ID',
+    format: 'int64',
   })
   readonly id: string;
 

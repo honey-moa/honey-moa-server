@@ -70,7 +70,13 @@ export class Guard {
     return pattern.test(value);
   }
 
-  static isPositiveInt(value: number | bigint) {
-    return Number.isInteger(value) && value > 0;
+  static isPositiveBigInt(value: number | bigint): boolean {
+    try {
+      const bigIntValue = BigInt(value);
+
+      return bigIntValue > 0;
+    } catch {
+      return false;
+    }
   }
 }

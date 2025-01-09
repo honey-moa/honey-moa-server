@@ -113,4 +113,5 @@ enum UserConnectionStatusEnum {
   PENDING
   ACCEPTED
   REJECTED
+  DISCONNECTED
 }

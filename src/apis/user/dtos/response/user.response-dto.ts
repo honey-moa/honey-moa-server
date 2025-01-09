@@ -1,13 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  UserLoginType,
-  UserMbti,
-  UserRole,
-} from '@src/apis/user/types/user.constant';
+import { UserLoginType, UserMbti } from '@src/apis/user/types/user.constant';
 import {
   UserLoginTypeUnion,
   UserMbtiUnion,
-  UserRoleUnion,
 } from '@src/apis/user/types/user.type';
 import {
   BaseResponseDto,
@@ -18,7 +13,6 @@ export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   nickname: string;
   email: string;
   loginType: UserLoginTypeUnion;
-  role: UserRoleUnion;
   mbti: UserMbtiUnion | null;
   isEmailVerified: boolean;
 }
@@ -52,13 +46,6 @@ export class UserResponseDto
   readonly loginType: UserLoginTypeUnion;
 
   @ApiProperty({
-    example: 'user',
-    description: '유저 역할',
-    enum: UserRole,
-  })
-  readonly role: UserRoleUnion;
-
-  @ApiProperty({
     example: 'ISTP',
     description: '유저 MBTI',
     enum: UserMbti,
@@ -75,12 +62,11 @@ export class UserResponseDto
   constructor(create: CreateUserResponseDtoProps) {
     super(create);
 
-    const { nickname, role, email, loginType, mbti, isEmailVerified } = create;
+    const { nickname, email, loginType, mbti, isEmailVerified } = create;
 
     this.nickname = nickname;
     this.email = email;
     this.loginType = loginType;
-    this.role = role;
     this.mbti = mbti;
     this.isEmailVerified = isEmailVerified;
   }

@@ -1,3 +1,4 @@
+import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import type {
   UserLoginTypeUnion,
@@ -16,6 +17,8 @@ export interface UserProps {
   deletedAt: Date | null;
 
   userVerifyTokens?: UserVerifyTokenEntity[];
+  requestedConnection?: UserConnectionEntity;
+  requesterConnection?: UserConnectionEntity;
 }
 
 export interface CreateUserProps {

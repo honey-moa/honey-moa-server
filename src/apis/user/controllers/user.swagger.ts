@@ -1,9 +1,11 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiExtraModels,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  getSchemaPath,
 } from '@nestjs/swagger';
 
 import { UserController } from '@src/apis/user/controllers/user.controller';
@@ -15,6 +17,8 @@ import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/except
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
+import { CursorPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
+import { OffsetPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@src/libs/types/custom-validation-errors.type';
 import {
   ApiOperator,
@@ -22,16 +26,43 @@ import {
 } from '@src/libs/types/type';
 
 export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
-  FindOne: (
+  FindUsers: (
     apiOperationOptions: ApiOperationOptionsWithSummary,
   ): MethodDecorator => {
+    const paginationResponseTypes = [
+      CursorPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'users',
+        UserResponseDto,
+        [
+          { format: 'int64', key: 'id' },
+          { format: 'date-time', key: 'createdAt' },
+          { format: 'date-time', key: 'updatedAt' },
+        ],
+        true,
+      ),
+      OffsetPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'users',
+        UserResponseDto,
+        true,
+      ),
+    ];
+
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
       }),
+      ApiBearerAuth('access-token'),
+      ApiExtraModels(...paginationResponseTypes),
       ApiOkResponse({
-        description: '정상적으로 유저 상세 조회 됨.',
-        type: UserResponseDto,
+        description:
+          '정상적으로 유저 상세 조회 됨. cursor 혹은 offset pagination response 타입 중 하나를 리턴함.',
+        schema: {
+          oneOf: paginationResponseTypes.map((type) => ({
+            $ref: getSchemaPath(type),
+          })),
+        },
       }),
       HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
@@ -49,11 +80,19 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
             errorType: CustomValidationError,
           },
         },
-      ]),
-      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
         {
-          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
-          description: '리소스를 찾을 수 없습니다.',
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '필수 key값 혹은 value의 format이 잘못됨.',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_JSON_FORMAT,
+          description: 'JSON format이 잘못됨.',
+        },
+      ]),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
         },
       ]),
     );

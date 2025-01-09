@@ -1,21 +1,10 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
-import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { Request } from 'express';
 
 @Injectable()
 export class BasicTokenGuard implements CanActivate {
-  constructor(
-    @Inject(USER_REPOSITORY_DI_TOKEN)
-    private readonly userRepository: UserRepositoryPort,
-  ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
 

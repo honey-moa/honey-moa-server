@@ -16,6 +16,10 @@ import {
   userVerifyTokenSchema,
 } from '@src/apis/user/mappers/user-verify-token.mapper';
 import { isNil } from '@src/libs/utils/util';
+import {
+  UserConnectionMapper,
+  userConnectionSchema,
+} from '@src/apis/user/mappers/user-connection.mapper';
 
 export const userSchema = baseSchema.extend({
   nickname: z.string().min(1).max(20),
@@ -31,23 +35,28 @@ export const userSchema = baseSchema.extend({
   ),
 });
 
-export const userWithUserVerifyTokensSchema = userSchema.extend({
-  userVerifyTokens: z.nullable(z.array(userVerifyTokenSchema)).optional(),
+export const userWithEntitiesTokensSchema = userSchema.extend({
+  userVerifyTokens: z.array(userVerifyTokenSchema).optional(),
+  requestedConnection: z.nullable(userConnectionSchema).optional(),
+  requesterConnection: z.nullable(userConnectionSchema).optional(),
 });
 
 export type UserModel = z.TypeOf<typeof userSchema>;
 
-type UserWithUserVerifyTokensModel = z.TypeOf<
-  typeof userWithUserVerifyTokensSchema
+type UserWithEntitiesTokensModel = z.TypeOf<
+  typeof userWithEntitiesTokensSchema
 >;
 
 @Injectable()
 export class UserMapper
   implements Mapper<UserEntity, UserModel, UserResponseDto>
 {
-  constructor(private readonly userVerifyTokenMapper: UserVerifyTokenMapper) {}
+  constructor(
+    private readonly userVerifyTokenMapper: UserVerifyTokenMapper,
+    private readonly userConnectionMapper: UserConnectionMapper,
+  ) {}
 
-  toEntity(record: UserWithUserVerifyTokensModel): UserEntity {
+  toEntity(record: UserWithEntitiesTokensModel): UserEntity {
     const userProps: CreateEntityProps<UserProps> = {
       id: record.id,
       props: {
@@ -70,12 +79,31 @@ export class UserMapper
       );
     }
 
+    if (!isNil(record.requestedConnection)) {
+      userProps.props.requestedConnection = this.userConnectionMapper.toEntity(
+        record.requestedConnection,
+      );
+    }
+
+    if (!isNil(record.requesterConnection)) {
+      userProps.props.requesterConnection = this.userConnectionMapper.toEntity(
+        record.requesterConnection,
+      );
+    }
+
     return new UserEntity(userProps);
   }
 
   toPersistence(entity: UserEntity): UserModel {
-    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-    const { userVerifyTokens, ...props } = entity.getProps();
+    const {
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+      userVerifyTokens,
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+      requestedConnection,
+      // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+      requesterConnection,
+      ...props
+    } = entity.getProps();
 
     const record: UserModel = {
       ...props,

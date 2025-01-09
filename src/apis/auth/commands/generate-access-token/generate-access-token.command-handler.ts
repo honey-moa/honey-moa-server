@@ -29,8 +29,6 @@ export class GenerateAccessTokenCommandHandler
       UserLoginType.EMAIL,
     );
 
-    console.log(password);
-
     if (isNil(existingUser)) {
       throw new HttpUnauthorizedException({
         code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,

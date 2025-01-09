@@ -14,4 +14,5 @@ export const COMMON_ERROR_MESSAGE: ErrorMessage<typeof COMMON_ERROR_CODE> = {
     "The resource you're trying to access doesn't exist.",
   [COMMON_ERROR_CODE.MISSING_UPDATE_FIELD]:
     'At least one update field must exist.',
+  [COMMON_ERROR_CODE.INVALID_JSON_FORMAT]: 'Invalid JSON format',
 } as const;

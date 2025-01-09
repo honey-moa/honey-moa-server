@@ -1,4 +1,5 @@
 import { ApiOperationOptions } from '@nestjs/swagger';
+import { CursorBy, OrderBy } from '@src/libs/api/types/api.type';
 import { BaseModel } from '@src/libs/db/base.schema';
 
 export type ApiOperationOptionsWithSummary = Required<
@@ -18,15 +19,17 @@ export type ErrorMessage<T extends Record<string, number>> = Required<{
   [key in ValueOf<T>]: string;
 }>;
 
-export type OrderBy<Model extends BaseModel> = {
-  [key in keyof Model]?: 'asc' | 'desc';
-};
-
-export type PaginatedQueryParams<Model extends BaseModel> = {
+export type PaginatedQueryParams = {
   limit: number;
+  orderBy: OrderBy<Pick<BaseModel, 'id'>>;
   page: number;
-  offset: number;
-  orderBy: OrderBy<Model>;
+  cursor: CursorBy<BaseModel, 'id'>;
 };
 
 export type Paginated<T> = [Array<T>, number];
+
+export type SingleProperty<T> = {
+  [K in keyof T]: { [P in K]: T[P] } & Partial<
+    Record<Exclude<keyof T, K>, never>
+  >;
+}[keyof T];

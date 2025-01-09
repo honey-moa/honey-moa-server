@@ -16,7 +16,6 @@ import { AggregateID } from '@src/libs/ddd/entity.base';
 import { SetGuardType } from '@src/libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@src/libs/guards/types/guard.constant';
 import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import { PaginationBy } from '@src/libs/interceptors/pagination/types/pagination-interceptor.enum';
 import { Paginated } from '@src/libs/types/type';
 
 @ApiTags('Post')
@@ -49,7 +48,7 @@ export class PostController {
   }
 
   @SetGuardType(GuardType.PUBLIC)
-  @SetPagination(PaginationBy.Offset)
+  @SetPagination()
   @ApiPost.FindPosts({ summary: '게시글 조회(Pagination) API' })
   @Get(routesV1.post.root)
   async findPosts(
