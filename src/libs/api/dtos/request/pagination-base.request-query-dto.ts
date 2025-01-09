@@ -25,7 +25,8 @@ export abstract class PaginationBaseRequestQueryDto<
 > {
   @ApiPropertyOptional({
     description:
-      '페이지번호. 보내지 않으면 기본적으로 cursor pagination 으로 동작합니다.',
+      '페이지번호. 보내지 않으면 기본적으로 cursor pagination 으로 동작합니다.<br>' +
+      '페이지를 보내고 cursor를 보내지 않는 경우에만 offset pagination 으로 동작합니다.',
     type: 'number',
     format: 'integer',
     minimum: 1,
