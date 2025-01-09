@@ -65,6 +65,9 @@ export class UserController {
     return [users.map((user) => this.mapper.toResponseDto(user)), count];
   }
 
+  /**
+   * @todo 나중에 PUT API로 바꿔야 함. 토큰이 존재하면 덮어 쓰고 존재하지 않으면 새로운 리소스를 만들기 때문.
+   */
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiUser.SendVerificationEmail({ summary: '유저 인증 이메일 전송 API' })
   @Post(routesV1.user.sendVerificationEmail)
@@ -76,6 +79,9 @@ export class UserController {
     await this.commandBus.execute(command);
   }
 
+  /**
+   * @todo 나중에 PUT API로 바꿔야 함. 토큰이 존재하면 덮어 쓰고 존재하지 않으면 새로운 리소스를 만들기 때문.
+   */
   @SetGuardType(GuardType.PUBLIC)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiUser.SendPasswordChangeVerificationEmail({

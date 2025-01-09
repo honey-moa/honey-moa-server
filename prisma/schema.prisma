@@ -114,4 +114,5 @@ enum UserConnectionStatusEnum {
   ACCEPTED
   REJECTED
   DISCONNECTED
+  CANCELED
 }

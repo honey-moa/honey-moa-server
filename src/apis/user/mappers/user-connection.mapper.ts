@@ -7,6 +7,11 @@ import { Mapper } from '@src/libs/ddd/mapper.interface';
 import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserConnectionProps } from '@src/apis/user/domain/user-connection/user-connection.entity-interface';
+import {
+  CreateUserConnectionResponseDtoProps,
+  UserConnectionResponseDto,
+} from '@src/apis/user/dtos/user-connection/response/user-connection.response-dto';
+import { HydratedUserResponseDto } from '@src/apis/user/dtos/response/hydrated-user.response-dto';
 
 export const userConnectionSchema = baseSchema
   .extend({
@@ -33,9 +38,10 @@ export type UserConnectionModel = z.TypeOf<typeof userConnectionSchema>;
 @Injectable()
 export class UserConnectionMapper
   implements
-    Omit<
-      Mapper<UserConnectionEntity, UserConnectionModel, unknown>,
-      'toResponseDto'
+    Mapper<
+      UserConnectionEntity,
+      UserConnectionModel,
+      UserConnectionResponseDto
     >
 {
   toEntity(record: UserConnectionModel): UserConnectionEntity {
@@ -62,5 +68,23 @@ export class UserConnectionMapper
     };
 
     return userConnectionSchema.parse(record);
+  }
+
+  toResponseDto(entity: UserConnectionEntity): UserConnectionResponseDto {
+    const { requestedUser, requesterUser, ...props } = entity.getProps();
+
+    const createDtoProps: CreateUserConnectionResponseDtoProps = {
+      ...props,
+    };
+
+    if (requestedUser) {
+      createDtoProps.requested = new HydratedUserResponseDto(requestedUser);
+    }
+
+    if (requesterUser) {
+      createDtoProps.requester = new HydratedUserResponseDto(requesterUser);
+    }
+
+    return new UserConnectionResponseDto(createDtoProps);
   }
 }

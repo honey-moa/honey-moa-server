@@ -19,6 +19,11 @@ export interface UserRepositoryPort
     include?: UserInclude,
   ): Promise<UserEntity | undefined>;
 
+  findOneUserConnectionById(
+    userConnectionId: AggregateID,
+    include?: UserInclude,
+  ): Promise<UserConnectionEntity | undefined>;
+
   findByIds(ids: AggregateID[], include?: UserInclude): Promise<UserEntity[]>;
 
   createUserVerifyToken(entity: UserVerifyTokenEntity): Promise<void>;
@@ -26,4 +31,6 @@ export interface UserRepositoryPort
   updateUserVerifyToken(entity: UserVerifyTokenEntity): Promise<void>;
 
   createUserConnection(entity: UserConnectionEntity): Promise<void>;
+
+  updateUserConnection(entity: UserConnectionEntity): Promise<void>;
 }

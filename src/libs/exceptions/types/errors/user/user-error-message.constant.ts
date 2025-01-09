@@ -27,4 +27,12 @@ export const USER_ERROR_MESSAGE: ErrorMessage<typeof USER_ERROR_CODE> = {
     "The connection couldn't be created because the target's email was not verified.",
   [USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF]:
     "You can't create a connection with yourself.",
+  [USER_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION]:
+    'You can only update a pending connection',
+  [USER_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU]:
+    'You can only accept a connection that comes to you',
+  [USER_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU]:
+    'You can only reject a connection that comes to you',
+  [USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT]:
+    'You can only cancel a connection that you sent',
 } as const;

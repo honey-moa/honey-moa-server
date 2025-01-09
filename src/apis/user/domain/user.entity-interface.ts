@@ -5,6 +5,7 @@ import type {
   UserMbtiUnion,
   UserRoleUnion,
 } from '@src/apis/user/types/user.type';
+import { BaseEntityProps } from '@src/libs/ddd/entity.base';
 
 export interface UserProps {
   nickname: string;
@@ -27,4 +28,8 @@ export interface CreateUserProps {
   password: string;
   loginType: UserLoginTypeUnion;
   mbti: UserMbtiUnion | null;
+}
+
+export interface HydratedUserEntityProps extends BaseEntityProps {
+  nickname: string;
 }

@@ -2,6 +2,7 @@ import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { UserConnectionStatusEnum } from '@prisma/client';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
@@ -113,6 +114,21 @@ export class UserRepository implements UserRepositoryPort {
     return records.map((record) => this.mapper.toEntity(record));
   }
 
+  async findOneUserConnectionById(
+    userConnectionId: AggregateID,
+  ): Promise<UserConnectionEntity | undefined> {
+    const userConnection = await this.txHost.tx.userConnection.findUnique({
+      where: {
+        id: userConnectionId,
+        status: UserConnectionStatusEnum.PENDING,
+      },
+    });
+
+    return userConnection
+      ? this.userConnectionMapper.toEntity(userConnection)
+      : undefined;
+  }
+
   async createUserVerifyToken(entity: UserVerifyTokenEntity): Promise<void> {
     const record = this.userVerifyTokenMapper.toPersistence(entity);
 
@@ -136,6 +152,15 @@ export class UserRepository implements UserRepositoryPort {
     const record = this.userConnectionMapper.toPersistence(entity);
 
     await this.txHost.tx.userConnection.create({
+      data: record,
+    });
+  }
+
+  async updateUserConnection(entity: UserConnectionEntity): Promise<void> {
+    const record = this.userConnectionMapper.toPersistence(entity);
+
+    await this.txHost.tx.userConnection.update({
+      where: { id: record.id },
       data: record,
     });
   }

@@ -42,4 +42,5 @@ export const UserConnectionStatus = {
   ACCEPTED: 'ACCEPTED',
   REJECTED: 'REJECTED',
   DISCONNECTED: 'DISCONNECTED',
+  CANCELED: 'CANCELED',
 } as const;
