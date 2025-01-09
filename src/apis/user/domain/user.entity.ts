@@ -19,6 +19,7 @@ import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-er
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { UserIsEmailVerifiedUpdatedDomainEvent } from '@src/apis/user/domain/events/user-is-email-verified-modified.event';
 import { UserPasswordUpdatedDomainEvent } from '@src/apis/user/domain/events/user-password-updated.event';
+import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 
 config();
 
@@ -94,6 +95,24 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
   comparePassword(plainPassword: string): Promise<boolean> {
     return bcrypt.compare(plainPassword, this.props.password);
+  }
+
+  hydrateRequesterUserConnection(userConnection: UserConnectionEntity) {
+    userConnection.requesterUser = {
+      id: this.id,
+      nickname: this.props.nickname,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
+
+  hydrateRequestedUserConnection(userConnection: UserConnectionEntity) {
+    userConnection.requestedUser = {
+      id: this.id,
+      nickname: this.props.nickname,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   }
 
   get userVerifyTokens() {

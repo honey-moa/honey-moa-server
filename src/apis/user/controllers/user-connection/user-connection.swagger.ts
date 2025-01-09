@@ -5,14 +5,17 @@ import {
   ApiOperation,
 } from '@nestjs/swagger';
 import { UserConnectionController } from '@src/apis/user/controllers/user-connection/user-connection.controller';
+import { UserConnectionResponseDto } from '@src/apis/user/dtos/user-connection/response/user-connection.response-dto';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
 
 import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
+import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
+import { OffsetPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@src/libs/types/custom-validation-errors.type';
 import {
   ApiOperator,
@@ -96,6 +99,28 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
           code: USER_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
           description:
             '요청한 유저는 이미 대기중인 커넥션 요청이 있음. 여러개의 요청 생성 불가.',
+        },
+      ]),
+    );
+  },
+
+  FindConnections: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      OffsetPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'userConnections',
+        UserConnectionResponseDto,
+      ),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
         },
       ]),
     );

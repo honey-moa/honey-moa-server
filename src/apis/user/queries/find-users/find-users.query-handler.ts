@@ -1,3 +1,5 @@
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
@@ -10,7 +12,9 @@ export class FindUsersQueryHandler
   implements IQueryHandler<FindUsersQuery, Paginated<UserEntity>>
 {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly txHost: TransactionHost<
+      TransactionalAdapterPrisma<PrismaService>
+    >,
     private readonly userMapper: UserMapper,
   ) {}
 
@@ -19,7 +23,7 @@ export class FindUsersQueryHandler
       query;
 
     const [users, count] = await Promise.all([
-      this.prisma.user.findMany({
+      this.txHost.tx.user.findMany({
         ...(cursor?.id && {
           cursor: {
             id: cursor?.id,
@@ -47,7 +51,7 @@ export class FindUsersQueryHandler
         take,
       }),
 
-      this.prisma.user.count({
+      this.txHost.tx.user.count({
         where: {
           email: { contains: email },
           nickname: { contains: nickname },

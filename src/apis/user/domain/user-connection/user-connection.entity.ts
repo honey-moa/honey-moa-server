@@ -1,5 +1,5 @@
 import { getTsid } from 'tsid-ts';
-import { Entity } from '@src/libs/ddd/entity.base';
+import { AggregateID, Entity } from '@src/libs/ddd/entity.base';
 import {
   UserConnectionProps,
   CreateUserConnectionProps,
@@ -8,6 +8,7 @@ import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
 import { Guard } from '@src/libs/guard';
 import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { HydratedUserEntityProps } from '@src/apis/user/domain/user.entity-interface';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -37,6 +38,22 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   isPending(): boolean {
     return this.props.status === UserConnectionStatus.PENDING;
+  }
+
+  set requestedUser(user: HydratedUserEntityProps) {
+    this.props.requestedUser = user;
+  }
+
+  set requesterUser(user: HydratedUserEntityProps) {
+    this.props.requesterUser = user;
+  }
+
+  get requesterId(): AggregateID {
+    return this.props.requesterId;
+  }
+
+  get requestedId(): AggregateID {
+    return this.props.requestedId;
   }
 
   public validate(): void {

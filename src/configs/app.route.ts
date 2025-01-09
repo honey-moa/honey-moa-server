@@ -21,6 +21,7 @@ export const routesV1 = {
     userConnection: {
       root: `${userRoot}/me/connections`,
       create: `${userRoot}/me/connections`,
+      findConnections: `${userRoot}/me/connections`,
     } as const,
   } as const,
 
