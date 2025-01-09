@@ -1,11 +1,23 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserConnectionCommand } from '@src/apis/user/commands/user-connection/create-user-connection/create-user-connection.command';
+import { UpdateUserConnectionCommand } from '@src/apis/user/commands/user-connection/update-user-connection/update-user-connection.command';
 import { ApiUserConnection } from '@src/apis/user/controllers/user-connection/user-connection.swagger';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { CreateUserConnectionRequestBodyDto } from '@src/apis/user/dtos/user-connection/request/create-user-connection.request-body-dto';
 import { FindUserConnectionsRequestQueryDto } from '@src/apis/user/dtos/user-connection/request/find-user-connections.request-query-dto';
+import { UpdateUserConnectionRequestBodyDto } from '@src/apis/user/dtos/user-connection/request/update-user-connection.request-body-dto';
 import { UserConnectionResponseDto } from '@src/apis/user/dtos/user-connection/response/user-connection.response-dto';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { FindUserConnectionsQuery } from '@src/apis/user/queries/user-connection/find-user-connections/find-user-connections.query';
@@ -13,6 +25,7 @@ import { routesV1 } from '@src/configs/app.route';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@src/libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
+import { ParsePositiveBigIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { Paginated } from '@src/libs/types/type';
@@ -73,5 +86,24 @@ export class UserConnectionController {
       ),
       count,
     ];
+  }
+
+  @ApiUserConnection.Update({
+    summary: '유저 커넥션 수락 / 거절 / 취소',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Put(routesV1.user.userConnection.update)
+  async update(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) userConnectionId: string,
+    @Body() requestBodyDto: UpdateUserConnectionRequestBodyDto,
+  ): Promise<void> {
+    const command = new UpdateUserConnectionCommand({
+      userId,
+      userConnectionId: BigInt(userConnectionId),
+      ...requestBodyDto,
+    });
+
+    await this.commandBus.execute<UpdateUserConnectionCommand, void>(command);
   }
 }

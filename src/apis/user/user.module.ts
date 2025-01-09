@@ -17,6 +17,7 @@ import { CreateUserConnectionCommandHandler } from '@src/apis/user/commands/user
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { FindUsersQueryHandler } from '@src/apis/user/queries/find-users/find-users.query-handler';
 import { FindUserConnectionsQueryHandler } from '@src/apis/user/queries/user-connection/find-user-connections/find-user-connections.query-handler';
+import { UpdateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/update-user-connection/update-user-connection.command-handler';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -27,6 +28,7 @@ const commandHandlers: Provider[] = [
   SendPasswordChangeVerificationEmailCommandHandler,
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
+  UpdateUserConnectionCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [

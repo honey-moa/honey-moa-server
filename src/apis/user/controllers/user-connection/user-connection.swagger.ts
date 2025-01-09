@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOperation,
 } from '@nestjs/swagger';
 import { UserConnectionController } from '@src/apis/user/controllers/user-connection/user-connection.controller';
@@ -148,6 +149,81 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
         {
           code: COMMON_ERROR_CODE.INVALID_TOKEN,
           description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
+        },
+      ]),
+    );
+  },
+
+  Update: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiNoContentResponse({
+        description: '정상적으로 유저 커넥션 수락 / 거절 / 취소됨.',
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'userConnectionId가 양의 정수가 아님',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'id',
+                value: 'asdf',
+                reason: 'param internal the id must be a numeric string',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'status가 ACCEPTED / REJECTED / CANCELED 중 하나가 아님',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'status',
+                value: 'ACCEPTsED',
+                reason:
+                  'status must be one of the following values: ACCEPTED, REJECTED, CANCELED',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+          description: '유저가 커넥션 요청자 혹은 피요청자가 아님.',
+        },
+        {
+          code: USER_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+          description: '피요청자만 커넥션 요청을 수락할 수 있음.',
+        },
+        {
+          code: USER_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+          description: '피요청자만 커넥션 요청을 거절할 수 있음.',
+        },
+        {
+          code: USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
+          description: '요청자만 커넥션 요청을 취소할 수 있음.',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '커넥션이 존재하지 않음.',
+        },
+      ]),
+      HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
+        {
+          code: USER_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION,
+          description: 'pending 상태의 커넥션만 수정할 수 있음.',
         },
       ]),
     );
