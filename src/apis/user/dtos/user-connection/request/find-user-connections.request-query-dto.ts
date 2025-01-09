@@ -1,12 +1,20 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserConnectionModel } from '@src/apis/user/mappers/user-connection.mapper';
+import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
+import { UserConnectionStatusUnion } from '@src/apis/user/types/user.type';
 import { OffsetPaginationRequestQueryDto } from '@src/libs/api/dtos/request/offset-pagination.request-query-dto';
 import { ParseQueryByColonAndTransformToObject } from '@src/libs/api/transformers/parse-query-by-colon-and-transform-to-object.transformer';
 import { transformStringToBoolean } from '@src/libs/api/transformers/transform-string-to-boolean.transformer';
 import { SortOrder } from '@src/libs/api/types/api.constant';
 import { OrderBy } from '@src/libs/api/types/api.type';
 import { Transform } from 'class-transformer';
-import { IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsOptional,
+  IsBoolean,
+  IsEnum,
+  ArrayNotEmpty,
+  ArrayUnique,
+} from 'class-validator';
 
 type UserConnectionModelForPaginated = Pick<
   UserConnectionModel,
@@ -35,6 +43,32 @@ export class FindUserConnectionsRequestQueryDto extends OffsetPaginationRequestQ
   @Transform(transformStringToBoolean)
   @IsBoolean()
   showRequested?: boolean;
+
+  @ApiPropertyOptional({
+    description:
+      '필터링할 상태.<br>' +
+      'ACCEPTED: 수락된 커넥션<br>' +
+      'PENDING: 대기중인 커넥션<br>',
+    enum: [UserConnectionStatus.ACCEPTED, UserConnectionStatus.PENDING],
+    isArray: true,
+    minItems: 1,
+    uniqueItems: true,
+  })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
+  @IsOptional()
+  @ArrayNotEmpty()
+  @ArrayUnique()
+  @IsEnum(
+    {
+      PENDING: UserConnectionStatus.PENDING,
+      ACCEPTED: UserConnectionStatus.ACCEPTED,
+    },
+    { each: true },
+  )
+  readonly status?: Exclude<
+    UserConnectionStatusUnion,
+    'REJECTED' | 'DISCONNECTED' | 'CANCELED'
+  >[];
 
   @ParseQueryByColonAndTransformToObject({
     id: {

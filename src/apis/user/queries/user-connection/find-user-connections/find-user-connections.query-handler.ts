@@ -26,7 +26,8 @@ export class FindUserConnectionsQueryHandler
   async execute(
     query: FindUserConnectionsQuery,
   ): Promise<Paginated<UserConnectionEntity>> {
-    const { userId, showRequest, showRequested, orderBy, skip, take } = query;
+    const { userId, showRequest, showRequested, status, orderBy, skip, take } =
+      query;
 
     const or: { requesterId?: AggregateID; requestedId?: AggregateID }[] = [];
 
@@ -42,6 +43,9 @@ export class FindUserConnectionsQueryHandler
       this.txHost.tx.userConnection.findMany({
         where: {
           OR: or,
+          status: {
+            in: status,
+          },
         },
         orderBy: [
           {

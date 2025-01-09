@@ -97,6 +97,9 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
       });
     }
 
+    /**
+     * @todo 추후 Domain Exception으로 수정돼야 함.
+     */
     if (status === UserConnectionStatus.PENDING) {
       throw new HttpInternalServerErrorException({
         code: COMMON_ERROR_CODE.SERVER_ERROR,
