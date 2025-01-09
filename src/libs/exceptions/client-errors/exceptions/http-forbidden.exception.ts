@@ -8,12 +8,13 @@ import { HttpError } from '@src/libs/exceptions/types/exceptions.type';
  */
 export class HttpForbiddenException extends HttpException {
   constructor(error: HttpError<HttpForbiddenException>) {
-    const { code, errors } = error;
+    const { code, errors, customMessage } = error;
 
     super({
       code,
       statusCode: HttpStatus.FORBIDDEN,
       errors,
+      customMessage,
     });
   }
 

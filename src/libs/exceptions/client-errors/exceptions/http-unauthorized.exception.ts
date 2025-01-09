@@ -7,12 +7,13 @@ import { HttpError } from '@src/libs/exceptions/types/exceptions.type';
  */
 export class HttpUnauthorizedException extends HttpException {
   constructor(error: HttpError<HttpUnauthorizedException>) {
-    const { code, errors } = error;
+    const { code, errors, customMessage } = error;
 
     super({
       code,
       statusCode: HttpStatus.UNAUTHORIZED,
       errors,
+      customMessage,
     });
   }
 

@@ -16,12 +16,13 @@ export class HttpInternalServerErrorException extends HttpException {
       stack?: any;
     },
   ) {
-    const { code, errors, ctx, stack } = error;
+    const { code, errors, ctx, stack, customMessage } = error;
 
     super({
       code,
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       errors,
+      customMessage,
     });
 
     this.ctx = ctx;
