@@ -36,8 +36,6 @@ export class HttpExceptionService {
     const isProduction = this.appConfigService.isProduction();
     const { code, errors, customMessage } = exceptionError;
 
-    console.log(exceptionError);
-
     return new ExceptionResponseDto({
       statusCode,
       code,

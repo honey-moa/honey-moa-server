@@ -15,11 +15,7 @@ export class CustomValidationPipe extends ValidationPipe {
       this.validatorOptions = Object.assign(this.validatorOptions, options);
     }
 
-    console.log(value, metadata);
-
     const result = await super.transform(value, metadata);
-
-    console.log(result);
 
     if (originOptions) {
       this.validatorOptions = originOptions;
