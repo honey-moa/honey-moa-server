@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-config.service-port';
 
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
@@ -7,6 +7,7 @@ import { ExceptionResponseDto } from '@src/libs/exceptions/dtos/exception-respon
 import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
 import { ERROR_MESSAGE } from '@src/libs/exceptions/types/errors/error-message.constant';
 import { ValueOf } from '@src/libs/types/type';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 interface ExceptionError {
   code: ValueOf<typeof ERROR_CODE>;
@@ -27,6 +28,8 @@ export class HttpExceptionService {
   constructor(
     @Inject(APP_CONFIG_SERVICE_DI_TOKEN)
     private readonly appConfigService: AppConfigServicePort<Key>,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: Logger,
   ) {}
 
   buildResponseJson(
@@ -49,7 +52,7 @@ export class HttpExceptionService {
   printLog(logInfo: LogInfo): void {
     const { ctx, stack, request, response } = logInfo;
 
-    console.error({
+    this.logger.error({
       ctx,
       stack,
       request: {

@@ -24,7 +24,7 @@ declare global {
 }
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
   const bootstrapService = app.get<BootstrapService>(BootstrapService);
 

@@ -34,6 +34,7 @@
     "prisma:generate": "npx prisma generate"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.726.1",
     "@nest-middlewares/helmet": "^10.0.0",
     "@nest-middlewares/method-override": "^10.0.0",
     "@nestjs-cls/transactional": "^2.4.2",
@@ -56,6 +57,7 @@
     "inflection": "^3.0.0",
     "joi": "^17.13.3",
     "nanoid": "^3.3.4",
+    "nest-winston": "^1.9.7",
     "nestjs-cls": "^4.4.1",
     "nestjs-request-context": "^3.0.0",
     "nodemailer": "^6.9.16",
@@ -64,6 +66,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "tsid-ts": "^0.0.9",
+    "winston": "^3.17.0",
+    "winston-cloudwatch": "^6.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

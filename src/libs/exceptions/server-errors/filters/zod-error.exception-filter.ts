@@ -3,6 +3,8 @@ import {
   Catch,
   ExceptionFilter,
   HttpStatus,
+  Inject,
+  Logger,
 } from '@nestjs/common';
 
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
@@ -10,13 +12,18 @@ import { HttpExceptionService } from '@src/libs/exceptions/services/http-excepti
 import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { ZodError } from 'zod';
 import { Request, Response } from 'express';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 /**
  * ZodError를 잡는 ExceptionFilter
  */
 @Catch(ZodError)
 export class ZodErrorExceptionFilter implements ExceptionFilter<ZodError> {
-  constructor(private readonly httpExceptionService: HttpExceptionService) {}
+  constructor(
+    private readonly httpExceptionService: HttpExceptionService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: Logger,
+  ) {}
 
   catch(exception: ZodError, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -39,7 +46,7 @@ export class ZodErrorExceptionFilter implements ExceptionFilter<ZodError> {
       exceptionError,
     );
 
-    console.dir(
+    this.logger.error(
       {
         ctx: exception.issues,
         stack: exception.stack,
