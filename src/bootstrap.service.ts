@@ -30,6 +30,7 @@ import { CustomValidationPipe } from '@src/libs/pipes/custom-validation.pipe';
 import bodyParser from 'body-parser';
 
 import { singularize } from 'inflection';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class BootstrapService {
@@ -38,9 +39,7 @@ export class BootstrapService {
   }
 
   setLogger(app: INestApplication) {
-    const logger = new Logger();
-
-    app.useLogger(logger);
+    app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   }
 
   setHealthCheckApi(app: INestApplication) {
@@ -197,6 +196,8 @@ export class BootstrapService {
 
     await app.listen(PORT);
 
-    console.info(`Server listening on port ${PORT}`);
+    app
+      .get<Logger>(WINSTON_MODULE_NEST_PROVIDER)
+      .log(`Server listening on port ${PORT}`);
   }
 }
