@@ -32,6 +32,12 @@ import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-con
         [ENV_KEY.EMAIL_PORT]: Joi.number().required(),
         [ENV_KEY.EMAIL_AUTH_USER]: Joi.string().required(),
         [ENV_KEY.EMAIL_AUTH_PASSWORD]: Joi.string().required(),
+
+        [ENV_KEY.CLOUDWATCH_AWS_ACCESS_KEY_ID]: Joi.string().required(),
+        [ENV_KEY.CLOUDWATCH_AWS_SECRET_ACCESS_KEY]: Joi.string().required(),
+        [ENV_KEY.CLOUDWATCH_AWS_REGION]: Joi.string().required(),
+        [ENV_KEY.CLOUDWATCH_AWS_LOG_GROUP_NAME]: Joi.string().required(),
+        [ENV_KEY.CLOUDWATCH_AWS_LOG_STREAM_NAME]: Joi.string().required(),
       }),
     }),
   ],
