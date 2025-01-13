@@ -47,20 +47,23 @@ export class ZodErrorExceptionFilter implements ExceptionFilter<ZodError> {
     );
 
     this.logger.error(
-      {
-        ctx: exception.issues,
-        stack: exception.stack,
-        request: {
-          method: request.method,
-          url: request.url,
-          body: request.body,
-          currentUser: request.user?.sub,
+      JSON.stringify(
+        {
+          ctx: exception.issues,
+          stack: exception.stack,
+          request: {
+            method: request.method,
+            url: request.url,
+            body: request.body,
+            currentUser: request.user?.sub,
+          },
+          response: {
+            body: responseJson,
+          },
         },
-        response: {
-          body: responseJson,
-        },
-      },
-      { depth: null },
+        null,
+        2,
+      ),
     );
 
     response.status(statusCode).json(responseJson);
