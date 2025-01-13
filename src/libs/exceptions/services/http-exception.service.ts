@@ -52,18 +52,24 @@ export class HttpExceptionService {
   printLog(logInfo: LogInfo): void {
     const { ctx, stack, request, response } = logInfo;
 
-    this.logger.error({
-      ctx,
-      stack,
-      request: {
-        method: request.method,
-        url: request.url,
-        body: request.body,
-        currentUser: request.user?.id,
-      },
-      response: {
-        body: Object.assign({}, response.body),
-      },
-    });
+    this.logger.error(
+      JSON.stringify(
+        {
+          ctx,
+          stack,
+          request: {
+            method: request.method,
+            url: request.url,
+            body: request.body,
+            currentUser: request.user?.id,
+          },
+          response: {
+            body: Object.assign({}, response.body),
+          },
+        },
+        null,
+        2,
+      ),
+    );
   }
 }
