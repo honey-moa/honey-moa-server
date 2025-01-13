@@ -20,6 +20,7 @@ import { FindUserConnectionsRequestQueryDto } from '@src/apis/user/dtos/user-con
 import { UpdateUserConnectionRequestBodyDto } from '@src/apis/user/dtos/user-connection/request/update-user-connection.request-body-dto';
 import { UserConnectionResponseDto } from '@src/apis/user/dtos/user-connection/response/user-connection.response-dto';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
+import { FindOneUserConnectionQuery } from '@src/apis/user/queries/user-connection/find-one-user-connection/find-one-user-connection.query';
 import { FindUserConnectionsQuery } from '@src/apis/user/queries/user-connection/find-user-connections/find-user-connections.query';
 import { routesV1 } from '@src/configs/app.route';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
@@ -86,6 +87,27 @@ export class UserConnectionController {
       ),
       count,
     ];
+  }
+
+  @ApiUserConnection.FindOneUserConnection({
+    summary: '유저 커넥션 상세 조회',
+  })
+  @Get(routesV1.user.userConnection.findOneConnection)
+  async findOneUserConnection(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) userConnectionId: string,
+  ): Promise<UserConnectionResponseDto> {
+    const query = new FindOneUserConnectionQuery({
+      userId,
+      userConnectionId: BigInt(userConnectionId),
+    });
+
+    const result = await this.queryBus.execute<
+      FindOneUserConnectionQuery,
+      UserConnectionEntity
+    >(query);
+
+    return this.mapper.toResponseDto(result);
   }
 
   @ApiUserConnection.Update({

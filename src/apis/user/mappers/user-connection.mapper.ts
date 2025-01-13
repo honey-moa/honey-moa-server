@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
-import { CreateEntityProps } from '@src/libs/ddd/entity.base';
+import { AggregateID, CreateEntityProps } from '@src/libs/ddd/entity.base';
 import { baseSchema } from '@src/libs/db/base.schema';
 import { Mapper } from '@src/libs/ddd/mapper.interface';
 import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
@@ -11,29 +11,49 @@ import {
   CreateUserConnectionResponseDtoProps,
   UserConnectionResponseDto,
 } from '@src/apis/user/dtos/user-connection/response/user-connection.response-dto';
-import { HydratedUserResponseDto } from '@src/apis/user/dtos/response/hydrated-user.response-dto';
+import {
+  ChatRoomMapper,
+  chatRoomSchema,
+} from '@src/apis/user/mappers/chat-room.mapper';
+import { BlogMapper, blogSchema } from '@src/apis/user/mappers/blog.mapper';
+import { isNil } from '@src/libs/utils/util';
 
-export const userConnectionSchema = baseSchema
-  .extend({
-    requesterId: z.bigint(),
-    requestedId: z.bigint(),
-    status: z.nativeEnum(UserConnectionStatus),
-    deletedAt: z.preprocess(
-      (val: any) => (val === null ? null : new Date(val)),
-      z.nullable(z.date()),
-    ),
-  })
-  .superRefine(({ requestedId, requesterId }, ctx) => {
-    if (requestedId === requesterId) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'requestedId and requesterId must be different.',
-        path: ['requestedId', 'requesterId'],
-      });
-    }
-  });
+export const userConnectionSchema = baseSchema.extend({
+  requesterId: z.bigint(),
+  requestedId: z.bigint(),
+  status: z.nativeEnum(UserConnectionStatus),
+  deletedAt: z.preprocess(
+    (val: any) => (val === null ? null : new Date(val)),
+    z.nullable(z.date()),
+  ),
+});
+
+const userConnectionSuperRefine = (
+  {
+    requestedId,
+    requesterId,
+  }: { requestedId: AggregateID; requesterId: AggregateID },
+  ctx: z.RefinementCtx,
+) => {
+  if (requestedId === requesterId) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'requestedId and requesterId must be different.',
+      path: ['requestedId', 'requesterId'],
+    });
+  }
+};
 
 export type UserConnectionModel = z.TypeOf<typeof userConnectionSchema>;
+
+export const userConnectionWithEntitiesSchema = userConnectionSchema.extend({
+  blog: z.nullable(blogSchema).optional(),
+  chatRoom: z.nullable(chatRoomSchema).optional(),
+});
+
+type UserConnectionWithEntitiesModel = z.TypeOf<
+  typeof userConnectionWithEntitiesSchema
+>;
 
 @Injectable()
 export class UserConnectionMapper
@@ -44,7 +64,12 @@ export class UserConnectionMapper
       UserConnectionResponseDto
     >
 {
-  toEntity(record: UserConnectionModel): UserConnectionEntity {
+  constructor(
+    private readonly chatRoomMapper: ChatRoomMapper,
+    private readonly blogMapper: BlogMapper,
+  ) {}
+
+  toEntity(record: UserConnectionWithEntitiesModel): UserConnectionEntity {
     const userConnectionProps: CreateEntityProps<UserConnectionProps> = {
       id: record.id,
       props: {
@@ -57,6 +82,16 @@ export class UserConnectionMapper
       updatedAt: record.updatedAt,
     };
 
+    if (!isNil(record.blog)) {
+      userConnectionProps.props.blog = this.blogMapper.toEntity(record.blog);
+    }
+
+    if (!isNil(record.chatRoom)) {
+      userConnectionProps.props.chatRoom = this.chatRoomMapper.toEntity(
+        record.chatRoom,
+      );
+    }
+
     return new UserConnectionEntity(userConnectionProps);
   }
 
@@ -67,22 +102,24 @@ export class UserConnectionMapper
       ...props,
     };
 
-    return userConnectionSchema.parse(record);
+    return userConnectionSchema
+      .superRefine(userConnectionSuperRefine)
+      .parse(record);
   }
 
   toResponseDto(entity: UserConnectionEntity): UserConnectionResponseDto {
-    const { requestedUser, requesterUser, ...props } = entity.getProps();
+    const { blog, chatRoom, ...props } = entity.getProps();
 
     const createDtoProps: CreateUserConnectionResponseDtoProps = {
       ...props,
     };
 
-    if (requestedUser) {
-      createDtoProps.requested = new HydratedUserResponseDto(requestedUser);
+    if (blog) {
+      createDtoProps.blog = this.blogMapper.toResponseDto(blog);
     }
 
-    if (requesterUser) {
-      createDtoProps.requester = new HydratedUserResponseDto(requesterUser);
+    if (chatRoom) {
+      createDtoProps.chatRoom = this.chatRoomMapper.toResponseDto(chatRoom);
     }
 
     return new UserConnectionResponseDto(createDtoProps);
