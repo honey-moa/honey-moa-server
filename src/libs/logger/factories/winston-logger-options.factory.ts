@@ -37,16 +37,16 @@ export class WinstonLoggerModuleOptionsFactory
             winston.format.printf(
               ({ level, message, timestamp, stack, response }) => {
                 return stack
-                  ? (response as any)?.data
-                    ? `${timestamp} [${level}] ${message}\n${stack}\n ErrorResponseData : ${JSON.stringify((response as any).data)}`
-                    : `${timestamp} [${level}] ${message}\n${stack}`
+                  ? response
+                    ? `${timestamp} [${level}] ${message}\n${stack}\n ErrorResponseData : ${JSON.stringify(response)}`
+                    : `${timestamp} [${level}] ${message}\n${stack}\n `
                   : `${timestamp} [${level}] ${message}`;
               },
             ), // 로그 포맷
           ),
         }),
         new WinstonCloudwatch({
-          level: 'warn',
+          level: 'error',
           logGroupName: this.appConfigService.get<string>(
             ENV_KEY.CLOUDWATCH_AWS_LOG_GROUP_NAME,
           ),
