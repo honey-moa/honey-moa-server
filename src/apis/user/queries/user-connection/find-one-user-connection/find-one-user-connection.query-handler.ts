@@ -4,6 +4,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { FindOneUserConnectionQuery } from '@src/apis/user/queries/user-connection/find-one-user-connection/find-one-user-connection.query';
+import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
 import { PrismaService } from '@src/libs/core/prisma/services/prisma.service';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
@@ -26,6 +27,7 @@ export class FindOneUserConnectionQueryHandler
     const userConnection = await this.txHost.tx.userConnection.findUnique({
       where: {
         id: query.userConnectionId,
+        status: UserConnectionStatus.ACCEPTED,
       },
       include: {
         blog: true,

@@ -90,7 +90,7 @@ export class UserConnectionController {
   }
 
   @ApiUserConnection.FindOneUserConnection({
-    summary: '유저 커넥션 상세 조회',
+    summary: '유저 커넥션 상세 조회. ACCEPTED된 상태의 Connection만 조회 가능.',
   })
   @Get(routesV1.user.userConnection.findOneConnection)
   async findOneUserConnection(
