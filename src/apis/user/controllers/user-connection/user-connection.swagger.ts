@@ -16,6 +16,7 @@ import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/excep
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@src/libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
 import { OffsetPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@src/libs/types/custom-validation-errors.type';
@@ -39,7 +40,7 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
       }),
       HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
-          code: USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF,
+          code: USER_CONNECTION_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF,
           description: '본인 스스로 커넥션을 생성할 수 없음.',
         },
         {
@@ -78,7 +79,7 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
           customMessage: 'The requester email is not verified.',
         },
         {
-          code: USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_TARGET_EMAIL_NOT_VERIFIED,
+          code: USER_CONNECTION_ERROR_CODE.CANNOT_CREATE_CONNECTION_TARGET_EMAIL_NOT_VERIFIED,
           description: '커넥션 요청 받은 유저의 이메일이 인증되지 않음.',
         },
       ]),
@@ -90,15 +91,15 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
       ]),
       HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
         {
-          code: USER_ERROR_CODE.REQUESTER_ALREADY_HAVE_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_HAVE_CONNECTION,
           description: '요청한 유저가 이미 커넥션이 맺어져 있음.',
         },
         {
-          code: USER_ERROR_CODE.REQUESTED_USER_ALREADY_HAVE_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.REQUESTED_USER_ALREADY_HAVE_CONNECTION,
           description: '요청 받은 유저가 이미 커넥션이 맺어져 있음.',
         },
         {
-          code: USER_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
           description:
             '요청한 유저는 이미 대기중인 커넥션 요청이 있음. 여러개의 요청 생성 불가.',
         },
@@ -246,15 +247,15 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
           description: '유저가 커넥션 요청자 혹은 피요청자가 아님.',
         },
         {
-          code: USER_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
           description: '피요청자만 커넥션 요청을 수락할 수 있음.',
         },
         {
-          code: USER_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
           description: '피요청자만 커넥션 요청을 거절할 수 있음.',
         },
         {
-          code: USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
           description: '요청자만 커넥션 요청을 취소할 수 있음.',
         },
       ]),
@@ -266,7 +267,7 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
       ]),
       HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
         {
-          code: USER_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION,
           description: 'pending 상태의 커넥션만 수정할 수 있음.',
         },
       ]),

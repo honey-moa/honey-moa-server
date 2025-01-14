@@ -21,8 +21,10 @@ import { UpdateUserConnectionCommandHandler } from '@src/apis/user/commands/user
 import { BlogMapper } from '@src/apis/user/mappers/blog.mapper';
 import { ChatRoomMapper } from '@src/apis/user/mappers/chat-room.mapper';
 import { FindOneUserConnectionQueryHandler } from '@src/apis/user/queries/user-connection/find-one-user-connection/find-one-user-connection.query-handler';
+import { CreateBlogCommandHandler } from '@src/apis/user/commands/blog/create-blog/create-blog.command-handler';
+import { BlogController } from '@src/apis/user/controllers/user-connection/blog/blog.controller';
 
-const controllers = [UserController, UserConnectionController];
+const controllers = [UserController, UserConnectionController, BlogController];
 
 const commandHandlers: Provider[] = [
   CreateUserCommandHandler,
@@ -32,6 +34,7 @@ const commandHandlers: Provider[] = [
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
   UpdateUserConnectionCommandHandler,
+  CreateBlogCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [

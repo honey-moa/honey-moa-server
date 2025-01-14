@@ -10,7 +10,9 @@ import { HttpConflictException } from '@src/libs/exceptions/client-errors/except
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
+import { isNil } from '@src/libs/utils/util';
 
 @CommandHandler(CreateUserConnectionCommand)
 export class CreateUserConnectionCommandHandler
@@ -26,7 +28,7 @@ export class CreateUserConnectionCommandHandler
 
     if (requestedId === requesterId) {
       throw new HttpBadRequestException({
-        code: USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF,
+        code: USER_CONNECTION_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF,
       });
     }
 
@@ -53,29 +55,26 @@ export class CreateUserConnectionCommandHandler
           });
         } else {
           throw new HttpForbiddenException({
-            code: USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_TARGET_EMAIL_NOT_VERIFIED,
+            code: USER_CONNECTION_ERROR_CODE.CANNOT_CREATE_CONNECTION_TARGET_EMAIL_NOT_VERIFIED,
           });
         }
       }
 
-      if (
-        user.requestedConnection?.isConnected() ||
-        user.requesterConnection?.isConnected()
-      ) {
+      if (!isNil(user.acceptedConnection)) {
         if (user.id === requesterId) {
           throw new HttpConflictException({
-            code: USER_ERROR_CODE.REQUESTER_ALREADY_HAVE_CONNECTION,
+            code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_HAVE_CONNECTION,
           });
         } else {
           throw new HttpConflictException({
-            code: USER_ERROR_CODE.REQUESTED_USER_ALREADY_HAVE_CONNECTION,
+            code: USER_CONNECTION_ERROR_CODE.REQUESTED_USER_ALREADY_HAVE_CONNECTION,
           });
         }
       }
 
-      if (user.requesterConnection?.isPending() && user.id === requesterId) {
+      if (user.hasSentPendingConnection() && user.id === requesterId) {
         throw new HttpConflictException({
-          code: USER_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
         });
       }
     }
