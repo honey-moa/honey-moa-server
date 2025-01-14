@@ -13,7 +13,7 @@ import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/comm
 import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@src/libs/utils/util';
 
-@CommandHandler(CreateBlogCommandHandler)
+@CommandHandler(CreateBlogCommand)
 export class CreateBlogCommandHandler
   implements ICommandHandler<CreateBlogCommand, AggregateID>
 {

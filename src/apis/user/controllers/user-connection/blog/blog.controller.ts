@@ -20,12 +20,12 @@ export class BlogController {
   @Post(routesV1.user.userConnection.blog.create)
   async create(
     @User('sub') userId: AggregateID,
-    @Param('id') connectionId: AggregateID,
+    @Param('id') connectionId: string,
     @Body() requestBodyDto: CreateBlogRequestDto,
   ): Promise<IdResponseDto> {
     const command = new CreateBlogCommand({
       userId,
-      connectionId,
+      connectionId: BigInt(connectionId),
       ...requestBodyDto,
     });
 
