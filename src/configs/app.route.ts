@@ -26,13 +26,13 @@ export const routesV1 = {
       update: `${userRoot}/me/connections/:id`,
 
       blog: {
-        root: `${userRoot}/me/connections/:id/blog`,
-        create: `${userRoot}/me/connections/:id/blog`,
+        root: `${userRoot}/me/connections/:id/blogs`,
+        create: `${userRoot}/me/connections/:id/blogs`,
       },
 
       chatRoom: {
-        root: `${userRoot}/me/connections/:id/chat-room`,
-        create: `${userRoot}/me/connections/:id/chat-room`,
+        root: `${userRoot}/me/connections/:id/chat-rooms`,
+        create: `${userRoot}/me/connections/:id/chat-rooms`,
       },
     } as const,
   } as const,
