@@ -2,10 +2,13 @@ import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { UserConnectionStatusEnum } from '@prisma/client';
+import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
+import { BlogMapper } from '@src/apis/user/mappers/blog.mapper';
+import { ChatRoomMapper } from '@src/apis/user/mappers/chat-room.mapper';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { UserVerifyTokenMapper } from '@src/apis/user/mappers/user-verify-token.mapper';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
@@ -13,7 +16,10 @@ import {
   UserInclude,
   UserRepositoryPort,
 } from '@src/apis/user/repositories/user.repository-port';
-import { UserLoginTypeUnion } from '@src/apis/user/types/user.type';
+import {
+  UserConnectionStatusUnion,
+  UserLoginTypeUnion,
+} from '@src/apis/user/types/user.type';
 import { PrismaService } from '@src/libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 
@@ -27,6 +33,8 @@ export class UserRepository implements UserRepositoryPort {
     private readonly mapper: UserMapper,
     private readonly userVerifyTokenMapper: UserVerifyTokenMapper,
     private readonly userConnectionMapper: UserConnectionMapper,
+    private readonly blogMapper: BlogMapper,
+    private readonly chatRoomMapper: ChatRoomMapper,
   ) {}
 
   async findOneById(
@@ -34,7 +42,7 @@ export class UserRepository implements UserRepositoryPort {
     include?: UserInclude,
   ): Promise<UserEntity | undefined> {
     const record = await this.txHost.tx.user.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
       include,
     });
 
@@ -42,7 +50,11 @@ export class UserRepository implements UserRepositoryPort {
   }
 
   async findAll(): Promise<UserEntity[]> {
-    const record = await this.txHost.tx.user.findMany();
+    const record = await this.txHost.tx.user.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
 
     return record.map(this.mapper.toEntity);
   }
@@ -91,6 +103,7 @@ export class UserRepository implements UserRepositoryPort {
       where: {
         email,
         loginType,
+        deletedAt: null,
       },
       include,
     });
@@ -107,6 +120,7 @@ export class UserRepository implements UserRepositoryPort {
         id: {
           in: ids,
         },
+        deletedAt: null,
       },
       include,
     });
@@ -114,13 +128,48 @@ export class UserRepository implements UserRepositoryPort {
     return records.map((record) => this.mapper.toEntity(record));
   }
 
-  async findOneUserConnectionById(
+  async findOneUserByIdAndConnectionId(
+    id: AggregateID,
     userConnectionId: AggregateID,
+    status?: UserConnectionStatusUnion,
+    include?: UserInclude,
+  ): Promise<UserEntity | undefined> {
+    const user = await this.txHost.tx.user.findUnique({
+      where: {
+        id,
+        deletedAt: null,
+        OR: [
+          {
+            requestedConnection: {
+              id: userConnectionId,
+              status,
+              deletedAt: null,
+            },
+          },
+          {
+            requesterConnection: {
+              id: userConnectionId,
+              status,
+              deletedAt: null,
+            },
+          },
+        ],
+      },
+      include,
+    });
+
+    return user ? this.mapper.toEntity(user) : undefined;
+  }
+
+  async findOneUserConnectionByIdAndStatus(
+    userConnectionId: AggregateID,
+    status: UserConnectionStatusUnion,
   ): Promise<UserConnectionEntity | undefined> {
     const userConnection = await this.txHost.tx.userConnection.findUnique({
       where: {
         id: userConnectionId,
-        status: UserConnectionStatusEnum.PENDING,
+        status,
+        deletedAt: null,
       },
     });
 
@@ -161,6 +210,22 @@ export class UserRepository implements UserRepositoryPort {
 
     await this.txHost.tx.userConnection.update({
       where: { id: record.id },
+      data: record,
+    });
+  }
+
+  async createBlog(entity: BlogEntity): Promise<void> {
+    const record = this.blogMapper.toPersistence(entity);
+
+    await this.txHost.tx.blog.create({
+      data: record,
+    });
+  }
+
+  async createChatRoom(entity: ChatRoomEntity): Promise<void> {
+    const record = this.chatRoomMapper.toPersistence(entity);
+
+    await this.txHost.tx.chatRoom.create({
       data: record,
     });
   }

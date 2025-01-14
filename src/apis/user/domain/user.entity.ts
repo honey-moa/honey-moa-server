@@ -119,11 +119,27 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return this.props.userVerifyTokens;
   }
 
-  get requestedConnection() {
+  get acceptedConnection(): UserConnectionEntity | null {
+    if (this.requestedConnection?.isConnected()) {
+      return this.requestedConnection;
+    }
+
+    if (this.requesterConnection?.isConnected()) {
+      return this.requesterConnection;
+    }
+
+    return null;
+  }
+
+  hasSentPendingConnection(): boolean {
+    return this.requesterConnection?.isPending() || false;
+  }
+
+  private get requestedConnection() {
     return this.props.requestedConnection;
   }
 
-  get requesterConnection() {
+  private get requesterConnection() {
     return this.props.requesterConnection;
   }
 

@@ -22,7 +22,10 @@ export class UpdateUserConnectionCommandHandler
     const { userId, userConnectionId, status } = command;
 
     const userConnection =
-      await this.userRepository.findOneUserConnectionById(userConnectionId);
+      await this.userRepository.findOneUserConnectionByIdAndStatus(
+        userConnectionId,
+        UserConnectionStatus.PENDING,
+      );
 
     if (isNil(userConnection)) {
       throw new HttpNotFoundException({
