@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { HydratedUserResponseDto } from '@src/apis/user/dtos/response/hydrated-user.response-dto';
+import { BlogResponseDto } from '@src/apis/user/dtos/user-connection/blog/response/blog.response-dto';
+import { ChatRoomResponseDto } from '@src/apis/user/dtos/user-connection/chat-room/response/chat-room.response-dto';
 import { UserConnectionStatus } from '@src/apis/user/types/user.constant';
 import { UserConnectionStatusUnion } from '@src/apis/user/types/user.type';
 import {
@@ -15,6 +17,9 @@ export interface CreateUserConnectionResponseDtoProps
   requestedId: AggregateID;
   requested?: HydratedUserResponseDto;
   status: UserConnectionStatusUnion;
+
+  blog?: BlogResponseDto;
+  chatRoom?: ChatRoomResponseDto;
 }
 
 export class UserConnectionResponseDto
@@ -55,15 +60,39 @@ export class UserConnectionResponseDto
   })
   status: UserConnectionStatusUnion;
 
+  @ApiPropertyOptional({
+    description:
+      '블로그 정보. 해당 프로퍼티가 falsy한 값일 경우 블로그가 존재하지 않음.',
+    type: BlogResponseDto,
+  })
+  blog?: BlogResponseDto;
+
+  @ApiPropertyOptional({
+    description:
+      '채팅방 정보. 해당 프로퍼티가 falsy한 값일 경우 채팅방이 존재하지 않음.',
+    type: ChatRoomResponseDto,
+  })
+  chatRoom?: ChatRoomResponseDto;
+
   constructor(props: CreateUserConnectionResponseDtoProps) {
     super(props);
 
-    const { requester, requesterId, requested, requestedId, status } = props;
+    const {
+      requester,
+      requesterId,
+      requested,
+      requestedId,
+      status,
+      blog,
+      chatRoom,
+    } = props;
 
     this.requester = requester;
     this.requesterId = requesterId.toString();
     this.requested = requested;
     this.requestedId = requestedId.toString();
     this.status = status;
+    this.blog = blog;
+    this.chatRoom = chatRoom;
   }
 }

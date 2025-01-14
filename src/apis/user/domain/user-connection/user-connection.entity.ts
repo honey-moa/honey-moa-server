@@ -12,7 +12,9 @@ import { HydratedUserEntityProps } from '@src/apis/user/domain/user.entity-inter
 import { UserConnectionStatusUnion } from '@src/apis/user/types/user.type';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
-import { USER_ERROR_CODE } from '@src/libs/exceptions/types/errors/user/user-error-code.constant';
+import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
+import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -60,10 +62,18 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
     return this.props.requestedId;
   }
 
+  get blog(): BlogEntity | undefined {
+    return this.props.blog;
+  }
+
+  get chatRoom(): ChatRoomEntity | undefined {
+    return this.props.chatRoom;
+  }
+
   acceptConnectionRequest(userId: AggregateID): void {
     if (this.requestedId !== userId) {
       throw new HttpForbiddenException({
-        code: USER_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+        code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
       });
     }
 
@@ -73,7 +83,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
   rejectConnectionRequest(userId: AggregateID): void {
     if (this.requestedId !== userId) {
       throw new HttpForbiddenException({
-        code: USER_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
+        code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
       });
     }
 
@@ -83,7 +93,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
   cancelConnectionRequest(userId: AggregateID): void {
     if (this.requesterId !== userId) {
       throw new HttpForbiddenException({
-        code: USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
+        code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
       });
     }
 
@@ -93,7 +103,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
   private changeStatus(status: UserConnectionStatusUnion): void {
     if (!this.isPending() && status !== UserConnectionStatus.DISCONNECTED) {
       throw new HttpConflictException({
-        code: USER_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION,
+        code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION,
       });
     }
 

@@ -18,8 +18,20 @@ import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.map
 import { FindUsersQueryHandler } from '@src/apis/user/queries/find-users/find-users.query-handler';
 import { FindUserConnectionsQueryHandler } from '@src/apis/user/queries/user-connection/find-user-connections/find-user-connections.query-handler';
 import { UpdateUserConnectionCommandHandler } from '@src/apis/user/commands/user-connection/update-user-connection/update-user-connection.command-handler';
+import { BlogMapper } from '@src/apis/user/mappers/blog.mapper';
+import { ChatRoomMapper } from '@src/apis/user/mappers/chat-room.mapper';
+import { FindOneUserConnectionQueryHandler } from '@src/apis/user/queries/user-connection/find-one-user-connection/find-one-user-connection.query-handler';
+import { CreateBlogCommandHandler } from '@src/apis/user/commands/user-connection/blog/create-blog/create-blog.command-handler';
+import { BlogController } from '@src/apis/user/controllers/user-connection/blog/blog.controller';
+import { CreateChatRoomCommandHandler } from '@src/apis/user/commands/user-connection/chat-room/create-chat-room/create-chat-room.command-handler';
+import { ChatRoomController } from '@src/apis/user/controllers/user-connection/chat-room/chat-room.controller';
 
-const controllers = [UserController, UserConnectionController];
+const controllers = [
+  UserController,
+  UserConnectionController,
+  BlogController,
+  ChatRoomController,
+];
 
 const commandHandlers: Provider[] = [
   CreateUserCommandHandler,
@@ -29,11 +41,14 @@ const commandHandlers: Provider[] = [
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
   UpdateUserConnectionCommandHandler,
+  CreateBlogCommandHandler,
+  CreateChatRoomCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [
   FindUsersQueryHandler,
   FindUserConnectionsQueryHandler,
+  FindOneUserConnectionQueryHandler,
 ];
 
 const eventHandlers: Provider[] = [
@@ -48,6 +63,8 @@ const mappers: Provider[] = [
   UserMapper,
   UserConnectionMapper,
   UserVerifyTokenMapper,
+  ChatRoomMapper,
+  BlogMapper,
 ];
 
 @Module({

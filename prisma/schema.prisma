@@ -59,7 +59,38 @@ model UserConnection {
   requestedUser User @relation("RequestedConnection", fields: [requestedId], references: [id], onDelete: Cascade)
   requesterUser User @relation("RequesterConnection", fields: [requesterId], references: [id], onDelete: Cascade)
 
+  blog     Blog?
+  chatRoom ChatRoom?
+
   @@map("user_connections")
+}
+
+model Blog {
+  id           BigInt    @id(map: "pk_blogs")
+  createdBy    BigInt    @map("created_by") @db.BigInt()
+  connectionId BigInt    @unique(map: "uq_blogs_connection_id") @map("connection_id") @db.BigInt()
+  name         String    @db.VarChar(30)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  connection UserConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@map("blogs")
+}
+
+model ChatRoom {
+  id           BigInt    @id(map: "pk_chat_rooms")
+  createdBy    BigInt    @map("created_by") @db.BigInt()
+  connectionId BigInt    @unique(map: "uq_chat_rooms_connection_id") @map("connection_id") @db.BigInt()
+  name         String    @db.VarChar(30)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  connection UserConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+
+  @@map("chat_rooms")
 }
 
 model Post {

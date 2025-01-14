@@ -15,7 +15,7 @@ export type ApiOperator<M extends string> = {
 
 export type ValueOf<T extends Record<string, any>> = T[keyof T];
 
-export type ErrorMessage<T extends Record<string, number>> = Required<{
+export type ErrorMessage<T extends Record<string, string>> = Required<{
   [key in ValueOf<T>]: string;
 }>;
 

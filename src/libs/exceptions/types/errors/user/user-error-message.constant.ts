@@ -16,23 +16,5 @@ export const USER_ERROR_MESSAGE: ErrorMessage<typeof USER_ERROR_CODE> = {
     'An invalid password change verification token.',
   [USER_ERROR_CODE.ALREADY_USED_PASSWORD_CHANGE_VERIFY_TOKEN]:
     'The password change verification token has already been used',
-  [USER_ERROR_CODE.REQUESTER_ALREADY_HAVE_CONNECTION]:
-    'You already have a connection',
-  [USER_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION]:
-    'You already sent a pending connection',
-  [USER_ERROR_CODE.REQUESTED_USER_ALREADY_HAVE_CONNECTION]:
-    'The user you requested already have a connection',
-  [USER_ERROR_CODE.EMAIL_NOT_VERIFIED]: 'The email is not verified.',
-  [USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_TARGET_EMAIL_NOT_VERIFIED]:
-    "The connection couldn't be created because the target's email was not verified.",
-  [USER_ERROR_CODE.CANNOT_CREATE_CONNECTION_MYSELF]:
-    "You can't create a connection with yourself.",
-  [USER_ERROR_CODE.CAN_ONLY_UPDATE_PENDING_CONNECTION]:
-    'You can only update a pending connection',
-  [USER_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU]:
-    'You can only accept a connection that comes to you',
-  [USER_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU]:
-    'You can only reject a connection that comes to you',
-  [USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT]:
-    'You can only cancel a connection that you sent',
+  [USER_ERROR_CODE.EMAIL_NOT_VERIFIED]: 'The email is not verified',
 } as const;
