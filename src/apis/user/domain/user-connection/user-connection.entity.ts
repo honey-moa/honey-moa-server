@@ -14,6 +14,7 @@ import { HttpConflictException } from '@src/libs/exceptions/client-errors/except
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
 import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -63,6 +64,10 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   get blog(): BlogEntity | undefined {
     return this.props.blog;
+  }
+
+  get chatRoom(): ChatRoomEntity | undefined {
+    return this.props.chatRoom;
   }
 
   acceptConnectionRequest(userId: AggregateID): void {

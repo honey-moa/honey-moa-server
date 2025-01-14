@@ -1,28 +1,28 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateBlogCommand } from '@src/apis/user/commands/blog/create-blog/create-blog.command';
-import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
+import { CreateChatRoomCommand } from '@src/apis/user/commands/user-connection/chat-room/create-chat-room/create-chat-room.command';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 import { UserRepositoryPort } from '@src/apis/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@src/apis/user/tokens/di.token';
 import { AggregateID } from '@src/libs/ddd/entity.base';
 import { HttpConflictException } from '@src/libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@src/libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@src/libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { BLOG_ERROR_CODE } from '@src/libs/exceptions/types/errors/blog/blog-error-code.constant';
+import { CHAT_ROOM_ERROR_CODE } from '@src/libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@src/libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@src/libs/utils/util';
 
-@CommandHandler(CreateBlogCommand)
-export class CreateBlogCommandHandler
-  implements ICommandHandler<CreateBlogCommand, AggregateID>
+@CommandHandler(CreateChatRoomCommand)
+export class CreateChatRoomCommandHandler
+  implements ICommandHandler<CreateChatRoomCommand, AggregateID>
 {
   constructor(
     @Inject(USER_REPOSITORY_DI_TOKEN)
     private readonly userRepository: UserRepositoryPort,
   ) {}
 
-  async execute(command: CreateBlogCommand): Promise<AggregateID> {
+  async execute(command: CreateChatRoomCommand): Promise<AggregateID> {
     const { userId, connectionId, name } = command;
 
     const user = await this.userRepository.findOneUserByIdAndConnectionId(
@@ -31,10 +31,10 @@ export class CreateBlogCommandHandler
       undefined,
       {
         requestedConnection: {
-          include: { blog: true },
+          include: { chatRoom: true },
         },
         requesterConnection: {
-          include: { blog: true },
+          include: { chatRoom: true },
         },
       },
     );
@@ -53,20 +53,20 @@ export class CreateBlogCommandHandler
       });
     }
 
-    if (!isNil(acceptedConnection.blog)) {
+    if (!isNil(acceptedConnection.chatRoom)) {
       throw new HttpConflictException({
-        code: BLOG_ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG,
+        code: CHAT_ROOM_ERROR_CODE.YOU_ALREADY_HAVE_A_CHAT_ROOM,
       });
     }
 
-    const blog = BlogEntity.create({
+    const chatRoom = ChatRoomEntity.create({
       createdBy: userId,
       connectionId,
       name,
     });
 
-    await this.userRepository.createBlog(blog);
+    await this.userRepository.createChatRoom(chatRoom);
 
-    return blog.id;
+    return chatRoom.id;
   }
 }

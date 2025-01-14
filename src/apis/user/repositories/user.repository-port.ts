@@ -1,5 +1,6 @@
 import { RepositoryPort } from '@libs/ddd/repository.port';
 import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
@@ -54,4 +55,6 @@ export interface UserRepositoryPort
   updateUserConnection(entity: UserConnectionEntity): Promise<void>;
 
   createBlog(entity: BlogEntity): Promise<void>;
+
+  createChatRoom(entity: ChatRoomEntity): Promise<void>;
 }

@@ -21,10 +21,17 @@ import { UpdateUserConnectionCommandHandler } from '@src/apis/user/commands/user
 import { BlogMapper } from '@src/apis/user/mappers/blog.mapper';
 import { ChatRoomMapper } from '@src/apis/user/mappers/chat-room.mapper';
 import { FindOneUserConnectionQueryHandler } from '@src/apis/user/queries/user-connection/find-one-user-connection/find-one-user-connection.query-handler';
-import { CreateBlogCommandHandler } from '@src/apis/user/commands/blog/create-blog/create-blog.command-handler';
+import { CreateBlogCommandHandler } from '@src/apis/user/commands/user-connection/blog/create-blog/create-blog.command-handler';
 import { BlogController } from '@src/apis/user/controllers/user-connection/blog/blog.controller';
+import { CreateChatRoomCommandHandler } from '@src/apis/user/commands/user-connection/chat-room/create-chat-room/create-chat-room.command-handler';
+import { ChatRoomController } from '@src/apis/user/controllers/user-connection/chat-room/chat-room.controller';
 
-const controllers = [UserController, UserConnectionController, BlogController];
+const controllers = [
+  UserController,
+  UserConnectionController,
+  BlogController,
+  ChatRoomController,
+];
 
 const commandHandlers: Provider[] = [
   CreateUserCommandHandler,
@@ -35,6 +42,7 @@ const commandHandlers: Provider[] = [
   CreateUserConnectionCommandHandler,
   UpdateUserConnectionCommandHandler,
   CreateBlogCommandHandler,
+  CreateChatRoomCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [

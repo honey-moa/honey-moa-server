@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Length } from 'class-validator';
 
-export class CreateBlogRequestDto {
+export class CreateBlogRequestBodyDto {
   @ApiProperty({
     description: '블로그 이름',
     minLength: 1,

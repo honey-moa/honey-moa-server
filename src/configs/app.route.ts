@@ -29,6 +29,11 @@ export const routesV1 = {
         root: `${userRoot}/me/connections/:id/blog`,
         create: `${userRoot}/me/connections/:id/blog`,
       },
+
+      chatRoom: {
+        root: `${userRoot}/me/connections/:id/chat-room`,
+        create: `${userRoot}/me/connections/:id/chat-room`,
+      },
     } as const,
   } as const,
 

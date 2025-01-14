@@ -3,10 +3,12 @@ import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-pr
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BlogEntity } from '@src/apis/user/domain/user-connection/blog/blog.entity';
+import { ChatRoomEntity } from '@src/apis/user/domain/user-connection/chat-room/chat-room.entity';
 import { UserConnectionEntity } from '@src/apis/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@src/apis/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@src/apis/user/domain/user.entity';
 import { BlogMapper } from '@src/apis/user/mappers/blog.mapper';
+import { ChatRoomMapper } from '@src/apis/user/mappers/chat-room.mapper';
 import { UserConnectionMapper } from '@src/apis/user/mappers/user-connection.mapper';
 import { UserVerifyTokenMapper } from '@src/apis/user/mappers/user-verify-token.mapper';
 import { UserMapper } from '@src/apis/user/mappers/user.mapper';
@@ -32,6 +34,7 @@ export class UserRepository implements UserRepositoryPort {
     private readonly userVerifyTokenMapper: UserVerifyTokenMapper,
     private readonly userConnectionMapper: UserConnectionMapper,
     private readonly blogMapper: BlogMapper,
+    private readonly chatRoomMapper: ChatRoomMapper,
   ) {}
 
   async findOneById(
@@ -215,6 +218,14 @@ export class UserRepository implements UserRepositoryPort {
     const record = this.blogMapper.toPersistence(entity);
 
     await this.txHost.tx.blog.create({
+      data: record,
+    });
+  }
+
+  async createChatRoom(entity: ChatRoomEntity): Promise<void> {
+    const record = this.chatRoomMapper.toPersistence(entity);
+
+    await this.txHost.tx.chatRoom.create({
       data: record,
     });
   }
