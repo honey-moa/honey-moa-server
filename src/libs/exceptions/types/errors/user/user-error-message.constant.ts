@@ -35,4 +35,7 @@ export const USER_ERROR_MESSAGE: ErrorMessage<typeof USER_ERROR_CODE> = {
     'You can only reject a connection that comes to you',
   [USER_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT]:
     'You can only cancel a connection that you sent',
+  [USER_ERROR_CODE.YOU_DO_NOT_HAVE_AN_ACCEPTED_CONNECTION]:
+    "You don't have an accepted connection",
+  [USER_ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG]: 'You already have a blog',
 } as const;

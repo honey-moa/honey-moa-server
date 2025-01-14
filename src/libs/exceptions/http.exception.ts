@@ -131,7 +131,7 @@ export class HttpException extends NestHttpException {
               example: status,
             },
             code: {
-              type: 'number',
+              type: 'string',
               description: 'error code',
               example: codeAndDescription[0].code,
               enum: codeAndDescription.map(({ code }) => code),
