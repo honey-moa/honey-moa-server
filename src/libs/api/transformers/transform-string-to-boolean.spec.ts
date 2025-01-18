@@ -1,4 +1,4 @@
-import { transformStringToBoolean } from '@src/libs/api/transformers/transform-string-to-boolean.transformer';
+import { transformStringToBoolean } from '@libs/api/transformers/transform-string-to-boolean.transformer';
 
 describe(transformStringToBoolean.name, () => {
   it('BooleanString 외의 값이 들어왔을 때', () => {

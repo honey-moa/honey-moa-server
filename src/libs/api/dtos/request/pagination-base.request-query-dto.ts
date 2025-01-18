@@ -1,8 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { transformPage } from '@src/libs/api/transformers/page.transformer';
-import { PageLimit, SortOrder } from '@src/libs/api/types/api.constant';
-import { OrderBy, SortOrderUnion } from '@src/libs/api/types/api.type';
-import { BaseModel } from '@src/libs/db/base.schema';
+import { transformPage } from '@libs/api/transformers/page.transformer';
+import { PageLimit, SortOrder } from '@libs/api/types/api.constant';
+import { OrderBy, SortOrderUnion } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
 
 import { Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';

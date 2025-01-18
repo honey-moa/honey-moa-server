@@ -1,6 +1,6 @@
 import { ArgumentMetadata } from '@nestjs/common';
-import { ParsePositiveBigIntPipe } from '@src/libs/api/pipes/parse-positive-int.pipe';
-import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 
 describe(ParsePositiveBigIntPipe.name, () => {
   let target: ParsePositiveBigIntPipe;

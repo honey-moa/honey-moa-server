@@ -10,12 +10,12 @@ import {
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
-import { ERROR_MESSAGE } from '@src/libs/exceptions/types/errors/error-message.constant';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
 
-import { HttpError } from '@src/libs/exceptions/types/exceptions.type';
-import { ValueOf } from '@src/libs/types/type';
+import { HttpError } from '@libs/exceptions/types/exceptions.type';
+import { ValueOf } from '@libs/types/type';
 
 export class HttpException extends NestHttpException {
   public readonly statusCode: ErrorHttpStatusCode;

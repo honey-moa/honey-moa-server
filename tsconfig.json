@@ -22,7 +22,7 @@
     "esModuleInterop": true,
     "paths": {
       "@src/*": ["src/*"],
-      "@modules/*": ["src/modules/*"],
+      "@features/*": ["src/features/*"],
       "@config/*": ["src/configs/*"],
       "@libs/*": ["src/libs/*"],
       "@tests/*": ["tests/*"]

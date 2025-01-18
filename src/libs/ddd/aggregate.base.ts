@@ -1,5 +1,5 @@
 import { Entity } from '@libs/ddd/entity.base';
-import { convertPropsToObject } from '@src/libs/utils/util';
+import { convertPropsToObject } from '@libs/utils/util';
 
 type AggregateProps<T extends Entity<K>, K> = { [key: string]: T };
 
