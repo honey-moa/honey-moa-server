@@ -7,8 +7,8 @@ import {
 
 import { Response } from 'express';
 
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { HttpExceptionService } from '@src/libs/exceptions/services/http-exception.service';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 
 /**
  * api not found 에러를 잡는 필터

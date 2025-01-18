@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
-import { IsBigIntString } from '@src/libs/api/decorators/is-big-int.decorator';
-import { MinForBigInt } from '@src/libs/api/decorators/min-for-bigint.decorator';
+import { IsBigIntString } from '@libs/api/decorators/is-big-int.decorator';
+import { MinForBigInt } from '@libs/api/decorators/min-for-bigint.decorator';
 import { Transform } from 'class-transformer';
 import { ValidationOptions } from 'class-validator';
 

@@ -3,11 +3,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import * as Joi from 'joi';
 
-import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
-import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
-import { Key } from '@src/libs/core/app-config/types/app-config.type';
-import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-config.service-port';
+import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@libs/core/app-config/services/app-config.service';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@libs/core/app-config/types/app-config.type';
+import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 
 @Global()
 @Module({

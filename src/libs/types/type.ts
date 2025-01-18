@@ -1,6 +1,6 @@
 import { ApiOperationOptions } from '@nestjs/swagger';
-import { CursorBy, OrderBy } from '@src/libs/api/types/api.type';
-import { BaseModel } from '@src/libs/db/base.schema';
+import { CursorBy, OrderBy } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
 
 export type ApiOperationOptionsWithSummary = Required<
   Pick<ApiOperationOptions, 'summary'>
