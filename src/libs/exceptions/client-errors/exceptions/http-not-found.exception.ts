@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
-import { HttpException } from '@src/libs/exceptions/http.exception';
-import { HttpError } from '@src/libs/exceptions/types/exceptions.type';
+import { HttpException } from '@libs/exceptions/http.exception';
+import { HttpError } from '@libs/exceptions/types/exceptions.type';
 
 /**
  * status code 404 error exception

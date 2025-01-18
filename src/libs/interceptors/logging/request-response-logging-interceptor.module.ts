@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RequestResponseLoggingInterceptor } from '@src/libs/interceptors/logging/request-response-logging.interceptor';
+import { RequestResponseLoggingInterceptor } from '@libs/interceptors/logging/request-response-logging.interceptor';
 
 @Module({
   providers: [RequestResponseLoggingInterceptor],

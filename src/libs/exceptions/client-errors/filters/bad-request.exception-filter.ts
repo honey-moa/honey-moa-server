@@ -5,9 +5,9 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
-import { HttpBadRequestException } from '@src/libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { HttpExceptionService } from '@src/libs/exceptions/services/http-exception.service';
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Response } from 'express';
 
 @Catch(BadRequestException)

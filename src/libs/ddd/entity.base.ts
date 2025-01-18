@@ -1,7 +1,7 @@
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { Guard } from '@src/libs/guard';
-import { convertPropsToObject } from '@src/libs/utils/util';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
+import { convertPropsToObject } from '@libs/utils/util';
 
 export type AggregateID = bigint;
 

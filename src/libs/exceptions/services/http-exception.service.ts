@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-config.service-port';
+import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 
-import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
-import { Key } from '@src/libs/core/app-config/types/app-config.type';
-import { ExceptionResponseDto } from '@src/libs/exceptions/dtos/exception-response.dto';
-import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
-import { ERROR_MESSAGE } from '@src/libs/exceptions/types/errors/error-message.constant';
-import { ValueOf } from '@src/libs/types/type';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@libs/core/app-config/types/app-config.type';
+import { ExceptionResponseDto } from '@libs/exceptions/dtos/exception-response.dto';
+import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
+import { ValueOf } from '@libs/types/type';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 interface ExceptionError {

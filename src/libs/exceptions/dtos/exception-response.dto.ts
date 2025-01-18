@@ -1,7 +1,7 @@
 import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
-import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
-import { ERROR_MESSAGE } from '@src/libs/exceptions/types/errors/error-message.constant';
-import { ValueOf } from '@src/libs/types/type';
+import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
+import { ValueOf } from '@libs/types/type';
 
 export class ExceptionResponseDto {
   public readonly timestamp: Date;

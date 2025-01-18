@@ -8,9 +8,9 @@ import {
 
 import { Response } from 'express';
 
-import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
-import { HttpExceptionService } from '@src/libs/exceptions/services/http-exception.service';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 
 /**
  * 다른 exception filter 가 잡지않는 exception 을 잡는 필터
