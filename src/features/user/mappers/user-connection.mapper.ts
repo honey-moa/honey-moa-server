@@ -17,6 +17,7 @@ import {
 } from '@features/user/mappers/chat-room.mapper';
 import { BlogMapper, blogSchema } from '@features/user/mappers/blog.mapper';
 import { isNil } from '@libs/utils/util';
+import { HydratedUserResponseDto } from '@src/features/user/dtos/response/hydrated-user.response-dto';
 
 export const userConnectionSchema = baseSchema.extend({
   requesterId: z.bigint(),
@@ -120,6 +121,24 @@ export class UserConnectionMapper
 
     if (chatRoom) {
       createDtoProps.chatRoom = this.chatRoomMapper.toResponseDto(chatRoom);
+    }
+
+    if (props.requestedUser) {
+      createDtoProps.requested = new HydratedUserResponseDto({
+        id: props.requestedId,
+        nickname: props.requestedUser.nickname,
+        createdAt: props.requestedUser.createdAt,
+        updatedAt: props.requestedUser.updatedAt,
+      });
+    }
+
+    if (props.requesterUser) {
+      createDtoProps.requester = new HydratedUserResponseDto({
+        id: props.requesterId,
+        nickname: props.requesterUser.nickname,
+        createdAt: props.requesterUser.createdAt,
+        updatedAt: props.requesterUser.updatedAt,
+      });
     }
 
     return new UserConnectionResponseDto(createDtoProps);
