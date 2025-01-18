@@ -6,8 +6,8 @@ import {
   ApiPropertyOptions,
   ApiResponse,
 } from '@nestjs/swagger';
-import { CursorBy } from '@src/libs/api/types/api.type';
-import { BaseModel } from '@src/libs/db/base.schema';
+import { CursorBy } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
 
 export class CursorPaginationResponseDto {
   @ApiProperty({

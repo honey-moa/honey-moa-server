@@ -1,6 +1,6 @@
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { PrismaService } from '@src/libs/core/prisma/services/prisma.service';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { RequestContext } from 'nestjs-request-context';
 
 /**

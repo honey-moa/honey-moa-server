@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PaginationResponseBuilder } from '@src/libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
-import { PaginationInterceptor } from '@src/libs/interceptors/pagination/pagination.interceptor';
+import { PaginationResponseBuilder } from '@libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
+import { PaginationInterceptor } from '@libs/interceptors/pagination/pagination.interceptor';
 
 @Module({
   providers: [PaginationInterceptor, PaginationResponseBuilder],

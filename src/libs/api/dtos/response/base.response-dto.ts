@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IdResponseDto } from '@src/libs/api/dtos/response/id.response-dto';
-import { AggregateID } from '@src/libs/ddd/entity.base';
+import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export interface CreateBaseResponseDtoProps {
   id: AggregateID;

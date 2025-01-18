@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ContextInterceptorModule } from '@src/libs/interceptors/context/context-interceptor.module';
-import { RequestResponseLoggingInterceptorModule } from '@src/libs/interceptors/logging/request-response-logging-interceptor.module';
-import { PaginationInterceptorModule } from '@src/libs/interceptors/pagination/pagination-interceptor.module';
+import { ContextInterceptorModule } from '@libs/interceptors/context/context-interceptor.module';
+import { RequestResponseLoggingInterceptorModule } from '@libs/interceptors/logging/request-response-logging-interceptor.module';
+import { PaginationInterceptorModule } from '@libs/interceptors/pagination/pagination-interceptor.module';
 
 @Module({
   imports: [

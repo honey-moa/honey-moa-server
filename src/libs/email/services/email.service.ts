@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Mail from 'nodemailer/lib/mailer';
 import nodemailer from 'nodemailer';
-import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
-import { AppConfigServicePort } from '@src/libs/core/app-config/services/app-config.service-port';
-import { Key } from '@src/libs/core/app-config/types/app-config.type';
-import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
-import { AggregateID } from '@src/libs/ddd/entity.base';
-import { EmailServicePort } from '@src/libs/email/services/email.service-port';
-import { routesV1 } from '@src/configs/app.route';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
+import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import { Key } from '@libs/core/app-config/types/app-config.type';
+import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { EmailServicePort } from '@libs/email/services/email.service-port';
+import { routesV1 } from '@config/app.route';
 
 @Injectable()
 export class EmailService implements EmailServicePort {

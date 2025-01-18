@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { OffsetPaginationRequestQueryDto } from '@src/libs/api/dtos/request/offset-pagination.request-query-dto';
-import { PageLimit } from '@src/libs/api/types/api.constant';
-import { CursorBy } from '@src/libs/api/types/api.type';
-import { BaseModel } from '@src/libs/db/base.schema';
-import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { ERROR_CODE } from '@src/libs/exceptions/types/errors/error-code.constant';
-import { CursorPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
-import { OffsetPaginationResponseDto } from '@src/libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
+import { OffsetPaginationRequestQueryDto } from '@libs/api/dtos/request/offset-pagination.request-query-dto';
+import { PageLimit } from '@libs/api/types/api.constant';
+import { CursorBy } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
+import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 
 interface Res {
   data: unknown;

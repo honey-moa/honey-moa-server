@@ -1,5 +1,5 @@
-import { SortOrder } from '@src/libs/api/types/api.constant';
-import { ValueOf } from '@src/libs/types/type';
+import { SortOrder } from '@libs/api/types/api.constant';
+import { ValueOf } from '@libs/types/type';
 
 export type SortOrderUnion = ValueOf<typeof SortOrder>;
 
