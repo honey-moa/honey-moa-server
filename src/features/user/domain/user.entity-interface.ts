@@ -1,5 +1,5 @@
-import { UserConnectionEntity } from '@features/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import type {
   UserLoginTypeUnion,
   UserMbtiUnion,
@@ -18,8 +18,8 @@ export interface UserProps {
   deletedAt: Date | null;
 
   userVerifyTokens?: UserVerifyTokenEntity[];
-  requestedConnection?: UserConnectionEntity;
-  requesterConnection?: UserConnectionEntity;
+  requestedConnection?: UserConnectionEntity[];
+  requesterConnection?: UserConnectionEntity[];
 }
 
 export interface CreateUserProps {

@@ -2,26 +2,20 @@ import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { BlogEntity } from '@features/user/domain/user-connection/blog/blog.entity';
-import { ChatRoomEntity } from '@features/user/domain/user-connection/chat-room/chat-room.entity';
-import { UserConnectionEntity } from '@features/user/domain/user-connection/user-connection.entity';
 import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
 import { UserEntity } from '@features/user/domain/user.entity';
-import { BlogMapper } from '@features/user/mappers/blog.mapper';
-import { ChatRoomMapper } from '@features/user/mappers/chat-room.mapper';
-import { UserConnectionMapper } from '@features/user/mappers/user-connection.mapper';
 import { UserVerifyTokenMapper } from '@features/user/mappers/user-verify-token.mapper';
 import { UserMapper } from '@features/user/mappers/user.mapper';
 import {
   UserInclude,
   UserRepositoryPort,
 } from '@features/user/repositories/user.repository-port';
-import {
-  UserConnectionStatusUnion,
-  UserLoginTypeUnion,
-} from '@features/user/types/user.type';
+import { UserLoginTypeUnion } from '@features/user/types/user.type';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
+import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {
@@ -33,8 +27,6 @@ export class UserRepository implements UserRepositoryPort {
     private readonly mapper: UserMapper,
     private readonly userVerifyTokenMapper: UserVerifyTokenMapper,
     private readonly userConnectionMapper: UserConnectionMapper,
-    private readonly blogMapper: BlogMapper,
-    private readonly chatRoomMapper: ChatRoomMapper,
   ) {}
 
   async findOneById(
@@ -141,16 +133,20 @@ export class UserRepository implements UserRepositoryPort {
         OR: [
           {
             requestedConnection: {
-              id: userConnectionId,
-              status,
-              deletedAt: null,
+              some: {
+                id: userConnectionId,
+                status,
+                deletedAt: null,
+              },
             },
           },
           {
             requesterConnection: {
-              id: userConnectionId,
-              status,
-              deletedAt: null,
+              some: {
+                id: userConnectionId,
+                status,
+                deletedAt: null,
+              },
             },
           },
         ],
@@ -210,22 +206,6 @@ export class UserRepository implements UserRepositoryPort {
 
     await this.txHost.tx.userConnection.update({
       where: { id: record.id },
-      data: record,
-    });
-  }
-
-  async createBlog(entity: BlogEntity): Promise<void> {
-    const record = this.blogMapper.toPersistence(entity);
-
-    await this.txHost.tx.blog.create({
-      data: record,
-    });
-  }
-
-  async createChatRoom(entity: ChatRoomEntity): Promise<void> {
-    const record = this.chatRoomMapper.toPersistence(entity);
-
-    await this.txHost.tx.chatRoom.create({
       data: record,
     });
   }

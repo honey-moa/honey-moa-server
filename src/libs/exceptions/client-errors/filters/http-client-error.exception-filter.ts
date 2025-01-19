@@ -7,13 +7,15 @@ import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/except
 import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 
 import { Response } from 'express';
+import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 
 type ClientErrorException =
   | HttpBadRequestException
   | HttpUnauthorizedException
   | HttpForbiddenException
   | HttpNotFoundException
-  | HttpConflictException;
+  | HttpConflictException
+  | HttpUnprocessableEntityException;
 
 /**
  * 400번대 에러를 잡는 exception filter
@@ -24,6 +26,7 @@ type ClientErrorException =
   HttpForbiddenException,
   HttpNotFoundException,
   HttpConflictException,
+  HttpUnprocessableEntityException,
 )
 export class HttpClientErrorExceptionFilter
   implements ExceptionFilter<ClientErrorException>

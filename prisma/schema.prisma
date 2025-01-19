@@ -27,8 +27,8 @@ model User {
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   userVerifyTokens    UserVerifyToken[]
-  requestedConnection UserConnection?   @relation("RequestedConnection")
-  requesterConnection UserConnection?   @relation("RequesterConnection")
+  requestedConnection UserConnection[]  @relation("RequestedConnection")
+  requesterConnection UserConnection[]  @relation("RequesterConnection")
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
@@ -53,9 +53,9 @@ model UserVerifyToken {
 model UserConnection {
   id          BigInt                   @id(map: "pk_user_connections")
   // 피요청자
-  requestedId BigInt                   @unique(map: "uq_user_connections_requested_id") @map("requested_id") @db.BigInt()
+  requestedId BigInt                   @map("requested_id") @db.BigInt()
   // 요청자
-  requesterId BigInt                   @unique(map: "uq_user_connections_requester_id") @map("requester_id") @db.BigInt()
+  requesterId BigInt                   @map("requester_id") @db.BigInt()
   status      UserConnectionStatusEnum @default(PENDING)
   createdAt   DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime                 @default(now()) @map("updated_at") @db.Timestamptz(6)
@@ -67,6 +67,7 @@ model UserConnection {
   blog     Blog?
   chatRoom ChatRoom?
 
+  @@unique([requestedId, requesterId], name: "uq_user_connections_requested_id_requester_id")
   @@map("user_connections")
 }
 

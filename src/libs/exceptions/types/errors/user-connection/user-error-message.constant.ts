@@ -24,4 +24,12 @@ export const USER_CONNECTION_ERROR_MESSAGE: ErrorMessage<
     'You can only cancel a connection that you sent',
   [USER_CONNECTION_ERROR_CODE.YOU_DO_NOT_HAVE_AN_ACCEPTED_CONNECTION]:
     "You don't have an accepted connection",
+  [USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED]:
+    'You cannot disconnect a connection that is not accepted',
+  [USER_CONNECTION_ERROR_CODE.CANNOT_ACCEPT_CONNECTION_REQUEST_NOT_FOUND]:
+    'You cannot accept a connection that is not pending',
+  [USER_CONNECTION_ERROR_CODE.CANNOT_REJECT_CONNECTION_REQUEST_NOT_FOUND]:
+    'You cannot reject a connection that is not pending',
+  [USER_CONNECTION_ERROR_CODE.CANNOT_CANCEL_CONNECTION_REQUEST_NOT_FOUND]:
+    'You cannot cancel a connection that is not pending',
 } as const;
