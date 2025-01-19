@@ -24,18 +24,18 @@ export const routesV1 = {
       findConnections: `${userRoot}/me/connections`,
       findOneConnection: `${userRoot}/me/connections/:id`,
       update: `${userRoot}/me/connections/:id`,
+    },
+  },
 
-      blog: {
-        root: `${userRoot}/me/connections/:id/blogs`,
-        create: `${userRoot}/me/connections/:id/blogs`,
-      },
+  blog: {
+    root: `${userRoot}/me/connections/:id/blogs`,
+    create: `${userRoot}/me/connections/:id/blogs`,
+  },
 
-      chatRoom: {
-        root: `${userRoot}/me/connections/:id/chat-rooms`,
-        create: `${userRoot}/me/connections/:id/chat-rooms`,
-      },
-    } as const,
-  } as const,
+  chatRoom: {
+    root: `${userRoot}/me/connections/:id/chat-rooms`,
+    create: `${userRoot}/me/connections/:id/chat-rooms`,
+  },
 
   auth: {
     root: authRoot,
@@ -45,5 +45,5 @@ export const routesV1 = {
 
   post: {
     root: postRoot,
-  } as const,
+  },
 } as const;

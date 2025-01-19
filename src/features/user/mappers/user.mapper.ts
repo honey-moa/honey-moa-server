@@ -17,9 +17,9 @@ import {
 } from '@features/user/mappers/user-verify-token.mapper';
 import { isNil } from '@libs/utils/util';
 import {
-  UserConnectionMapper,
   userConnectionSchema,
-} from '@features/user/mappers/user-connection.mapper';
+  UserConnectionMapper,
+} from '@features/user/user-connection/mappers/user-connection.mapper';
 
 export const userSchema = baseSchema.extend({
   nickname: z.string().min(1).max(20),
@@ -37,8 +37,8 @@ export const userSchema = baseSchema.extend({
 
 export const userWithEntitiesTokensSchema = userSchema.extend({
   userVerifyTokens: z.array(userVerifyTokenSchema).optional(),
-  requestedConnection: z.nullable(userConnectionSchema).optional(),
-  requesterConnection: z.nullable(userConnectionSchema).optional(),
+  requestedConnection: z.array(userConnectionSchema).optional(),
+  requesterConnection: z.array(userConnectionSchema).optional(),
 });
 
 export type UserModel = z.TypeOf<typeof userSchema>;
@@ -74,20 +74,20 @@ export class UserMapper
     };
 
     if (!isNil(record.userVerifyTokens)) {
-      userProps.props.userVerifyTokens = record.userVerifyTokens.map(
-        this.userVerifyTokenMapper.toEntity,
+      userProps.props.userVerifyTokens = record.userVerifyTokens.map((token) =>
+        this.userVerifyTokenMapper.toEntity(token),
       );
     }
 
     if (!isNil(record.requestedConnection)) {
-      userProps.props.requestedConnection = this.userConnectionMapper.toEntity(
-        record.requestedConnection,
+      userProps.props.requestedConnection = record.requestedConnection.map(
+        (connection) => this.userConnectionMapper.toEntity(connection),
       );
     }
 
     if (!isNil(record.requesterConnection)) {
-      userProps.props.requesterConnection = this.userConnectionMapper.toEntity(
-        record.requesterConnection,
+      userProps.props.requesterConnection = record.requesterConnection.map(
+        (connection) => this.userConnectionMapper.toEntity(connection),
       );
     }
 
