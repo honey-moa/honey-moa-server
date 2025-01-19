@@ -28,6 +28,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
+
 export class UserEntity extends AggregateRoot<UserProps> {
   static async create(create: CreateUserProps): Promise<UserEntity> {
     const id = getTsid().toBigInt();
@@ -106,6 +107,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
     getHydratedUser: (hydratedUser: HydratedUserEntityProps) => void;
   }) {
     entity.getHydratedUser({
+  hydrateRequesterUserConnection(userConnection: UserConnectionEntity) {
+    userConnection.requesterUser = {
       id: this.id,
       nickname: this.props.nickname,
       createdAt: this.createdAt,
