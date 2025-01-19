@@ -107,8 +107,6 @@ export class UserEntity extends AggregateRoot<UserProps> {
     getHydratedUser: (hydratedUser: HydratedUserEntityProps) => void;
   }) {
     entity.getHydratedUser({
-  hydrateRequesterUserConnection(userConnection: UserConnectionEntity) {
-    userConnection.requesterUser = {
       id: this.id,
       nickname: this.props.nickname,
       createdAt: this.createdAt,

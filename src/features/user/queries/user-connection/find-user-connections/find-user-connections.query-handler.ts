@@ -1,14 +1,14 @@
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UserConnectionEntity } from '@features/user/domain/user-connection/user-connection.entity';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserConnectionMapper } from '@features/user/mappers/user-connection.mapper';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { UserMapper } from '@features/user/mappers/user.mapper';
 import { FindUserConnectionsQuery } from '@features/user/queries/user-connection/find-user-connections/find-user-connections.query';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { Paginated } from '@libs/types/type';
+import { UserEntity } from '@features/user/domain/user.entity';
+import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 
 @QueryHandler(FindUserConnectionsQuery)
 export class FindUserConnectionsQueryHandler
@@ -100,8 +100,8 @@ export class FindUserConnectionsQueryHandler
       const requesterUser = userMap.get(userConnection.requesterId);
       const requestedUser = userMap.get(userConnection.requestedId);
 
-      requesterUser?.hydrateRequesterUserConnection(userConnection);
-      requestedUser?.hydrateRequestedUserConnection(userConnection);
+      requesterUser?.hydrate(userConnection);
+      requestedUser?.hydrate(userConnection);
     });
 
     return [userConnectionEntities, count];

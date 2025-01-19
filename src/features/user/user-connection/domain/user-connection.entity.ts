@@ -13,7 +13,6 @@ import {
 } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -98,7 +97,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   disconnectConnection(): void {
     if (this.props.status !== UserConnectionStatus.ACCEPTED) {
-      throw new HttpUnprocessableEntityException({
+      throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED,
       });
     }

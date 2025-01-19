@@ -1,5 +1,5 @@
 import { IQuery } from '@nestjs/cqrs';
-import { UserConnectionStatusUnion } from '@features/user/types/user.type';
+import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
 
