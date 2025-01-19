@@ -67,7 +67,6 @@ model UserConnection {
   blog     Blog?
   chatRoom ChatRoom?
 
-  @@unique([requestedId, requesterId], name: "uq_user_connections_requested_id_requester_id")
   @@map("user_connections")
 }
 
