@@ -27,6 +27,7 @@ import { isNil } from '@libs/utils/util';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 export class UserEntity extends AggregateRoot<UserProps> {
   static async create(create: CreateUserProps): Promise<UserEntity> {
     const id = getTsid().toBigInt();
@@ -151,8 +152,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
     if (status === UserConnectionStatus.ACCEPTED) {
       if (isNil(requestedConnection)) {
-        throw new HttpUnprocessableEntityException({
-          code: USER_CONNECTION_ERROR_CODE.CANNOT_ACCEPT_CONNECTION_REQUEST_NOT_FOUND,
+        throw new HttpForbiddenException({
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
         });
       }
 
@@ -163,8 +164,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
     if (status === UserConnectionStatus.REJECTED) {
       if (isNil(requestedConnection)) {
-        throw new HttpUnprocessableEntityException({
-          code: USER_CONNECTION_ERROR_CODE.CANNOT_REJECT_CONNECTION_REQUEST_NOT_FOUND,
+        throw new HttpForbiddenException({
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
         });
       }
 
@@ -175,8 +176,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
     if (status === UserConnectionStatus.CANCELED) {
       if (isNil(requesterConnection)) {
-        throw new HttpUnprocessableEntityException({
-          code: USER_CONNECTION_ERROR_CODE.CANNOT_CANCEL_CONNECTION_REQUEST_NOT_FOUND,
+        throw new HttpForbiddenException({
+          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
         });
       }
 
