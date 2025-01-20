@@ -6,6 +6,4 @@ export interface BlogRepositoryPort extends RepositoryPort<BlogEntity> {
   findOneByConnectionId(
     connectionId: AggregateID,
   ): Promise<BlogEntity | undefined>;
-
-  createBlog(entity: BlogEntity): Promise<void>;
 }

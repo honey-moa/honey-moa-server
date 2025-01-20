@@ -64,7 +64,7 @@ export class CreateBlogCommandHandler
       name,
     });
 
-    await this.blogRepository.createBlog(blog);
+    await this.blogRepository.create(blog);
 
     return blog.id;
   }
