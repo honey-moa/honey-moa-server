@@ -21,10 +21,10 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-      "@src/*": ["src/*"],
       "@features/*": ["src/features/*"],
       "@config/*": ["src/configs/*"],
       "@libs/*": ["src/libs/*"],
+      "@src/*": ["src/*"],
       "@tests/*": ["tests/*"]
     }
   }

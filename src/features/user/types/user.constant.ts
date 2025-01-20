@@ -36,11 +36,3 @@ export const USER_PASSWORD_REGEXP =
 
 export const USER_EMAIL_REGEXP =
   /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
-
-export const UserConnectionStatus = {
-  PENDING: 'PENDING',
-  ACCEPTED: 'ACCEPTED',
-  REJECTED: 'REJECTED',
-  DISCONNECTED: 'DISCONNECTED',
-  CANCELED: 'CANCELED',
-} as const;
