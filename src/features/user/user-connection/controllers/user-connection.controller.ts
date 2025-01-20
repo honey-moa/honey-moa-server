@@ -53,7 +53,7 @@ export class UserConnectionController {
   @ApiUserConnection.Create({
     summary: '유저 커넥션 생성',
   })
-  @Post(routesV1.user.userConnection.create)
+  @Post(routesV1.userConnection.create)
   async create(
     @User('sub') userId: AggregateID,
     @Body() requestBodyDto: CreateUserConnectionRequestBodyDto,
@@ -76,7 +76,7 @@ export class UserConnectionController {
       '유저 커넥션 Offset-based Pagination 조회. 해당 요청에선 blog, chat-room에 대한 정보는 나가지 않음',
   })
   @SetPagination()
-  @Get(routesV1.user.userConnection.findConnections)
+  @Get(routesV1.userConnection.findConnections)
   async findConnections(
     @User('sub') userId: AggregateID,
     @Query() requestQueryDto: FindUserConnectionsRequestQueryDto,
@@ -102,7 +102,7 @@ export class UserConnectionController {
   @ApiUserConnection.FindOneUserConnection({
     summary: '유저 커넥션 상세 조회. ACCEPTED된 상태의 Connection만 조회 가능.',
   })
-  @Get(routesV1.user.userConnection.findOneConnection)
+  @Get(routesV1.userConnection.findOneConnection)
   async findOneUserConnection(
     @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) userConnectionId: string,
@@ -138,7 +138,7 @@ export class UserConnectionController {
     summary: '유저 커넥션 수락 / 거절 / 취소',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Put(routesV1.user.userConnection.update)
+  @Put(routesV1.userConnection.update)
   async update(
     @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) userConnectionId: string,
