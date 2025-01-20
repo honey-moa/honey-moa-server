@@ -82,12 +82,4 @@ export class BlogRepository implements BlogRepositoryPort {
 
     return record ? this.mapper.toEntity(record) : undefined;
   }
-
-  async createBlog(entity: BlogEntity): Promise<void> {
-    const record = this.mapper.toPersistence(entity);
-
-    await this.txHost.tx.blog.create({
-      data: record,
-    });
-  }
 }

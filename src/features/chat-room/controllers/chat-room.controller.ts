@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateChatRoomCommand } from '@features/chat-room/commands/create-chat-room/create-chat-room.command';
@@ -20,12 +20,10 @@ export class ChatRoomController {
   @Post(routesV1.chatRoom.create)
   async create(
     @User('sub') userId: AggregateID,
-    @Param('id') connectionId: string,
     @Body() requestBodyDto: CreateChatRoomRequestBodyDto,
   ): Promise<IdResponseDto> {
     const command = new CreateChatRoomCommand({
       userId,
-      connectionId: BigInt(connectionId),
       ...requestBodyDto,
     });
 

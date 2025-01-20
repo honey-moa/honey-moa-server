@@ -27,17 +27,12 @@ export class CreateChatRoomCommandHandler
   ) {}
 
   async execute(command: CreateChatRoomCommand): Promise<AggregateID> {
-    const { userId, connectionId, name } = command;
+    const { userId, name } = command;
 
-    const user = await this.userRepository.findOneUserByIdAndConnectionId(
-      userId,
-      connectionId,
-      undefined,
-      {
-        requestedConnection: true,
-        requesterConnection: true,
-      },
-    );
+    const user = await this.userRepository.findOneById(userId, {
+      requestedConnection: true,
+      requesterConnection: true,
+    });
 
     if (isNil(user)) {
       throw new HttpUnauthorizedException({
@@ -66,7 +61,7 @@ export class CreateChatRoomCommandHandler
 
     const chatRoom = ChatRoomEntity.create({
       createdBy: userId,
-      connectionId,
+      connectionId: acceptedConnection.id,
       name,
     });
 
