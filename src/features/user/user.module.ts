@@ -24,13 +24,18 @@ import { FindOneUserConnectionQueryHandler } from '@features/user/queries/user-c
 import { CreateBlogCommandHandler } from '@features/user/commands/user-connection/blog/create-blog/create-blog.command-handler';
 import { BlogController } from '@features/user/controllers/user-connection/blog/blog.controller';
 import { CreateChatRoomCommandHandler } from '@features/user/commands/user-connection/chat-room/create-chat-room/create-chat-room.command-handler';
-import { ChatRoomController } from '@features/user/controllers/user-connection/chat-room/chat-room.controller';
+import { ChatRoomController } from '@src/features/user/controllers/user-connection/chats/chat-room/chat-room.controller';
+import { ChatMessageGateway } from '@src/features/user/controllers/user-connection/chats/chat-message/chat-message.gateway';
+import { ChatMessageController } from '@src/features/user/controllers/user-connection/chats/chat-message/chat-message.controller';
+import { FindChatMessagesQueryHandler } from '@src/features/user/queries/user-connection/find-chat-messages/find-chat-messages.query-handler';
+import { ChatMessageMapper } from '@src/features/user/mappers/chat-message.mapper';
 
 const controllers = [
   UserController,
   UserConnectionController,
   BlogController,
   ChatRoomController,
+  ChatMessageController,
 ];
 
 const commandHandlers: Provider[] = [
@@ -49,6 +54,7 @@ const queryHandlers: Provider[] = [
   FindUsersQueryHandler,
   FindUserConnectionsQueryHandler,
   FindOneUserConnectionQueryHandler,
+  FindChatMessagesQueryHandler,
 ];
 
 const eventHandlers: Provider[] = [
@@ -63,8 +69,9 @@ const mappers: Provider[] = [
   UserMapper,
   UserConnectionMapper,
   UserVerifyTokenMapper,
-  ChatRoomMapper,
   BlogMapper,
+  ChatRoomMapper,
+  ChatMessageMapper,
 ];
 
 @Module({
@@ -76,6 +83,7 @@ const mappers: Provider[] = [
     ...commandHandlers,
     ...queryHandlers,
     ...eventHandlers,
+    ChatMessageGateway,
   ],
   exports: [...repositories, ...mappers],
 })

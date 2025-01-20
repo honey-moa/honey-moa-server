@@ -2,12 +2,13 @@ import { Body, Controller, Param, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateChatRoomCommand } from '@features/user/commands/user-connection/chat-room/create-chat-room/create-chat-room.command';
-import { ApiChatRoom } from '@features/user/controllers/user-connection/chat-room/chat-room.swagger';
+
 import { CreateChatRoomRequestBodyDto } from '@features/user/dtos/user-connection/chat-room/request/create-chat-room.request-body-dto';
 import { routesV1 } from '@config/app.route';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { ApiChatRoom } from '@src/features/user/controllers/user-connection/chats/chat-room/chat-room.swagger';
 
 @ApiTags('ChatRoom')
 @Controller(routesV1.version)

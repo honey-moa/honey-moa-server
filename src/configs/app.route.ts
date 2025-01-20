@@ -34,6 +34,10 @@ export const routesV1 = {
         root: `${userRoot}/me/connections/:id/chat-rooms`,
         create: `${userRoot}/me/connections/:id/chat-rooms`,
       },
+
+      chatMessage: {
+        root: `${userRoot}/me/connections/:id/chat-rooms/:roomId/messages`,
+      },
     } as const,
   } as const,
 

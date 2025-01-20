@@ -4,7 +4,7 @@ import {
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { ChatRoomController } from '@features/user/controllers/user-connection/chat-room/chat-room.controller';
+import { ChatRoomController } from '@features/user/controllers/user-connection/chats/chat-room/chat-room.controller';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
