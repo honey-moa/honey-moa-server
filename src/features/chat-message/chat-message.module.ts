@@ -1,4 +1,4 @@
-import { ChatMessageController } from '@features/chat-message/chat-message.controller';
+import { ChatMessageController } from '@features/chat-message/controllers/chat-message.controller';
 import { ChatMessageGateway } from '@features/chat-message/chat-message.gateway';
 import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import { FindChatMessagesQueryHandler } from '@features/chat-message/queries/find-chat-messages/find-chat-messages.query-handler';

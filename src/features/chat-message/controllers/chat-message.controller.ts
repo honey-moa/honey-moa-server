@@ -10,6 +10,7 @@ import { ChatMessageMapper } from '@src/features/chat-message/mappers/chat-messa
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 import { FindChatMessagesRequestQueryDto } from '@features/chat-message/dtos/request/find-chat-messages.request-query-dto';
 import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
+import { ApiChatMessage } from '@features/chat-message/controllers/chat-message.swagger';
 
 @ApiTags('ChatMessage')
 @ApiInternalServerErrorBuilder()
@@ -21,6 +22,9 @@ export class ChatMessageController {
   ) {}
 
   // 채팅 메시지 페이지네이션
+  @ApiChatMessage.FindChatMessages({
+    summary: '채팅 메시지 조회 API(Pagination)',
+  })
   @SetPagination()
   @Get(routesV1.chatMessage.root)
   async findChatMessages(
