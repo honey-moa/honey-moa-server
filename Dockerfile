@@ -36,8 +36,6 @@ COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modul
 
 COPY --chown=node:node . .
 
-ENV DISABLE_ERD=true
-
 RUN npm run prisma:generate
 
 # Run the build command which creates the production bundle
