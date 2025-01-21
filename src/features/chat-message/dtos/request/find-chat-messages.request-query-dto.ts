@@ -10,7 +10,7 @@ type ChatMessagesModelForPaginated = Pick<
   'id' | 'createdAt' | 'updatedAt'
 >;
 
-export class FindChatMessagesRequestDto extends CursorPaginationRequestQueryDto<ChatMessagesModelForPaginated> {
+export class FindChatMessagesRequestQueryDto extends CursorPaginationRequestQueryDto<ChatMessagesModelForPaginated> {
   @ParseQueryByColonAndTransformToObject({
     createdAt: {
       type: 'date',

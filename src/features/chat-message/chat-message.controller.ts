@@ -8,7 +8,7 @@ import { Paginated } from '@src/libs/types/type';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatMessageMapper } from '@src/features/chat-message/mappers/chat-message.mapper';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
-import { FindChatMessagesRequestDto } from '@features/chat-message/dtos/request/find-chat-messages.request-query-dto';
+import { FindChatMessagesRequestQueryDto } from '@features/chat-message/dtos/request/find-chat-messages.request-query-dto';
 import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
 
 @ApiTags('ChatMessage')
@@ -25,11 +25,11 @@ export class ChatMessageController {
   @Get(routesV1.chatMessage.root)
   async findChatMessages(
     @Param('id') roomId: string,
-    @Query() findChatMessagesRequestDto: FindChatMessagesRequestDto,
+    @Query() findChatMessagesRequestQueryDto: FindChatMessagesRequestQueryDto,
   ): Promise<[ChatMessageResponseDto[], number]> {
     const query = new FindChatMessagesQuery({
       roomId: BigInt(roomId),
-      ...findChatMessagesRequestDto,
+      ...findChatMessagesRequestQueryDto,
     });
 
     const [chatMessages, count] = await this.queryBus.execute<
