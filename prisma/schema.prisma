@@ -4,9 +4,7 @@ generator client {
 
 generator erd {
   provider = "prisma-erd-generator"
-  output   = "../ERD.svg"
   theme    = "forest"
-  disabled = true
 }
 
 datasource db {
@@ -102,7 +100,7 @@ model ChatRoom {
 
 model Tag {
   id        BigInt   @id(map: "pk_tags")
-  name      String   @db.VarChar(255)
+  name      String   @unique(map: "uq_tags_name") @db.VarChar(20)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
 
@@ -155,6 +153,7 @@ model BlogPostTag {
   blogPost BlogPost @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
   tag      Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
+  @@unique([blogPostId, tagId], name: "uq_blog_post_tags_blog_post_id_tag_id")
   @@map("blog_post_tags")
 }
 
