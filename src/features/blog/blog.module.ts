@@ -3,6 +3,7 @@ import { BlogController } from '@features/blog/controllers/blog.controller';
 import { BlogMapper } from '@features/blog/mappers/blog.mapper';
 import { BlogRepository } from '@features/blog/repositories/blog.repository';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
+import { UserModule } from '@features/user/user.module';
 import { Module, Provider } from '@nestjs/common';
 
 const controllers = [BlogController];
@@ -16,7 +17,9 @@ const repositories: Provider[] = [
 ];
 
 @Module({
+  imports: [UserModule],
   controllers: [...controllers],
   providers: [...mappers, ...commandHandlers, ...repositories],
+  exports: [...repositories, ...mappers],
 })
 export class BlogModule {}

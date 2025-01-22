@@ -100,6 +100,7 @@ model ChatRoom {
 
 model Tag {
   id        BigInt   @id(map: "pk_tags")
+  userId    BigInt   @map("user_id") @db.BigInt()
   name      String   @unique(map: "uq_tags_name") @db.VarChar(20)
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
