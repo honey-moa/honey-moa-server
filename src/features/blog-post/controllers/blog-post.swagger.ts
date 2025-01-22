@@ -7,11 +7,9 @@ import {
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { BLOG_ERROR_CODE } from '@libs/exceptions/types/errors/blog/blog-error-code.constant';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
@@ -127,20 +125,14 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
       ]),
       HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
         {
-          code: USER_CONNECTION_ERROR_CODE.YOU_DO_NOT_HAVE_AN_ACCEPTED_CONNECTION,
-          description: '유저가 맺어진 커넥션이 없음.',
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+          description: '해당 blog의 커넥션에 속해있지 않음.',
         },
       ]),
       HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
         {
           code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
-          description: '유저 혹은 커넥션이 존재하지 않음.',
-        },
-      ]),
-      HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
-        {
-          code: BLOG_ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG,
-          description: '유저가 이미 블로그를 가지고 있음.',
+          description: '해당 blog가 존재하지 않음.',
         },
       ]),
     );
