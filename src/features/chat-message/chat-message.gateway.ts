@@ -1,3 +1,4 @@
+import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
 import { CreateChatMessageDto } from '@features/chat-message/dtos/socket/create-chat-message.dto';
 import { EnterChatDto } from '@features/chat-message/dtos/socket/enter-chat.dto';
 import { SocketWithUserDto } from '@features/chat-message/dtos/socket/socket-with-user.dto';
@@ -13,7 +14,7 @@ import {
   UsePipes,
   ValidationPipeOptions,
 } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ConnectedSocket,
   MessageBody,
@@ -56,7 +57,10 @@ const customValidationPipe = new CustomValidationPipe({
   namespace: 'chats',
 })
 export class ChatMessageGateway implements OnGatewayConnection {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -68,7 +72,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
   @UsePipes(customValidationPipe)
   @UseFilters(SocketCatchHttpExceptionFilter)
   @UseGuards(SocketJwtBearerAuthGuard)
-  @SubscribeMessage('enter_chat')
+  @SubscribeMessage('enter_chat_room')
   async enterChat(
     @MessageBody() data: EnterChatDto,
     @ConnectedSocket() socket: Socket,
@@ -103,9 +107,9 @@ export class ChatMessageGateway implements OnGatewayConnection {
      * 2. 메시지를 전송하면 chatMessage 테이블에 메시지 저장.
      * (event를 발생시켜서 chatMessage 테이블에 저장하는 방식으로 개선하면 좋을듯.)
      */
-    console.log(socket.user.sub);
 
     const { roomId, message } = data;
+    const { sub: userId } = socket.user;
 
     const query = new ExistsChatRoomQuery({ roomId });
 
@@ -118,7 +122,14 @@ export class ChatMessageGateway implements OnGatewayConnection {
       throw new WsException('Does not exist room');
     }
 
+    const command = new CreateChatMessageCommand({
+      roomId: BigInt(roomId),
+      userId: BigInt(userId),
+      message,
+    });
+
+    await this.commandBus.execute<CreateChatMessageCommand, void>(command);
+
     socket.to(String(roomId)).emit('receive_message', message);
-    // this.server.in(String(data.chatId)).emit('receive_message', data.message);
   }
 }

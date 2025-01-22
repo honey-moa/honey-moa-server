@@ -1,4 +1,7 @@
-import { ChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
+import {
+  ChatMessageProps,
+  CreateChatMessageProps,
+} from '@features/chat-message/domain/chat-message.entity-interface';
 import { AggregateRoot } from '@src/libs/ddd/aggregate-root.base';
 import { HttpInternalServerErrorException } from '@src/libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@src/libs/exceptions/types/errors/common/common-error-code.constant';
@@ -6,7 +9,7 @@ import { Guard } from '@src/libs/guard';
 import { getTsid } from 'tsid-ts';
 
 export class ChatMessageEntity extends AggregateRoot<ChatMessageProps> {
-  static create(create: ChatMessageProps): ChatMessageEntity {
+  static create(create: CreateChatMessageProps): ChatMessageEntity {
     const id = getTsid().toBigInt();
 
     const now = new Date();
