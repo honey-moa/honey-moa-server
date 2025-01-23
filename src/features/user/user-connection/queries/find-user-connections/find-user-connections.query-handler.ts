@@ -100,8 +100,13 @@ export class FindUserConnectionsQueryHandler
       const requesterUser = userMap.get(userConnection.requesterId);
       const requestedUser = userMap.get(userConnection.requestedId);
 
-      requesterUser?.hydrate(userConnection);
-      requestedUser?.hydrate(userConnection);
+      if (requesterUser) {
+        userConnection.hydrateRequesterUser(requesterUser);
+      }
+
+      if (requestedUser) {
+        userConnection.hydrateRequestedUser(requestedUser);
+      }
     });
 
     return [userConnectionEntities, count];

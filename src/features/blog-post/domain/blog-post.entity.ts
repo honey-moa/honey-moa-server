@@ -8,10 +8,9 @@ import {
   CreateBlogPostProps,
 } from '@features/blog-post/domain/blog-post.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { HydratedTagEntityProps } from '@features/tag/domain/tag.entity-interface';
-import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { TagEntity } from '@features/tag/domain/tag.entity';
 import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
+import { UserEntity } from '@features/user/domain/user.entity';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -34,12 +33,12 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     return blogPost;
   }
 
-  getHydratedUser(hydratedUser: HydratedUserEntityProps): void {
-    this.props.user = hydratedUser;
+  hydrateUser(user: UserEntity): void {
+    this.props.user = user.hydrateProps;
   }
 
-  getHydratedTag(hydratedTag: HydratedTagEntityProps) {
-    this.props.tags = [...(this.props.tags || []), hydratedTag];
+  hydrateTag(tag: TagEntity): void {
+    this.props.tags = [...(this.props.tags || []), tag.hydrateProps];
   }
 
   createBlogPostTag(tag: TagEntity): BlogPostTagEntity {
