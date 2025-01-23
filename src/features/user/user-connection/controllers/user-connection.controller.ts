@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateUserConnectionCommand } from '@features/user/user-connection/commands/create-user-connection/create-user-connection.command';
 import { UpdateUserConnectionCommand } from '@features/user/user-connection/commands/update-user-connection/update-user-connection.command';
 import { ApiUserConnection } from '@features/user/user-connection/controllers/user-connection.swagger';
@@ -42,6 +42,7 @@ import { isNil } from '@libs/utils/util';
 
 @ApiTags('UserConnection')
 @ApiInternalServerErrorBuilder()
+@ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class UserConnectionController {
   constructor(

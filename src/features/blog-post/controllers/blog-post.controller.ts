@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { routesV1 } from '@config/app.route';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
@@ -13,6 +13,7 @@ import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
+@ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class BlogPostController {
   constructor(private readonly commandBus: CommandBus) {}
