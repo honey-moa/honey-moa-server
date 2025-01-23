@@ -9,6 +9,7 @@ import {
   HydratedBlogEntityProps,
 } from '@features/blog/domain/blog.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
   static create(create: CreateBlogProps): BlogEntity {
@@ -40,6 +41,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       updatedAt: this.updatedAt,
       name: this.props.name,
     });
+  }
+
+  get connectionId(): AggregateID {
+    return this.props.connectionId;
   }
 
   public validate(): void {

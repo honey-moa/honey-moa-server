@@ -8,8 +8,10 @@ import { routesV1 } from '@config/app.route';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 
 @ApiTags('Blog')
+@ApiInternalServerErrorBuilder()
 @Controller(routesV1.version)
 export class BlogController {
   constructor(private readonly commandBus: CommandBus) {}

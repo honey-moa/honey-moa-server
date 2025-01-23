@@ -26,4 +26,6 @@ export const USER_CONNECTION_ERROR_MESSAGE: ErrorMessage<
     "You don't have an accepted connection",
   [USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED]:
     'You cannot disconnect a connection that is not accepted',
+  [USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION]:
+    "You aren't part of a connection",
 } as const;
