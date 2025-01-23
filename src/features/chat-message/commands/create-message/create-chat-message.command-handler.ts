@@ -2,7 +2,6 @@ import { CreateChatMessageCommand } from '@features/chat-message/commands/create
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
 import { CHAT_MESSAGE_REPOSITORY_DI_TOKEN } from '@features/chat-message/tokens/di.token';
-import { AggregateID } from '@libs/ddd/entity.base';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 

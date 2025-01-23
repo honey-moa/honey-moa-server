@@ -45,9 +45,9 @@ export class ChatMessageMapper
     const { id, createdAt, updatedAt, ...props } = entity.getProps();
 
     const record: ChatMessageModel = {
-      id: entity.id,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
+      id,
+      createdAt,
+      updatedAt,
       ...props,
     };
 
