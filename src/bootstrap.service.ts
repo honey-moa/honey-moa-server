@@ -150,6 +150,15 @@ export class BootstrapService {
         type: 'http',
         description: 'Username에 email',
       })
+      .addApiKey(
+        {
+          type: 'apiKey',
+          in: 'header',
+          name: 'Api-Key',
+          description: 'API 키',
+        },
+        'Api-Key',
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config, {
