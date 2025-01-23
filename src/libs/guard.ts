@@ -70,6 +70,10 @@ export class Guard {
     return pattern.test(value);
   }
 
+  static isArray(value: unknown): value is unknown[] {
+    return Array.isArray(value);
+  }
+
   static isPositiveBigInt(value: number | bigint): boolean {
     try {
       const bigIntValue = BigInt(value);
