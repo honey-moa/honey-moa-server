@@ -11,7 +11,7 @@ import { z } from 'zod';
 export const chatMessageSchema = baseSchema.extend({
   roomId: z.bigint(),
   senderId: z.bigint(),
-  message: z.string(),
+  message: z.string().max(1000),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),

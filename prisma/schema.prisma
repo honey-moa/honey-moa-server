@@ -104,7 +104,7 @@ model ChatMessage {
   id        BigInt    @id(map: "pk_chat_messages")
   roomId    BigInt    @map("room_id") @db.BigInt()
   senderId  BigInt    @map("sender_id") @db.BigInt()
-  message   String    @db.Text
+  message   String    @db.VarChar(1000)
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)

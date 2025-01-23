@@ -1,3 +1,4 @@
+import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseResponseDto,
@@ -6,8 +7,8 @@ import {
 
 export interface CreateChatMessageResponseDtoProps
   extends CreateBaseResponseDtoProps {
-  roomId: bigint;
-  senderId: bigint;
+  roomId: AggregateID;
+  senderId: AggregateID;
   message: string;
 }
 
@@ -19,13 +20,13 @@ export class ChatMessageResponseDto
     example: 668734709767935546n,
     description: '채팅방 ID',
   })
-  readonly roomId: bigint;
+  readonly roomId: AggregateID;
 
   @ApiProperty({
     example: 668734709767935546n,
     description: '메시지를 보낸 유저 ID',
   })
-  readonly senderId: bigint;
+  readonly senderId: AggregateID;
 
   @ApiProperty({
     example: '안녕하세요',
