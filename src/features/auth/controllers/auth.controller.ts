@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { routesV1 } from '@config/app.route';
 import { User } from '@libs/api/decorators/user.decorator';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
@@ -17,6 +17,7 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
 
 @ApiTags('Auth')
+@ApiSecurity('Api-Key')
 @ApiInternalServerErrorBuilder()
 @Controller(routesV1.version)
 export class AuthController {

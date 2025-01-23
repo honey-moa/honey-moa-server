@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateChatRoomCommand } from '@features/chat-room/commands/create-chat-room/create-chat-room.command';
 import { ApiChatRoom } from '@features/chat-room/controllers/chat-room.swagger';
 import { CreateChatRoomRequestBodyDto } from '@features/chat-room/dtos/request/create-chat-room.request-body-dto';
@@ -12,6 +12,7 @@ import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal
 
 @ApiTags('ChatRoom')
 @ApiInternalServerErrorBuilder()
+@ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class ChatRoomController {
   constructor(private readonly commandBus: CommandBus) {}

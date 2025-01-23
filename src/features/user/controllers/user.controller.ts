@@ -11,7 +11,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { ApiExcludeEndpoint, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeEndpoint, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { ApiUser } from '@features/user/controllers/user.swagger';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
@@ -37,6 +37,7 @@ import { Paginated } from '@libs/types/type';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
+@ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class UserController {
   constructor(
