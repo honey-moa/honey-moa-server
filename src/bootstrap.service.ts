@@ -36,8 +36,10 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 export class BootstrapService {
   setCors(app: INestApplication) {
     app.enableCors({
-      allowedHeaders: ['Api-Key'],
+      allowedHeaders: ['Api-Key', 'Authorization'],
     });
+
+    console.dir(app, { depth: null });
   }
 
   setLogger(app: INestApplication) {
