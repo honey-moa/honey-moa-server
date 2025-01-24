@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { routesV1 } from '@src/configs/app.route';
 import { QueryBus } from '@nestjs/cqrs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { FindChatMessagesQuery } from '@src/features/chat-message/queries/find-chat-messages/find-chat-messages.query';
 import { Paginated } from '@src/libs/types/type';
@@ -15,6 +15,7 @@ import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe
 
 @ApiTags('ChatMessage')
 @ApiInternalServerErrorBuilder()
+@ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class ChatMessageController {
   constructor(
@@ -22,7 +23,6 @@ export class ChatMessageController {
     private readonly queryBus: QueryBus,
   ) {}
 
-  // 채팅 메시지 페이지네이션
   @ApiChatMessage.FindChatMessages({
     summary: '채팅 메시지 조회 API(Pagination)',
   })
