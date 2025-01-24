@@ -38,8 +38,6 @@ export class BootstrapService {
     app.enableCors({
       allowedHeaders: ['Api-Key', 'Authorization'],
     });
-
-    console.dir(app, { depth: null });
   }
 
   setLogger(app: INestApplication) {
