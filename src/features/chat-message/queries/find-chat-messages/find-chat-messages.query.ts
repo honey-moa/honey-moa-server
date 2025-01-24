@@ -6,13 +6,15 @@ export class FindChatMessagesQuery
   extends PaginatedQueryBase
   implements IQuery
 {
+  readonly userId: AggregateID;
   readonly roomId: AggregateID;
 
   constructor(props: PaginatedParams<FindChatMessagesQuery>) {
     super(props);
 
-    const { roomId } = props;
+    const { userId, roomId } = props;
 
+    this.userId = userId;
     this.roomId = roomId;
   }
 }

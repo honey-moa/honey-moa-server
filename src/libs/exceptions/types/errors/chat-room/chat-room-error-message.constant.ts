@@ -6,4 +6,5 @@ export const CHAT_ROOM_ERROR_MESSAGE: ErrorMessage<
 > = {
   [CHAT_ROOM_ERROR_CODE.YOU_ALREADY_HAVE_A_CHAT_ROOM]:
     'You already have a chat room',
+  [CHAT_ROOM_ERROR_CODE.CHAT_ROOM_NOT_FOUND]: 'Chat room not found',
 } as const;

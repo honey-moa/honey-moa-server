@@ -15,6 +15,9 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
+import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
+import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 
 export const ApiChatMessage: ApiOperator<keyof ChatMessageController> = {
   FindChatMessages: (
@@ -84,6 +87,18 @@ export const ApiChatMessage: ApiOperator<keyof ChatMessageController> = {
         {
           code: COMMON_ERROR_CODE.INVALID_TOKEN,
           description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: CHAT_ROOM_ERROR_CODE.CHAT_ROOM_NOT_FOUND,
+          description: '해당 채팅방이 존재하지 않음.',
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+          description: '해당 채팅방에 참여자가 아님.',
         },
       ]),
     );

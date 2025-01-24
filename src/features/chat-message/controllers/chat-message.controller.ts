@@ -12,6 +12,8 @@ import { FindChatMessagesRequestQueryDto } from '@features/chat-message/dtos/req
 import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
 import { ApiChatMessage } from '@features/chat-message/controllers/chat-message.swagger';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
+import { User } from '@libs/api/decorators/user.decorator';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 @ApiTags('ChatMessage')
 @ApiInternalServerErrorBuilder()
@@ -29,10 +31,12 @@ export class ChatMessageController {
   @SetPagination()
   @Get(routesV1.chatMessage.root)
   async findChatMessages(
+    @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) roomId: string,
     @Query() findChatMessagesRequestQueryDto: FindChatMessagesRequestQueryDto,
   ): Promise<[ChatMessageResponseDto[], number]> {
     const query = new FindChatMessagesQuery({
+      userId,
       roomId: BigInt(roomId),
       ...findChatMessagesRequestQueryDto,
     });
