@@ -157,7 +157,7 @@ export class BootstrapService {
           name: 'Api-Key',
           description: 'API 키',
         },
-        'Api-Key',
+        'X-API-Key',
       )
       .build();
 
