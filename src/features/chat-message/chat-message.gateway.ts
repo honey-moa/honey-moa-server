@@ -2,19 +2,21 @@ import { CreateChatMessageCommand } from '@features/chat-message/commands/create
 import { CreateChatMessageDto } from '@features/chat-message/dtos/socket/create-chat-message.dto';
 import { EnterChatDto } from '@features/chat-message/dtos/socket/enter-chat.dto';
 import { SocketWithUserDto } from '@features/chat-message/dtos/socket/socket-with-user.dto';
-import { ExistsChatRoomQuery } from '@features/chat-room/queries/exists-chat-room.query';
+import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { SocketCatchHttpExceptionFilter } from '@libs/exceptions/socket/filters/socket-catch-http.exception-filter';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { SocketJwtBearerAuthGuard } from '@libs/guards/providers/socket-jwt-bearer-auth.guard';
 import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
 import {
+  Inject,
   UseFilters,
   UseGuards,
   UsePipes,
   ValidationPipeOptions,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import {
   ConnectedSocket,
   MessageBody,
@@ -58,8 +60,9 @@ const customValidationPipe = new CustomValidationPipe({
 })
 export class ChatMessageGateway implements OnGatewayConnection {
   constructor(
+    @Inject(CHAT_ROOM_REPOSITORY_DI_TOKEN)
+    private readonly chatRoomRepository: ChatRoomRepositoryPort,
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
   ) {}
 
   @WebSocketServer()
@@ -79,12 +82,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
   ) {
     const { roomId } = data;
 
-    const query = new ExistsChatRoomQuery({ roomId });
-
-    const existsRoom = await this.queryBus.execute<
-      ExistsChatRoomQuery,
-      boolean
-    >(query);
+    const existsRoom = await this.chatRoomRepository.findOneById(roomId);
 
     if (!existsRoom) {
       throw new WsException('Does not exist room');
@@ -111,12 +109,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
     const { roomId, message } = data;
     const { sub: userId } = socket.user;
 
-    const query = new ExistsChatRoomQuery({ roomId });
-
-    const existsRoom = await this.queryBus.execute<
-      ExistsChatRoomQuery,
-      boolean
-    >(query);
+    const existsRoom = await this.chatRoomRepository.findOneById(roomId);
 
     if (!existsRoom) {
       throw new WsException('Does not exist room');

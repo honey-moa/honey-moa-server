@@ -28,6 +28,6 @@ const mappers: Provider[] = [ChatRoomMapper];
     ...repositories,
     ...mappers,
   ],
-  exports: [...mappers, ...queryHandlers],
+  exports: [...mappers, ...queryHandlers, ...repositories],
 })
 export class ChatRoomModule {}
