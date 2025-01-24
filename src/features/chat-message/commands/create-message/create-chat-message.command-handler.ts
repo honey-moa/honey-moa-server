@@ -6,7 +6,7 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateChatMessageCommand)
-export class createChatMessageCommandHandler
+export class CreateChatMessageCommandHandler
   implements ICommandHandler<CreateChatMessageCommand, void>
 {
   constructor(
