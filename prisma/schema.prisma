@@ -28,7 +28,7 @@ model User {
   userVerifyTokens    UserVerifyToken[]
   requestedConnection UserConnection[]  @relation("RequestedConnection")
   requesterConnection UserConnection[]  @relation("RequesterConnection")
-  ChatMessage         ChatMessage[]
+  chatMessages        ChatMessage[]
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
