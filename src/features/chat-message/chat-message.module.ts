@@ -8,6 +8,7 @@ import { ChatRoomModule } from '@features/chat-room/chat-room.module';
 import { ChatMessageRepository } from '@features/chat-message/repositories/chat-message.repository';
 import { CHAT_MESSAGE_REPOSITORY_DI_TOKEN } from '@features/chat-message/tokens/di.token';
 import { createChatMessageCommandHandler } from '@features/chat-message/commands/create-message/create-chat-message.command-handler';
+import { GuardModule } from '@libs/guards/guard.module';
 
 const controllers = [ChatMessageController];
 
@@ -27,7 +28,7 @@ const mappers: Provider[] = [ChatMessageMapper, ChatMessageGateway];
 const gateways: Provider[] = [ChatMessageGateway];
 
 @Module({
-  imports: [UserModule, ChatRoomModule],
+  imports: [UserModule, ChatRoomModule, GuardModule],
   controllers: [...controllers],
   providers: [
     ...commandHandlers,
