@@ -35,9 +35,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 @Injectable()
 export class BootstrapService {
   setCors(app: INestApplication) {
-    app.enableCors({
-      allowedHeaders: ['Api-Key', 'Authorization'],
-    });
+    app.enableCors();
   }
 
   setLogger(app: INestApplication) {
@@ -156,7 +154,7 @@ export class BootstrapService {
         {
           type: 'apiKey',
           in: 'header',
-          name: 'Api-Key',
+          name: 'X-API-Key',
           description: 'API 키',
         },
         'Api-Key',
