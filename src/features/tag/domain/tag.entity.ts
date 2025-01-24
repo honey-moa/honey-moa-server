@@ -31,15 +31,13 @@ export class TagEntity extends AggregateRoot<TagProps> {
     return tag;
   }
 
-  hydrate(entity: {
-    getHydratedTag: (hydratedTag: HydratedTagEntityProps) => void;
-  }) {
-    entity.getHydratedTag({
+  get hydrateProps(): HydratedTagEntityProps {
+    return {
       id: this.id,
       name: this.props.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-    });
+    };
   }
 
   get name(): string {

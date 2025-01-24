@@ -103,15 +103,13 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return bcrypt.compare(plainPassword, this.props.password);
   }
 
-  hydrate(entity: {
-    getHydratedUser: (hydratedUser: HydratedUserEntityProps) => void;
-  }) {
-    entity.getHydratedUser({
+  get hydrateProps(): HydratedUserEntityProps {
+    return {
       id: this.id,
       nickname: this.props.nickname,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-    });
+    };
   }
 
   createRequestedUserConnection(

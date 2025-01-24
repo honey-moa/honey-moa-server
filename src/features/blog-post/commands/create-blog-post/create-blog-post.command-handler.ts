@@ -106,7 +106,7 @@ export class CreateBlogPostCommandHandler
 
     await this.blogPostTagRepository.bulkCreate(blogPostTags);
 
-    tags.forEach((tag) => tag.hydrate(blogPost));
+    tags.forEach((tag) => blogPost.hydrateTag(tag));
 
     return blogPost.id;
   }

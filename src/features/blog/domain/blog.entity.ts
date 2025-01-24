@@ -32,15 +32,13 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return blog;
   }
 
-  hydrate(entity: {
-    getHydratedBlog: (hydratedBlog: HydratedBlogEntityProps) => void;
-  }) {
-    entity.getHydratedBlog({
+  get hydrateProps(): HydratedBlogEntityProps {
+    return {
       id: this.id,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       name: this.props.name,
-    });
+    };
   }
 
   get connectionId(): AggregateID {
