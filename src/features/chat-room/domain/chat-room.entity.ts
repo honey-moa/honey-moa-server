@@ -30,17 +30,13 @@ export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
     return chatRoom;
   }
 
-  hydrate(entity: {
-    getHydratedChatRoom: (
-      hydratedChatRoom: HydratedChatRoomEntityProps,
-    ) => void;
-  }) {
-    entity.getHydratedChatRoom({
+  get hydrateProps(): HydratedChatRoomEntityProps {
+    return {
       id: this.id,
       name: this.props.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-    });
+    };
   }
 
   public validate(): void {
