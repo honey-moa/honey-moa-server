@@ -82,9 +82,9 @@ export class ChatMessageGateway implements OnGatewayConnection {
   ) {
     const { roomId } = data;
 
-    const existsRoom = await this.chatRoomRepository.findOneById(roomId);
+    const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
-    if (!existsRoom) {
+    if (!chatRoom) {
       throw new WsException('Does not exist room');
     }
 
@@ -109,9 +109,9 @@ export class ChatMessageGateway implements OnGatewayConnection {
     const { roomId, message } = data;
     const { sub: userId } = socket.user;
 
-    const existsRoom = await this.chatRoomRepository.findOneById(roomId);
+    const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
-    if (!existsRoom) {
+    if (!chatRoom) {
       throw new WsException('Does not exist room');
     }
 
