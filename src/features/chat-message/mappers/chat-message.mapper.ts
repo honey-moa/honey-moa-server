@@ -42,16 +42,9 @@ export class ChatMessageMapper
   }
 
   toPersistence(entity: ChatMessageEntity): ChatMessageModel {
-    const { id, createdAt, updatedAt, ...props } = entity.getProps();
+    const props = entity.getProps();
 
-    const record: ChatMessageModel = {
-      id,
-      createdAt,
-      updatedAt,
-      ...props,
-    };
-
-    return chatMessageSchema.parse(record);
+    return chatMessageSchema.parse(props);
   }
 
   toResponseDto(entity: ChatMessageEntity): ChatMessageResponseDto {
