@@ -6,7 +6,6 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ChatMessageRepository implements ChatMessageRepositoryPort {
@@ -14,7 +13,6 @@ export class ChatMessageRepository implements ChatMessageRepositoryPort {
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
-    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: ChatMessageMapper,
   ) {}
 
@@ -26,8 +24,6 @@ export class ChatMessageRepository implements ChatMessageRepositoryPort {
     await this.txHost.tx.chatMessage.create({
       data: record,
     });
-
-    await entity.publishEvents(this.eventEmitter);
   }
 
   async findOneById(id: AggregateID): Promise<ChatMessageEntity | undefined> {
@@ -55,8 +51,6 @@ export class ChatMessageRepository implements ChatMessageRepositoryPort {
       where: { id: entity.id },
     });
 
-    await entity.publishEvents(this.eventEmitter);
-
     return result.id;
   }
 
@@ -69,8 +63,6 @@ export class ChatMessageRepository implements ChatMessageRepositoryPort {
       where: { id: entity.id },
       data: record,
     });
-
-    await entity.publishEvents(this.eventEmitter);
 
     return this.mapper.toEntity(updatedRecord);
   }
