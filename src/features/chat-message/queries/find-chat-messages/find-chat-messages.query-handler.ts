@@ -70,12 +70,12 @@ export class FindChatMessagesQueryHandler
         ...(cursor?.id && {
           cursor: {
             id: cursor?.id,
-            ...(cursor?.createdAt && { createdAt: cursor?.createdAt }),
+            createdAt: cursor?.createdAt,
             ...(cursor?.updatedAt && { updatedAt: cursor?.updatedAt }),
           },
         }),
         where: {
-          roomId: { equals: BigInt(roomId.toString()) },
+          roomId,
         },
         orderBy: orderBy,
         skip,
@@ -84,7 +84,7 @@ export class FindChatMessagesQueryHandler
 
       this.txHost.tx.chatMessage.count({
         where: {
-          roomId: { equals: BigInt(roomId.toString()) },
+          roomId,
         },
       }),
     ]);
