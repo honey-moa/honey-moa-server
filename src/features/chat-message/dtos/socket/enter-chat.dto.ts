@@ -1,4 +1,4 @@
-import { IsBigIntString } from '@libs/api/decorators/is-big-int.decorator';
+import { IsPositiveBigInt } from '@libs/api/decorators/is-positive-bigint.decorator';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -7,6 +7,6 @@ export class EnterChatDto {
     description: '채팅방 ID',
     example: '668734709767935500',
   })
-  @IsBigIntString()
+  @IsPositiveBigInt()
   roomId: AggregateID;
 }
