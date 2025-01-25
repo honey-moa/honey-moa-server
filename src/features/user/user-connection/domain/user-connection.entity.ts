@@ -3,7 +3,6 @@ import { AggregateID, Entity } from '@libs/ddd/entity.base';
 import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
@@ -13,6 +12,7 @@ import {
 } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import { UserEntity } from '@features/user/domain/user.entity';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -44,17 +44,12 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
     return this.props.status === UserConnectionStatus.PENDING;
   }
 
-  getHydratedUser(hydratedUser: HydratedUserEntityProps): void {
-    this.requestedUser = hydratedUser;
-    this.requesterUser = hydratedUser;
+  hydrateRequestedUser(user: UserEntity): void {
+    this.props.requestedUser = user.hydrateProps;
   }
 
-  private set requestedUser(user: HydratedUserEntityProps) {
-    this.props.requestedUser = user;
-  }
-
-  private set requesterUser(user: HydratedUserEntityProps) {
-    this.props.requesterUser = user;
+  hydrateRequesterUser(user: UserEntity): void {
+    this.props.requesterUser = user.hydrateProps;
   }
 
   get requesterId(): AggregateID {

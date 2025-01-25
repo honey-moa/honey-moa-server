@@ -175,6 +175,19 @@ model BlogPostTag {
   @@map("blog_post_tags")
 }
 
+model Attachment {
+  id        BigInt   @id(map: "pk_attachments")
+  userId    BigInt   @map("user_id") @db.BigInt()
+  url       String   @db.VarChar(255)
+  path      String   @db.VarChar(255)
+  mimeType  String   @map("mime_type") @db.VarChar(30)
+  capacity  BigInt   @db.BigInt()
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  @@map("attachments")
+}
+
 enum UserRoleEnum {
   USER
   ADMIN
