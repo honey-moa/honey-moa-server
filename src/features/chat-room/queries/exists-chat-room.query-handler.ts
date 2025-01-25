@@ -1,6 +1,10 @@
+import { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
 import { ExistsChatRoomQuery } from '@features/chat-room/queries/exists-chat-room.query';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
+import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
+import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
+import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
@@ -13,11 +17,17 @@ export class ExistsChatRoomQueryHandler
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
   ) {}
 
-  async execute(query: ExistsChatRoomQuery): Promise<boolean> {
+  async execute(query: ExistsChatRoomQuery): Promise<ChatRoomEntity> {
     const { roomId } = query;
 
-    const existsRoom = await this.chatRoomRepository.findOneById(roomId);
+    const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
-    return existsRoom !== undefined;
+    if (isNil(chatRoom)) {
+      throw new HttpNotFoundException({
+        code: CHAT_ROOM_ERROR_CODE.CHAT_ROOM_NOT_FOUND,
+      });
+    }
+
+    return chatRoom;
   }
 }
