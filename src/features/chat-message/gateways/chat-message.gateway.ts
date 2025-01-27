@@ -9,6 +9,7 @@ import { SocketCatchHttpExceptionFilter } from '@libs/exceptions/socket/filters/
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { SocketJwtBearerAuthGuard } from '@libs/guards/providers/socket-jwt-bearer-auth.guard';
 import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
+import { isNil } from '@libs/utils/util';
 import {
   Inject,
   UseFilters,
@@ -84,7 +85,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
 
     const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
-    if (!chatRoom) {
+    if (isNil(chatRoom)) {
       throw new WsException('Does not exist room');
     }
 
