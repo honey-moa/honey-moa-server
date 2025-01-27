@@ -15,12 +15,12 @@ import { SendPasswordChangeVerificationEmailCommandHandler } from '@features/use
 import { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
 import { CreateUserConnectionCommandHandler } from '@features/user/user-connection/commands/create-user-connection/create-user-connection.command-handler';
 import { FindUsersQueryHandler } from '@features/user/queries/find-users/find-users.query-handler';
-import { FindUserConnectionsQueryHandler } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query-handler';
 import { UpdateUserConnectionCommandHandler } from '@features/user/user-connection/commands/update-user-connection/update-user-connection.command-handler';
-import { FindOneUserConnectionQueryHandler } from '@features/user/user-connection/queries/find-one-user-connection/find-one-user-connection.query-handler';
 import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionRepository } from '@features/user/user-connection/repositories/user-connection.repository';
+import { FindUserConnectionsQueryHandler } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query-handler';
+import { FindOneUserConnectionQueryHandler } from '@features/user/user-connection/queries/find-one-user-connection/find-one-user-connection.query-handler';
 
 const controllers = [UserController, UserConnectionController];
 

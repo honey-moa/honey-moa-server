@@ -82,4 +82,27 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
 
     return userConnection ? this.mapper.toEntity(userConnection) : undefined;
   }
+
+  async findOneByUserIdAndStatus(
+    userId: AggregateID,
+    status: UserConnectionStatusUnion,
+  ): Promise<UserConnectionEntity | undefined> {
+    const userConnection = await this.txHost.tx.userConnection.findFirst({
+      where: {
+        OR: [
+          {
+            requesterId: userId,
+            status,
+          },
+          {
+            requestedId: userId,
+            status,
+          },
+        ],
+        deletedAt: null,
+      },
+    });
+
+    return userConnection ? this.mapper.toEntity(userConnection) : undefined;
+  }
 }

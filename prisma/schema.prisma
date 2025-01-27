@@ -28,6 +28,7 @@ model User {
   userVerifyTokens    UserVerifyToken[]
   requestedConnection UserConnection[]  @relation("RequestedConnection")
   requesterConnection UserConnection[]  @relation("RequesterConnection")
+  chatMessages        ChatMessage[]
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")
@@ -94,8 +95,24 @@ model ChatRoom {
   deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   connection UserConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  messages   ChatMessage[]
 
   @@map("chat_rooms")
+}
+
+model ChatMessage {
+  id        BigInt    @id(map: "pk_chat_messages")
+  roomId    BigInt    @map("room_id") @db.BigInt()
+  senderId  BigInt    @map("sender_id") @db.BigInt()
+  message   String    @db.VarChar(1000)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  chatRoom ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sender   User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@map("chat_messages")
 }
 
 model Tag {
