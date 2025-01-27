@@ -77,7 +77,7 @@ export class FindChatMessagesQueryHandler
         where: {
           roomId,
         },
-        orderBy: orderBy,
+        orderBy,
         skip,
         take,
       }),
@@ -86,6 +86,7 @@ export class FindChatMessagesQueryHandler
         where: {
           roomId,
         },
+        cursor: { id: cursor?.id },
       }),
     ]);
 
