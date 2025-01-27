@@ -12,6 +12,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { isNil } from '@libs/utils/util';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 
 @CommandHandler(CreateUserConnectionCommand)
 export class CreateUserConnectionCommandHandler
@@ -38,6 +39,31 @@ export class CreateUserConnectionCommandHandler
         requesterConnection: true,
       },
     );
+
+    const connections: UserConnectionEntity[] = [];
+
+    existingUsers.forEach((user) => {
+      if (user.requestPendingConnection) {
+        connections.push(user.requestPendingConnection);
+      }
+      if (user.requestedPendingConnections) {
+        connections.push(...user.requestedPendingConnections);
+      }
+    });
+
+    if (
+      connections.some(
+        (connection) =>
+          (connection.requesterId === requesterId &&
+            connection.requestedId === requestedId) ||
+          (connection.requestedId === requesterId &&
+            connection.requesterId === requestedId),
+      )
+    ) {
+      throw new HttpConflictException({
+        code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
+      });
+    }
 
     for (const user of existingUsers) {
       if (!user.isEmailVerified) {
