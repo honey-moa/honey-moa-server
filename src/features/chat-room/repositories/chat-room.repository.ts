@@ -7,6 +7,8 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { ChatRoomMapper } from '@features/chat-room/mappers/chat-room.mapper';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
+import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 
 @Injectable()
 export class ChatRoomRepository implements ChatRoomRepositoryPort {
@@ -16,6 +18,7 @@ export class ChatRoomRepository implements ChatRoomRepositoryPort {
     >,
     private readonly eventEmitter: EventEmitter2,
     private readonly mapper: ChatRoomMapper,
+    private readonly chatMessageMapper: ChatMessageMapper,
   ) {}
 
   async findOneById(id: AggregateID): Promise<ChatRoomEntity | undefined> {
@@ -85,6 +88,14 @@ export class ChatRoomRepository implements ChatRoomRepositoryPort {
     const record = this.mapper.toPersistence(entity);
 
     await this.txHost.tx.chatRoom.create({
+      data: record,
+    });
+  }
+
+  async createChatMessage(entity: ChatMessageEntity): Promise<void> {
+    const record = this.chatMessageMapper.toPersistence(entity);
+
+    await this.txHost.tx.chatMessage.create({
       data: record,
     });
   }

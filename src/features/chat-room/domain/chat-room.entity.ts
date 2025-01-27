@@ -8,6 +8,8 @@ import {
   HydratedChatRoomEntityProps,
 } from '@features/chat-room/domain/chat-room.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
+import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 
 export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
   static create(create: CreateChatRoomProps): ChatRoomEntity {
@@ -37,6 +39,12 @@ export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
+  }
+
+  createChatMessage(props: CreateChatMessageProps): ChatMessageEntity {
+    return ChatMessageEntity.create({
+      ...props,
+    });
   }
 
   public validate(): void {

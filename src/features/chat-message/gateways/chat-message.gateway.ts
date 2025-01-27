@@ -109,12 +109,6 @@ export class ChatMessageGateway implements OnGatewayConnection {
     const { roomId, message } = data;
     const { sub: userId } = socket.user;
 
-    const chatRoom = await this.chatRoomRepository.findOneById(roomId);
-
-    if (!chatRoom) {
-      throw new WsException('Does not exist room');
-    }
-
     const command = new CreateChatMessageCommand({
       roomId: BigInt(roomId),
       userId: BigInt(userId),
