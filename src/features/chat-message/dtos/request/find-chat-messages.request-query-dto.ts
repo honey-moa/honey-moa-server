@@ -39,7 +39,5 @@ export class FindChatMessagesRequestQueryDto extends CursorPaginationRequestQuer
     },
   })
   @IsOptional()
-  orderBy?: OrderBy<ChatMessagesModelForPaginated> = {
-    createdAt: SortOrder.DESC,
-  };
+  orderBy?: OrderBy<ChatMessagesModelForPaginated>;
 }
