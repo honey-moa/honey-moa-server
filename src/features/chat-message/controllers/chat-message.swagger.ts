@@ -16,7 +16,6 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 
 export const ApiChatMessage: ApiOperator<keyof ChatMessageController> = {
@@ -91,7 +90,7 @@ export const ApiChatMessage: ApiOperator<keyof ChatMessageController> = {
       ]),
       HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
         {
-          code: CHAT_ROOM_ERROR_CODE.CHAT_ROOM_NOT_FOUND,
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
           description: '해당 채팅방이 존재하지 않음.',
         },
       ]),

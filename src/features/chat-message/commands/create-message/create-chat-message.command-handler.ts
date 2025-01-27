@@ -1,6 +1,6 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
-import { CHAT_MESSAGE_REPOSITORY_DI_TOKEN } from '@features/chat-message/tokens/di.token';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
@@ -16,7 +16,7 @@ export class CreateChatMessageCommandHandler
   implements ICommandHandler<CreateChatMessageCommand, void>
 {
   constructor(
-    @Inject(CHAT_MESSAGE_REPOSITORY_DI_TOKEN)
+    @Inject(CHAT_ROOM_REPOSITORY_DI_TOKEN)
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
     @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
     private readonly userConnectionRepository: UserConnectionRepositoryPort,
