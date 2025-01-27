@@ -23,7 +23,7 @@ const commandHandlers: Provider[] = [CreateChatMessageCommandHandler];
 
 const queryHandlers: Provider[] = [FindChatMessagesQueryHandler];
 
-const mappers: Provider[] = [ChatMessageMapper, ChatMessageGateway];
+const mappers: Provider[] = [ChatMessageMapper];
 
 const gateways: Provider[] = [ChatMessageGateway];
 
