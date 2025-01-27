@@ -1,3 +1,4 @@
+import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import { CreateChatRoomCommandHandler } from '@features/chat-room/commands/create-chat-room/create-chat-room.command-handler';
 import { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
 import { ChatRoomMapper } from '@features/chat-room/mappers/chat-room.mapper';
@@ -17,7 +18,7 @@ const commandHandlers: Provider[] = [CreateChatRoomCommandHandler];
 
 const queryHandlers: Provider[] = [ExistsChatRoomQueryHandler];
 
-const mappers: Provider[] = [ChatRoomMapper];
+const mappers: Provider[] = [ChatRoomMapper, ChatMessageMapper];
 
 @Module({
   imports: [UserModule],
