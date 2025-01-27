@@ -10,7 +10,6 @@ import { Inject } from '@nestjs/common';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
@@ -42,7 +41,7 @@ export class FindChatMessagesQueryHandler
 
     if (isNil(chatRoom)) {
       throw new HttpNotFoundException({
-        code: CHAT_ROOM_ERROR_CODE.CHAT_ROOM_NOT_FOUND,
+        code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
       });
     }
 
