@@ -4,6 +4,7 @@ const authRoot = 'auth';
 const blogRoot = 'blogs';
 const blogPostRoot = 'blog-posts';
 const chatRoomRoot = 'chat-rooms';
+const chatMessageRoot = 'messages';
 const userConnectionRoot = 'connections';
 
 // Api Versions
@@ -43,6 +44,10 @@ export const routesV1 = {
   chatRoom: {
     root: chatRoomRoot,
     create: `${chatRoomRoot}`,
+  },
+
+  chatMessage: {
+    root: `${chatRoomRoot}/:id/${chatMessageRoot}`,
   },
 
   auth: {

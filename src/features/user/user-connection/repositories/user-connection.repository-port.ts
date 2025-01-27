@@ -9,4 +9,8 @@ export interface UserConnectionRepositoryPort
     id: AggregateID,
     status: UserConnectionStatusUnion,
   ): Promise<UserConnectionEntity | undefined>;
+  findOneByUserIdAndStatus(
+    userId: AggregateID,
+    status: UserConnectionStatusUnion,
+  ): Promise<UserConnectionEntity | undefined>;
 }
