@@ -6,6 +6,7 @@ import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connect
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
@@ -40,12 +41,13 @@ export class CreateChatMessageCommandHandler
       );
 
     if (isNil(connection)) {
-      throw new HttpNotFoundException({
-        code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'connection not found',
       });
     }
 
-    if (chatRoom.getProps().connectionId !== connection.getProps().id) {
+    if (chatRoom.getProps().connectionId !== connection.id) {
       throw new HttpForbiddenException({
         code: COMMON_ERROR_CODE.PERMISSION_DENIED,
       });
