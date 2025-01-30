@@ -1,6 +1,5 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { FILE_ARRAY_SIZE } from '@features/attachment/types/attachment.constant';
-import { RewriteValidationOptions } from '@libs/pipes/decorators/rewrite-validation-options.decorator';
 import { ArrayMaxSize, ArrayMinSize } from 'class-validator';
 import {
   HasMimeType,
@@ -9,7 +8,6 @@ import {
   MemoryStoredFile,
 } from 'nestjs-form-data';
 
-@RewriteValidationOptions({ validationError: { value: false } })
 export class CreateAttachmentRequestBodyDto {
   @IsFiles({
     each: true,

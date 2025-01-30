@@ -66,4 +66,20 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
 
     return this.mapper.toEntity(updatedRecord);
   }
+
+  async bulkCreate(entities: AttachmentEntity[]): Promise<void> {
+    const records = entities.map((entity) => {
+      entity.validate();
+
+      return this.mapper.toPersistence(entity);
+    });
+
+    await this.txHost.tx.attachment.createMany({
+      data: records,
+    });
+
+    await Promise.all(
+      entities.map((entity) => entity.publishEvents(this.eventEmitter)),
+    );
+  }
 }

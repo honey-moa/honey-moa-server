@@ -17,7 +17,7 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
     'video/quicktime',
   ];
 
-  static readonly ATTACHMENT_CAPACITY_MAX: number = 2_097_152;
+  static readonly ATTACHMENT_CAPACITY_MAX: number = 10_485_760; // 10MB
 
   static create(create: CreateAttachmentProps): AttachmentEntity {
     const { id, ...restProps } = create;
@@ -37,9 +37,18 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
     return attachment;
   }
+
+  get url(): string {
+    return this.props.url;
+  }
+
+  get path(): string {
+    return this.props.path;
+  }
+
   public validate(): void {
     if (
-      Guard.isIn(this.props.mimeType, AttachmentEntity.ATTACHMENT_MIME_TYPE)
+      !Guard.isIn(this.props.mimeType, AttachmentEntity.ATTACHMENT_MIME_TYPE)
     ) {
       throw new HttpInternalServerErrorException({
         code: COMMON_ERROR_CODE.SERVER_ERROR,

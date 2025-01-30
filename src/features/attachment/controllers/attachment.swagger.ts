@@ -8,14 +8,11 @@ import {
 } from '@nestjs/swagger';
 
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
-import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
 import { AttachmentController } from '@features/attachment/controllers/attachment.controller';
-import { AttachmentResponseDto } from '@features/attachment/dtos/response/attachment.response-dto';
+import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 
 export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
   Create: (
@@ -29,7 +26,9 @@ export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
       ApiConsumes('multipart/form-data'),
       ApiBody({
         description:
-          '현재는 정책 상 한번의 요청에 1개까지밖에 업로드 되지 않음.',
+          '현재는 정책 상 한번의 요청에 1개까지밖에 업로드 되지 않음.<br>' +
+          'Mime-Type은 image/png, image/jpeg, video/mp4, video/quicktime 타입만 허용됨.<br>' +
+          '파일 크기는 10MB 까지만 허용됨.',
         schema: {
           type: 'object',
           properties: {
@@ -44,41 +43,104 @@ export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
         },
       }),
       ApiCreatedResponse({
-        description: '정상적으로 첨부파일 생성됨.',
-        type: AttachmentResponseDto,
+        description:
+          '정상적으로 첨부파일 생성됨. 업로드 된 파일들의 url이 response body에 반환됨.',
+        type: String,
+        isArray: true,
       }),
       HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
           code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
-          description: 'Request parameter가 유효하지 않음',
+          description:
+            'Mime-Type은 image/png, image/jpeg, video/mp4, video/quicktime 타입만 허용됨.',
           additionalErrors: {
             errors: [
               {
-                property: 'connectUrl',
-                value: 'http://localhost:3000.com',
-                reason: 'connectUrl must be a URL address',
+                property: 'files',
+                value: [
+                  {
+                    originalName: 'dd.prproj',
+                    encoding: '7bit',
+                    busBoyMimeType: 'application/octet-stream',
+                    size: 414334,
+                    fileType: {
+                      ext: 'gz',
+                      mime: 'application/gzip',
+                    },
+                  },
+                ],
+                reason:
+                  'File must be of one of the types image/png, image/jpeg, video/mp4, video/quicktime',
               },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '최대 파일 사이즈는 10MB 까지만 허용됨.',
+          additionalErrors: {
+            errors: [
               {
-                value: 'jjb26com',
-                property: 'email',
-                reason: 'param internal the email must be a email format',
+                property: 'files',
+                value: [
+                  {
+                    originalName: 'dd.mov',
+                    encoding: '7bit',
+                    busBoyMimeType: 'video/quicktime',
+                    size: 268903988,
+                    fileType: {
+                      ext: 'mov',
+                      mime: 'video/quicktime',
+                    },
+                  },
+                ],
+                reason: 'Maximum file size is 10485760',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '최대 1개까지만 업로드 가능함.',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'files',
+                value: [
+                  {
+                    originalName: 'dd.mov',
+                    encoding: '7bit',
+                    busBoyMimeType: 'video/quicktime',
+                    size: 268903988,
+                    fileType: {
+                      ext: 'mov',
+                      mime: 'video/quicktime',
+                    },
+                  },
+                  {
+                    originalName: 'dd.mov',
+                    encoding: '7bit',
+                    busBoyMimeType: 'video/quicktime',
+                    size: 268903988,
+                    fileType: {
+                      ext: 'mov',
+                      mime: 'video/quicktime',
+                    },
+                  },
+                ],
+                reason: 'files must contain no more than 1 elements',
               },
             ],
             errorType: CustomValidationError,
           },
         },
       ]),
-      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
         {
-          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
-          description: '리소스를 찾을 수 없습니다.',
-        },
-      ]),
-      HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
-        {
-          code: USER_ERROR_CODE.CANNOT_RESEND_PASSWORD_CHANGE_VERIFICATION_EMAIL_AN_HOUR,
-          description:
-            '비밀번호 변경 인증 이메일이 재전송된 지 1시간이 지나지 않음.',
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
         },
       ]),
     );

@@ -1,8 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UserEntity } from '@features/user/domain/user.entity';
 import { Transactional } from '@nestjs-cls/transactional';
-import { AggregateID } from '@libs/ddd/entity.base';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { Key } from '@libs/core/app-config/types/app-config.type';
@@ -14,10 +12,12 @@ import { getTsid } from 'tsid-ts';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
 import { S3_SERVICE_TOKEN } from '@libs/s3/tokens/di.token';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 
 @CommandHandler(CreateAttachmentsCommand)
 export class CreateAttachmentsCommandHandler
-  implements ICommandHandler<CreateAttachmentsCommand, AggregateID>
+  implements ICommandHandler<CreateAttachmentsCommand, string[]>
 {
   constructor(
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
@@ -27,8 +27,9 @@ export class CreateAttachmentsCommandHandler
     @Inject(S3_SERVICE_TOKEN)
     private readonly s3Service: S3ServicePort,
   ) {}
+
   @Transactional()
-  async execute(command: CreateAttachmentsCommand): Promise<AggregateID> {
+  async execute(command: CreateAttachmentsCommand): Promise<string[]> {
     const { files } = command;
 
     const uploadedFiles = await Promise.all(
@@ -53,32 +54,28 @@ export class CreateAttachmentsCommandHandler
           url,
           mimeType: file.mimeType,
           capacity: BigInt(file.capacity),
-          buffer: file.buffer,
         };
       }),
     );
 
-    const attachments = files.map((file) =>
-      AttachmentEntity.create({
-        id: getTsid().toBigInt(),
-        userId: file.userId,
-        url: file.url,
-        path: file.path,
-        mimeType: file.mimeType,
-        capacity: BigInt(file.capacity),
-      }),
-    );
+    try {
+      const attachments = uploadedFiles.map((file) =>
+        AttachmentEntity.create(file),
+      );
 
-    const user = await UserEntity.create({
-      nickname: command.nickname,
-      mbti: command.mbti,
-      email: command.email,
-      password: hashedPassword,
-      loginType: command.loginType,
-    });
+      await this.attachmentRepository.bulkCreate(attachments);
 
-    await this.userRepository.create(user);
+      return attachments.map((attachment) => attachment.url);
+    } catch (err: any) {
+      await this.s3Service.deleteFilesFromS3(
+        uploadedFiles.map((file) => file.path),
+      );
 
-    return user.id;
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'Failed files upload',
+        stack: err.stack,
+      });
+    }
   }
 }

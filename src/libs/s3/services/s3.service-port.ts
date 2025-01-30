@@ -2,7 +2,7 @@ export interface S3ServicePort {
   uploadFileToS3(
     file: { buffer: Buffer; mimetype: string },
     filename: string,
-  ): Promise<void>;
+  ): Promise<string>;
 
-  deleteFileFromS3(filename: string): Promise<void>;
+  deleteFilesFromS3(filenames: string[]): Promise<void>;
 }

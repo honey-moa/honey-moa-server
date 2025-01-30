@@ -31,6 +31,7 @@ import bodyParser from 'body-parser';
 
 import { singularize } from 'inflection';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { MemoryStoredFile } from 'nestjs-form-data';
 
 @Injectable()
 export class BootstrapService {
@@ -81,13 +82,25 @@ export class BootstrapService {
       throw new HttpBadRequestException({
         code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
         errors: validationErrors.flatMap((validationError) => {
-          return {
+          const error = {
             property: validationError.property,
             value: validationError.value,
             reason: validationError.constraints
               ? Object.values(validationError.constraints)[0]
               : '',
           };
+
+          if (error.value instanceof Array) {
+            error.value = error.value.map((value) => {
+              if (value instanceof MemoryStoredFile) {
+                return { ...value, buffer: undefined };
+              }
+
+              return value;
+            });
+          }
+
+          return error;
         }),
       });
     };

@@ -5,7 +5,6 @@ import { routesV1 } from '@config/app.route';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { User } from '@libs/api/decorators/user.decorator';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
-import { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper';
 import { ApiAttachment } from '@features/attachment/controllers/attachment.swagger';
 import { FormDataRequest } from 'nestjs-form-data';
 import { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
@@ -16,10 +15,7 @@ import { CreateAttachmentsCommand } from '@features/attachment/commands/create-u
 @ApiSecurity('Api-Key')
 @Controller(routesV1.version)
 export class AttachmentController {
-  constructor(
-    private readonly mapper: AttachmentMapper,
-    private readonly commandBus: CommandBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   @ApiAttachment.Create({ summary: '파일 업로드 API' })
   @FormDataRequest()
@@ -27,7 +23,7 @@ export class AttachmentController {
   async create(
     @User('sub') userId: AggregateID,
     @Body() requestDto: CreateAttachmentRequestBodyDto,
-  ): Promise<void> {
+  ): Promise<string[]> {
     const command = new CreateAttachmentsCommand({
       files: requestDto.files.map((file) => ({
         userId,
@@ -37,6 +33,11 @@ export class AttachmentController {
       })),
     });
 
-    await this.commandBus.execute(command);
+    const urls = await this.commandBus.execute<
+      CreateAttachmentsCommand,
+      string[]
+    >(command);
+
+    return urls;
   }
 }

@@ -6,7 +6,6 @@ import type { CreateEntityProps } from '@libs/ddd/entity.base';
 import { baseSchema } from '@libs/db/base.schema';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
-import { AttachmentResponseDto } from '@features/attachment/dtos/response/attachment.response-dto';
 
 export const attachmentSchema = baseSchema.extend({
   userId: z.bigint(),
@@ -22,7 +21,7 @@ export type AttachmentModel = z.TypeOf<typeof attachmentSchema>;
 
 @Injectable()
 export class AttachmentMapper
-  implements Mapper<AttachmentEntity, AttachmentModel, AttachmentResponseDto>
+  implements Omit<Mapper<AttachmentEntity, AttachmentModel>, 'toResponseDto'>
 {
   toEntity(record: AttachmentModel): AttachmentEntity {
     const attachmentProps: CreateEntityProps<AttachmentProps> = {
@@ -45,11 +44,5 @@ export class AttachmentMapper
     const props = entity.getProps();
 
     return attachmentSchema.parse(props);
-  }
-
-  toResponseDto(entity: AttachmentEntity): AttachmentResponseDto {
-    const props = entity.getProps();
-
-    return new AttachmentResponseDto(props);
   }
 }
