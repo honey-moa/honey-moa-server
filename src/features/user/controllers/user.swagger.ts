@@ -104,13 +104,20 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
       }),
       ApiBearerAuth('access-token'),
       ApiOkResponse({
-        description: '정상적으로 내 유저 정보 조회 됨.',
+        description:
+          '정상적으로 내 유저 정보 조회 됨. blog, chatRoom 관련한 정보 없이 connection에 대한 정보만 나감',
         type: UserResponseDto,
       }),
       HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
         {
           code: COMMON_ERROR_CODE.INVALID_TOKEN,
           description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '유저를 찾을 수 없는 경우.',
         },
       ]),
     );

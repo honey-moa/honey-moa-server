@@ -34,7 +34,8 @@ import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { Paginated } from '@libs/types/type';
-import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
+import { FindOneUserWithAcceptedConnectionQuery } from '@features/user/queries/find-one-user/find-one-user-with-accepted-connection.query';
+import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -72,13 +73,23 @@ export class UserController {
   })
   @Get(routesV1.user.findMe)
   async findMe(@User('sub') userId: AggregateID): Promise<UserResponseDto> {
-    const query = new FindOneUserQuery({
+    const query = new FindOneUserWithAcceptedConnectionQuery({
       userId,
     });
 
-    const user = await this.queryBus.execute<FindOneUserQuery>(query);
+    const user =
+      await this.queryBus.execute<FindOneUserWithAcceptedConnectionQuery>(
+        query,
+      );
 
-    return this.mapper.toResponseDto(user);
+    return new UserResponseDto({
+      ...user,
+      ...(user.acceptedConnection && {
+        acceptedConnection: new UserConnectionResponseDto(
+          user.acceptedConnection,
+        ),
+      }),
+    });
   }
 
   /**

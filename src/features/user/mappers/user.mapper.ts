@@ -122,7 +122,7 @@ export class UserMapper
       ...props,
     };
 
-    if (entity.acceptedConnection) {
+    if (!isNil(entity.acceptedConnection)) {
       createDtoProps.acceptedConnection =
         this.userConnectionMapper.toResponseDto(entity.acceptedConnection);
     }
