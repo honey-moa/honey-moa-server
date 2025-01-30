@@ -1,6 +1,10 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import { FILE_ARRAY_SIZE } from '@features/attachment/types/attachment.constant';
-import { ArrayMaxSize, ArrayMinSize } from 'class-validator';
+import {
+  AttachmentUploadType,
+  FILE_ARRAY_SIZE,
+} from '@features/attachment/types/attachment.constant';
+import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
+import { ArrayMaxSize, ArrayMinSize, IsEnum } from 'class-validator';
 import {
   HasMimeType,
   IsFiles,
@@ -19,4 +23,7 @@ export class CreateAttachmentRequestBodyDto {
     each: true,
   })
   files: MemoryStoredFile[];
+
+  @IsEnum(AttachmentUploadType)
+  uploadType: AttachmentUploadTypeUnion;
 }

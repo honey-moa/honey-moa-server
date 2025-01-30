@@ -6,6 +6,7 @@ import type { CreateEntityProps } from '@libs/ddd/entity.base';
 import { baseSchema } from '@libs/db/base.schema';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
+import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 
 export const attachmentSchema = baseSchema.extend({
   userId: z.bigint(),
@@ -13,6 +14,7 @@ export const attachmentSchema = baseSchema.extend({
   path: z.string().min(1).max(255),
   mimeType: z.string().min(1).max(30),
   capacity: z.bigint(),
+  uploadType: z.nativeEnum(AttachmentUploadType),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -32,6 +34,7 @@ export class AttachmentMapper
         path: record.path,
         mimeType: record.mimeType,
         capacity: record.capacity,
+        uploadType: record.uploadType,
       },
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,

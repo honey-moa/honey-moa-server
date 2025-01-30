@@ -54,6 +54,7 @@ export class CreateAttachmentsCommandHandler
           url,
           mimeType: file.mimeType,
           capacity: BigInt(file.capacity),
+          uploadType: file.uploadType,
         };
       }),
     );

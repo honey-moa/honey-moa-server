@@ -13,6 +13,7 @@ import { CustomValidationError } from '@libs/types/custom-validation-errors.type
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
 import { AttachmentController } from '@features/attachment/controllers/attachment.controller';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
+import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 
 export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
   Create: (
@@ -28,7 +29,8 @@ export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
         description:
           '현재는 정책 상 한번의 요청에 1개까지밖에 업로드 되지 않음.<br>' +
           'Mime-Type은 image/png, image/jpeg, video/mp4, video/quicktime 타입만 허용됨.<br>' +
-          '파일 크기는 10MB 까지만 허용됨.',
+          '파일 크기는 10MB 까지만 허용됨.<br>' +
+          'uploadType은 이미지 업로드라면 IMAGE, 첨부 파일 업로드라면 FILE',
         schema: {
           type: 'object',
           properties: {
@@ -38,6 +40,12 @@ export const ApiAttachment: ApiOperator<keyof AttachmentController> = {
                 type: 'string',
                 format: 'binary',
               },
+            },
+            uploadType: {
+              description:
+                '파일 업로드 타입. 이미지 업로드라면 IMAGE, 첨부 파일 업로드라면 FILE',
+              type: 'string',
+              enum: Object.values(AttachmentUploadType),
             },
           },
         },

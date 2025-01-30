@@ -30,6 +30,7 @@ export class AttachmentController {
         mimeType: file.mimeType,
         capacity: file.size,
         buffer: file.buffer,
+        uploadType: requestDto.uploadType,
       })),
     });
 
