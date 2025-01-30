@@ -95,6 +95,27 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
     );
   },
 
+  FindMe: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiOkResponse({
+        description: '정상적으로 내 유저 정보 조회 됨.',
+        type: UserResponseDto,
+      }),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+    );
+  },
+
   SendPasswordChangeVerificationEmail: (
     apiOperationOptions: ApiOperationOptionsWithSummary,
   ): MethodDecorator => {

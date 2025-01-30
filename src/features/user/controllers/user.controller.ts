@@ -34,6 +34,7 @@ import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { Paginated } from '@libs/types/type';
+import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -64,6 +65,20 @@ export class UserController {
     >(query);
 
     return [users.map((user) => this.mapper.toResponseDto(user)), count];
+  }
+
+  @ApiUser.FindMe({
+    summary: '내 유저 정보 조회 API',
+  })
+  @Get(routesV1.user.findMe)
+  async findMe(@User('sub') userId: AggregateID): Promise<UserResponseDto> {
+    const query = new FindOneUserQuery({
+      userId,
+    });
+
+    const user = await this.queryBus.execute<FindOneUserQuery>(query);
+
+    return this.mapper.toResponseDto(user);
   }
 
   /**

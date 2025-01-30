@@ -8,7 +8,10 @@ import {
 } from '@features/user/types/user.constant';
 import { UserEntity } from '@features/user/domain/user.entity';
 import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
+import {
+  CreateUserResponseDtoProps,
+  UserResponseDto,
+} from '@features/user/dtos/response/user.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
 import type { UserProps } from '@features/user/domain/user.entity-interface';
 import {
@@ -115,8 +118,15 @@ export class UserMapper
   toResponseDto(entity: UserEntity): UserResponseDto {
     const props = entity.getProps();
 
-    return new UserResponseDto({
+    const createDtoProps: CreateUserResponseDtoProps = {
       ...props,
-    });
+    };
+
+    if (entity.acceptedConnection) {
+      createDtoProps.acceptedConnection =
+        this.userConnectionMapper.toResponseDto(entity.acceptedConnection);
+    }
+
+    return new UserResponseDto(createDtoProps);
   }
 }
