@@ -132,7 +132,7 @@ export class UserRepository implements UserRepositoryPort {
         deletedAt: null,
         OR: [
           {
-            requestedConnection: {
+            requestedConnections: {
               some: {
                 id: userConnectionId,
                 status,
@@ -141,7 +141,7 @@ export class UserRepository implements UserRepositoryPort {
             },
           },
           {
-            requesterConnection: {
+            requesterConnections: {
               some: {
                 id: userConnectionId,
                 status,

@@ -35,8 +35,8 @@ export class CreateUserConnectionCommandHandler
     const existingUsers = await this.userRepository.findByIds(
       [requestedId, requesterId],
       {
-        requestedConnection: true,
-        requesterConnection: true,
+        requestedConnections: true,
+        requesterConnections: true,
       },
     );
 

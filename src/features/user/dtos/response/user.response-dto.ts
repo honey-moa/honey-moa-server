@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserLoginType, UserMbti } from '@features/user/types/user.constant';
 import {
   UserLoginTypeUnion,
@@ -8,6 +8,7 @@ import {
   BaseResponseDto,
   CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
+import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 
 export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   nickname: string;
@@ -15,6 +16,8 @@ export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   loginType: UserLoginTypeUnion;
   mbti: UserMbtiUnion | null;
   isEmailVerified: boolean;
+
+  acceptedConnection?: UserConnectionResponseDto;
 }
 
 export class UserResponseDto
@@ -59,15 +62,29 @@ export class UserResponseDto
   })
   readonly isEmailVerified: boolean;
 
+  @ApiPropertyOptional({
+    description: '유저의 수락된 연결 정보',
+    type: UserConnectionResponseDto,
+  })
+  readonly acceptedConnection?: UserConnectionResponseDto;
+
   constructor(create: CreateUserResponseDtoProps) {
     super(create);
 
-    const { nickname, email, loginType, mbti, isEmailVerified } = create;
+    const {
+      nickname,
+      email,
+      loginType,
+      mbti,
+      isEmailVerified,
+      acceptedConnection,
+    } = create;
 
     this.nickname = nickname;
     this.email = email;
     this.loginType = loginType;
     this.mbti = mbti;
     this.isEmailVerified = isEmailVerified;
+    this.acceptedConnection = acceptedConnection;
   }
 }

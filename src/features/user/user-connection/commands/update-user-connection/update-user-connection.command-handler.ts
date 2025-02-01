@@ -29,8 +29,8 @@ export class UpdateUserConnectionCommandHandler
     const { userId, userConnectionId, status } = command;
 
     const user = await this.userRepository.findOneById(userId, {
-      requestedConnection: true,
-      requesterConnection: true,
+      requestedConnections: true,
+      requesterConnections: true,
     });
 
     if (isNil(user)) {
