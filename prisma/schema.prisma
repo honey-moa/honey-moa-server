@@ -25,10 +25,10 @@ model User {
   updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
-  userVerifyTokens    UserVerifyToken[]
-  requestedConnection UserConnection[]  @relation("RequestedConnection")
-  requesterConnection UserConnection[]  @relation("RequesterConnection")
-  chatMessages        ChatMessage[]
+  userVerifyTokens     UserVerifyToken[]
+  requestedConnections UserConnection[]  @relation("RequestedConnection")
+  requesterConnections UserConnection[]  @relation("RequesterConnection")
+  chatMessages         ChatMessage[]
 
   @@unique([email, loginType], name: "uq_user_email_login_type")
   @@map("users")

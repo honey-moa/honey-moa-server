@@ -34,6 +34,8 @@ import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
 import { Paginated } from '@libs/types/type';
+import { FindOneUserWithAcceptedConnectionQuery } from '@features/user/queries/find-one-user/find-one-user-with-accepted-connection.query';
+import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -64,6 +66,30 @@ export class UserController {
     >(query);
 
     return [users.map((user) => this.mapper.toResponseDto(user)), count];
+  }
+
+  @ApiUser.FindMe({
+    summary: '내 유저 정보 조회 API',
+  })
+  @Get(routesV1.user.findMe)
+  async findMe(@User('sub') userId: AggregateID): Promise<UserResponseDto> {
+    const query = new FindOneUserWithAcceptedConnectionQuery({
+      userId,
+    });
+
+    const user =
+      await this.queryBus.execute<FindOneUserWithAcceptedConnectionQuery>(
+        query,
+      );
+
+    return new UserResponseDto({
+      ...user,
+      ...(user.acceptedConnection && {
+        acceptedConnection: new UserConnectionResponseDto(
+          user.acceptedConnection,
+        ),
+      }),
+    });
   }
 
   /**

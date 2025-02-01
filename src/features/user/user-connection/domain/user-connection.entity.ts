@@ -60,6 +60,10 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
     return this.props.requestedId;
   }
 
+  get status(): UserConnectionStatusUnion {
+    return this.props.status;
+  }
+
   acceptConnectionRequest(userId: AggregateID): void {
     if (this.requestedId !== userId) {
       throw new HttpForbiddenException({
