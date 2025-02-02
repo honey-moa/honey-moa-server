@@ -21,6 +21,7 @@ import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connect
 import { UserConnectionRepository } from '@features/user/user-connection/repositories/user-connection.repository';
 import { FindUserConnectionsQueryHandler } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query-handler';
 import { FindOneUserConnectionQueryHandler } from '@features/user/user-connection/queries/find-one-user-connection/find-one-user-connection.query-handler';
+import { FindOneUserWithAcceptedConnectionQueryHandler } from '@features/user/queries/find-one-user/find-one-user-with-accepted-connection.query-handler';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -38,6 +39,7 @@ const queryHandlers: Provider[] = [
   FindUsersQueryHandler,
   FindUserConnectionsQueryHandler,
   FindOneUserConnectionQueryHandler,
+  FindOneUserWithAcceptedConnectionQueryHandler,
 ];
 
 const eventHandlers: Provider[] = [

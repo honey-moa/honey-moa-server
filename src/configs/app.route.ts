@@ -18,6 +18,7 @@ export const routesV1 = {
     root: userRoot,
     create: userRoot,
     findUsers: `${userRoot}`,
+    findMe: `${userRoot}/me`,
     verifyEmail: `${userRoot}/:id/is-email-verified`,
     updatePassword: `${userRoot}/:id/password`,
     sendVerificationEmail: `${userRoot}/me/user-verify-tokens/email`,

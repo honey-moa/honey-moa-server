@@ -8,8 +8,8 @@ import { UserConnectionStatusUnion } from '@features/user/user-connection/types/
 
 export interface UserInclude {
   userVerifyTokens?: boolean;
-  requestedConnection?: boolean;
-  requesterConnection?: boolean;
+  requestedConnections?: boolean;
+  requesterConnections?: boolean;
 }
 
 export interface UserRepositoryPort
