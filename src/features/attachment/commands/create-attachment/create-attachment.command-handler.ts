@@ -4,7 +4,7 @@ import { Transactional } from '@nestjs-cls/transactional';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { Key } from '@libs/core/app-config/types/app-config.type';
-import { CreateAttachmentsCommand } from '@features/attachment/commands/create-user/create-attachment.command';
+import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachment/create-attachment.command';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
