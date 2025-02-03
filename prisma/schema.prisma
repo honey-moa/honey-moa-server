@@ -151,12 +151,14 @@ model BlogPost {
   contents  Json
   date      String    @db.VarChar(20)
   location  String    @db.VarChar(100)
+  isPublic  Boolean   @default(false) @map("is_public") @db.Boolean
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
-  blog Blog          @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  tags BlogPostTag[]
+  blog                Blog                 @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  tags                BlogPostTag[]
+  blogPostAttachments BlogPostAttachment[]
 
   @@map("blog_posts")
 }
@@ -175,18 +177,32 @@ model BlogPostTag {
   @@map("blog_post_tags")
 }
 
+model BlogPostAttachment {
+  id           BigInt   @id(map: "pk_blog_post_attachments")
+  blogPostId   BigInt   @map("blog_post_id") @db.BigInt()
+  attachmentId BigInt   @map("attachment_id") @db.BigInt()
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @map("updated_at") @db.Timestamptz(6)
+
+  blogPost   BlogPost   @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+  attachment Attachment @relation(fields: [attachmentId], references: [id], onDelete: Cascade)
+
+  @@map("blog_post_attachments")
+}
+
 model Attachment {
   id         BigInt                   @id(map: "pk_attachments")
   userId     BigInt                   @map("user_id") @db.BigInt()
-  url        String                   @db.VarChar(255)
-  path       String                   @db.VarChar(255)
+  url        String                   @unique(map: "uq_attachments_url") @db.VarChar(255)
+  path       String                   @unique(map: "uq_attachments_path") @db.VarChar(255)
   mimeType   String                   @map("mime_type") @db.VarChar(30)
   capacity   BigInt                   @db.BigInt()
   uploadType AttachmentUploadTypeEnum @map("upload_type")
   createdAt  DateTime                 @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt  DateTime                 @default(now()) @map("updated_at") @db.Timestamptz(6)
 
-  @@index([path], name: "idx_attachments_path")
+  blogPostAttachments BlogPostAttachment[]
+
   @@map("attachments")
 }
 
