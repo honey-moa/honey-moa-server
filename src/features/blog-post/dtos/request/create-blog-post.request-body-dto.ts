@@ -2,6 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayNotEmpty,
   ArrayUnique,
+  IsBoolean,
   IsDateString,
   Length,
 } from 'class-validator';
@@ -41,6 +42,13 @@ export class CreateBlogPostRequestBodyDto {
   })
   @Length(1, 100)
   location: string;
+
+  @ApiPropertyOptional({
+    description: '해당 게시글 공개 여부',
+    default: false,
+  })
+  @IsBoolean()
+  isPublic: boolean = false;
 
   @ApiPropertyOptional({
     description: '해당 게시글 내용의 태그 이름',

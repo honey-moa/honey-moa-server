@@ -151,6 +151,7 @@ model BlogPost {
   contents  Json
   date      String    @db.VarChar(20)
   location  String    @db.VarChar(100)
+  isPublic  Boolean   @default(false) @map("is_public") @db.Boolean
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
