@@ -25,6 +25,7 @@ import { S3Service } from '@libs/s3/services/s3.service';
               ENV_KEY.AWS_S3_SECRET_KEY,
             ),
           },
+          maxAttempts: 3,
         });
       },
     },
