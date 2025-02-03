@@ -192,8 +192,8 @@ model BlogPostAttachment {
 model Attachment {
   id         BigInt                   @id(map: "pk_attachments")
   userId     BigInt                   @map("user_id") @db.BigInt()
-  url        String                   @db.VarChar(255)
-  path       String                   @db.VarChar(255)
+  url        String                   @unique(map: "uq_attachments_url") @db.VarChar(255)
+  path       String                   @unique(map: "uq_attachments_path") @db.VarChar(255)
   mimeType   String                   @map("mime_type") @db.VarChar(30)
   capacity   BigInt                   @db.BigInt()
   uploadType AttachmentUploadTypeEnum @map("upload_type")
@@ -202,7 +202,6 @@ model Attachment {
 
   blogPostAttachments BlogPostAttachment[]
 
-  @@index([path], name: "idx_attachments_path")
   @@map("attachments")
 }
 
