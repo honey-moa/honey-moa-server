@@ -34,21 +34,6 @@ export const ApiChatRoom: ApiOperator<keyof ChatRoomController> = {
       HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
         {
           code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
-          description: 'name의 길이가 1 이상 30 이하가 아님.',
-          additionalErrors: {
-            errors: [
-              {
-                property: 'name',
-                value: 1,
-                reason:
-                  'name must be longer than or equal to 1 and shorter than or equal to 30 characters',
-              },
-            ],
-            errorType: CustomValidationError,
-          },
-        },
-        {
-          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description: 'connectionId가 number string이 아님',
           additionalErrors: {
             errors: [

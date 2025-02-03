@@ -27,7 +27,7 @@ export class CreateChatRoomCommandHandler
   ) {}
 
   async execute(command: CreateChatRoomCommand): Promise<AggregateID> {
-    const { userId, name } = command;
+    const { userId } = command;
 
     const user = await this.userRepository.findOneById(userId, {
       requestedConnections: true,
@@ -62,7 +62,6 @@ export class CreateChatRoomCommandHandler
     const chatRoom = ChatRoomEntity.create({
       createdBy: userId,
       connectionId: acceptedConnection.id,
-      name,
     });
 
     await this.chatRoomRepository.createChatRoom(chatRoom);

@@ -40,8 +40,8 @@ export const userSchema = baseSchema.extend({
 
 export const userWithEntitiesTokensSchema = userSchema.extend({
   userVerifyTokens: z.array(userVerifyTokenSchema).optional(),
-  requestedConnection: z.array(userConnectionSchema).optional(),
-  requesterConnection: z.array(userConnectionSchema).optional(),
+  requestedConnections: z.array(userConnectionSchema).optional(),
+  requesterConnections: z.array(userConnectionSchema).optional(),
 });
 
 export type UserModel = z.TypeOf<typeof userSchema>;
@@ -82,14 +82,14 @@ export class UserMapper
       );
     }
 
-    if (!isNil(record.requestedConnection)) {
-      userProps.props.requestedConnection = record.requestedConnection.map(
+    if (!isNil(record.requestedConnections)) {
+      userProps.props.requestedConnections = record.requestedConnections.map(
         (connection) => this.userConnectionMapper.toEntity(connection),
       );
     }
 
-    if (!isNil(record.requesterConnection)) {
-      userProps.props.requesterConnection = record.requesterConnection.map(
+    if (!isNil(record.requesterConnections)) {
+      userProps.props.requesterConnections = record.requesterConnections.map(
         (connection) => this.userConnectionMapper.toEntity(connection),
       );
     }
@@ -102,9 +102,9 @@ export class UserMapper
       // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
       userVerifyTokens,
       // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-      requestedConnection,
+      requestedConnections,
       // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-      requesterConnection,
+      requesterConnections,
       ...props
     } = entity.getProps();
 

@@ -10,7 +10,6 @@ import { ChatRoomResponseDto } from '@features/chat-room/dtos/response/chat-room
 export const chatRoomSchema = baseSchema.extend({
   createdBy: z.bigint(),
   connectionId: z.bigint(),
-  name: z.string().max(30),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -33,7 +32,6 @@ export class ChatRoomMapper
       props: {
         createdBy: chatRoom.createdBy,
         connectionId: chatRoom.connectionId,
-        name: chatRoom.name,
         deletedAt: chatRoom.deletedAt,
       },
     };
