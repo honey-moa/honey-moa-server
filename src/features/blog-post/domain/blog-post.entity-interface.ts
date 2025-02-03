@@ -11,6 +11,7 @@ export interface BlogPostProps {
   contents: Array<Record<string, any>>;
   date: string;
   location: string;
+  isPublic: boolean;
   deletedAt: Date | null;
 
   blogPostTags?: BlogPostTagEntity[];
@@ -27,4 +28,5 @@ export interface CreateBlogPostProps {
   contents: Array<Record<string, any>>;
   date: string;
   location: string;
+  isPublic?: boolean;
 }

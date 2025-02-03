@@ -23,6 +23,7 @@ export const blogPostSchema = baseSchema.extend({
   contents: z.array(z.record(z.any())),
   date: z.string().max(20),
   location: z.string().max(100),
+  isPublic: z.boolean(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -48,6 +49,7 @@ export class BlogPostMapper
     const blogPostProps: CreateEntityProps<BlogPostProps> = {
       id: record.id,
       props: {
+        isPublic: record.isPublic,
         blogId: record.blogId,
         userId: record.userId,
         title: record.title,
