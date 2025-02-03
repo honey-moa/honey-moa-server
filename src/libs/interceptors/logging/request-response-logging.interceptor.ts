@@ -6,6 +6,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { MemoryStoredFile } from 'nestjs-form-data';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -30,12 +31,11 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
         const endTime = new Date().getTime();
         const duration = `${endTime - startTime}ms`;
 
-        this.logger.log({
+        const loggingObject: Record<string, any> = {
           duration,
           request: {
             method: method,
             url: originalUrl,
-            body: request.body,
             currentUser: request.user?.sub,
             userAgent,
             ip,
@@ -45,7 +45,20 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
             contentLength,
             body: data,
           },
-        });
+        };
+
+        if (request.body instanceof Array) {
+          loggingObject.request.body = request.body.map((value) => {
+            if (value instanceof MemoryStoredFile) {
+              return { ...value, buffer: undefined };
+            }
+            return value;
+          });
+        } else if (request.body instanceof MemoryStoredFile) {
+          loggingObject.request.body = { ...request.body, buffer: undefined };
+        }
+
+        this.logger.log(loggingObject);
 
         return data;
       }),

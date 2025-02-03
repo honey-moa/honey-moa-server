@@ -6,6 +6,7 @@ const blogPostRoot = 'blog-posts';
 const chatRoomRoot = 'chat-rooms';
 const chatMessageRoot = 'messages';
 const userConnectionRoot = 'connections';
+const attachmentRoot = 'attachments';
 
 // Api Versions
 const v1 = 'v1';
@@ -55,5 +56,10 @@ export const routesV1 = {
     root: authRoot,
     signIn: `${authRoot}/sign-in`,
     signUp: `${authRoot}/sign-up`,
+  },
+
+  attachment: {
+    root: attachmentRoot,
+    create: attachmentRoot,
   },
 } as const;
