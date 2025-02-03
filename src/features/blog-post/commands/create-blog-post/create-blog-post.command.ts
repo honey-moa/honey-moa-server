@@ -10,6 +10,7 @@ export class CreateBlogPostCommand extends Command implements ICommand {
   readonly date: string;
   readonly location: string;
   readonly tagNames: string[];
+  readonly fileUrls: string[];
 
   constructor(props: CommandProps<CreateBlogPostCommand>) {
     super(props);
@@ -21,5 +22,6 @@ export class CreateBlogPostCommand extends Command implements ICommand {
     this.date = props.date;
     this.location = props.location;
     this.tagNames = props.tagNames;
+    this.fileUrls = props.fileUrls;
   }
 }

@@ -11,6 +11,8 @@ import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { TagEntity } from '@features/tag/domain/tag.entity';
 import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
 import { UserEntity } from '@features/user/domain/user.entity';
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -33,6 +35,10 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     return blogPost;
   }
 
+  reviseContents(contents: Array<Record<string, any>>): void {
+    this.props.contents = contents;
+  }
+
   hydrateUser(user: UserEntity): void {
     this.props.user = user.hydrateProps;
   }
@@ -50,6 +56,26 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     this.props.blogPostTags = [...(this.props.blogPostTags || []), blogPostTag];
 
     return blogPostTag;
+  }
+
+  createBlogPostAttachment(
+    attachment: AttachmentEntity,
+  ): BlogPostAttachmentEntity {
+    const blogPostAttachment = BlogPostAttachmentEntity.create({
+      blogPostId: this.id,
+      attachmentId: attachment.id,
+    });
+
+    this.props.blogPostAttachments = [
+      ...(this.props.blogPostAttachments || []),
+      blogPostAttachment,
+    ];
+
+    return blogPostAttachment;
+  }
+
+  get contents(): Array<Record<string, any>> {
+    return this.props.contents;
   }
 
   public validate(): void {

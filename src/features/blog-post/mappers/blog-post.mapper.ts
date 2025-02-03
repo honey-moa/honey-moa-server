@@ -70,14 +70,17 @@ export class BlogPostMapper
   }
 
   toPersistence(entity: BlogPostEntity): BlogPostModel {
+    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+    const { blogPostAttachments, tags, blogPostTags, ...props } =
+      entity.getProps();
+
     return blogPostSchema.parse({
-      ...entity.getProps(),
+      ...props,
     });
   }
 
   toResponseDto(entity: BlogPostEntity): BlogPostResponseDto {
-    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-    const { blogPostTags, user, tags, ...props } = entity.getProps();
+    const { user, tags, ...props } = entity.getProps();
 
     const createDtoProps: CreateBlogPostResponseDtoProps = {
       ...props,
