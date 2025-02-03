@@ -41,3 +41,5 @@ export class BlogPostController {
     return new IdResponseDto(result);
   }
 }
+
+// 변경사항 반영
