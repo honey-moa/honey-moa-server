@@ -23,6 +23,7 @@ export const blogPostSchema = baseSchema.extend({
   contents: z.array(z.record(z.any())),
   date: z.string().max(20),
   location: z.string().max(100),
+  isPublic: z.boolean(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -48,6 +49,7 @@ export class BlogPostMapper
     const blogPostProps: CreateEntityProps<BlogPostProps> = {
       id: record.id,
       props: {
+        isPublic: record.isPublic,
         blogId: record.blogId,
         userId: record.userId,
         title: record.title,
@@ -70,14 +72,17 @@ export class BlogPostMapper
   }
 
   toPersistence(entity: BlogPostEntity): BlogPostModel {
+    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
+    const { blogPostAttachments, tags, blogPostTags, ...props } =
+      entity.getProps();
+
     return blogPostSchema.parse({
-      ...entity.getProps(),
+      ...props,
     });
   }
 
   toResponseDto(entity: BlogPostEntity): BlogPostResponseDto {
-    // eslint-disable-next-line unused-imports/no-unused-vars, @typescript-eslint/no-unused-vars
-    const { blogPostTags, user, tags, ...props } = entity.getProps();
+    const { user, tags, ...props } = entity.getProps();
 
     const createDtoProps: CreateBlogPostResponseDtoProps = {
       ...props,

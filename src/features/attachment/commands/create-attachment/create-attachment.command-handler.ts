@@ -9,11 +9,11 @@ import { AttachmentRepositoryPort } from '@features/attachment/repositories/atta
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { getTsid } from 'tsid-ts';
-import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
 import { S3_SERVICE_TOKEN } from '@libs/s3/tokens/di.token';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Location } from '@features/attachment/domain/value-objects/location.value-object';
 
 @CommandHandler(CreateAttachmentsCommand)
 export class CreateAttachmentsCommandHandler
@@ -35,9 +35,7 @@ export class CreateAttachmentsCommandHandler
     const uploadedFiles = await Promise.all(
       files.map(async (file) => {
         const id = getTsid().toBigInt();
-        const path =
-          this.appConfigService.get<string>(ENV_KEY.AWS_S3_ATTACHMENT_PATH) +
-          id;
+        const path = AttachmentEntity.ATTACHMENT_PATH_PREFIX + id;
 
         const url = await this.s3Service.uploadFileToS3(
           {
@@ -61,7 +59,10 @@ export class CreateAttachmentsCommandHandler
 
     try {
       const attachments = uploadedFiles.map((file) =>
-        AttachmentEntity.create(file),
+        AttachmentEntity.create({
+          ...file,
+          location: new Location({ path: file.path, url: file.url }),
+        }),
       );
 
       await this.attachmentRepository.bulkCreate(attachments);

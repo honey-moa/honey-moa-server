@@ -16,6 +16,7 @@ export interface CreateBlogPostResponseDtoProps
   contents: BlogPostContents;
   date: string;
   location: string;
+  isPublic: boolean;
   tags?: HydratedTagResponseDto[];
   user?: HydratedUserResponseDto;
 }
@@ -70,6 +71,11 @@ export class BlogPostResponseDto
   })
   readonly location: string;
 
+  @ApiProperty({
+    description: '게시글 공개 여부',
+  })
+  readonly isPublic: boolean;
+
   @ApiPropertyOptional({
     description: '게시글 태그',
     isArray: true,
@@ -86,8 +92,17 @@ export class BlogPostResponseDto
   constructor(create: CreateBlogPostResponseDtoProps) {
     super(create);
 
-    const { userId, blogId, title, contents, date, location, tags, user } =
-      create;
+    const {
+      userId,
+      blogId,
+      title,
+      contents,
+      date,
+      location,
+      tags,
+      user,
+      isPublic,
+    } = create;
 
     this.userId = userId;
     this.blogId = blogId;
@@ -97,5 +112,6 @@ export class BlogPostResponseDto
     this.location = location;
     this.tags = tags;
     this.user = user;
+    this.isPublic = isPublic;
   }
 }

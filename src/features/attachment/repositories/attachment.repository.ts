@@ -64,6 +64,8 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
       data: record,
     });
 
+    await entity.publishEvents(this.eventEmitter);
+
     return this.mapper.toEntity(updatedRecord);
   }
 
@@ -76,6 +78,30 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
 
     await this.txHost.tx.attachment.createMany({
       data: records,
+    });
+
+    await Promise.all(
+      entities.map((entity) => entity.publishEvents(this.eventEmitter)),
+    );
+  }
+
+  async findByUrls(urls: string[]): Promise<AttachmentEntity[]> {
+    const records = await this.txHost.tx.attachment.findMany({
+      where: {
+        url: {
+          in: urls,
+        },
+      },
+    });
+
+    return records.map(this.mapper.toEntity);
+  }
+
+  async bulkDelete(entities: AttachmentEntity[]): Promise<void> {
+    const ids = entities.map((entity) => entity.id);
+
+    await this.txHost.tx.attachment.deleteMany({
+      where: { id: { in: ids } },
     });
 
     await Promise.all(

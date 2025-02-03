@@ -8,6 +8,12 @@ import { AttachmentCreatedDomainEvent } from '@features/attachment/domain/events
 import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import {
+  Location,
+  UpdateLocationProps,
+} from '@features/attachment/domain/value-objects/location.value-object';
+import { AttachmentLocationUpdatedDomainEvent } from '@features/attachment/domain/events/attachment-location-updated.domain-event';
+import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events/attachment-deleted.domain-event';
 
 export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
   static readonly ATTACHMENT_MIME_TYPE: readonly string[] = [
@@ -18,6 +24,8 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
   ];
 
   static readonly ATTACHMENT_CAPACITY_MAX: number = 10_485_760; // 10MB
+
+  static readonly ATTACHMENT_PATH_PREFIX: string = 'temp/';
 
   static create(create: CreateAttachmentProps): AttachmentEntity {
     const { id, ...restProps } = create;
@@ -32,6 +40,8 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
       new AttachmentCreatedDomainEvent({
         aggregateId: id,
         ...props,
+        url: props.location.url,
+        path: props.location.path,
       }),
     );
 
@@ -39,11 +49,39 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
   }
 
   get url(): string {
-    return this.props.url;
+    return this.props.location.url;
   }
 
   get path(): string {
-    return this.props.path;
+    return this.props.location.path;
+  }
+
+  /**
+   * 추후 path, url을 하나의 Value-Object로 만들어야 할지에 대한 고민이 있음
+   */
+  changeLocation(update: UpdateLocationProps): void {
+    const newLocation = new Location({
+      path: update.path,
+      url: update.url,
+    });
+
+    this.props.location = newLocation;
+
+    this.addEvent(
+      new AttachmentLocationUpdatedDomainEvent({
+        aggregateId: this.id,
+        path: newLocation.path,
+        url: newLocation.url,
+      }),
+    );
+  }
+
+  delete(): void {
+    this.addEvent(
+      new AttachmentDeletedDomainEvent({
+        aggregateId: this.id,
+      }),
+    );
   }
 
   public validate(): void {

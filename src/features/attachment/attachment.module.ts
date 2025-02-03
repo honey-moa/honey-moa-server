@@ -24,5 +24,6 @@ const commandHandlers: Provider[] = [CreateAttachmentsCommandHandler];
   imports: [NestjsFormDataModule, S3Module],
   controllers,
   providers: [...repositories, ...mappers, ...commandHandlers],
+  exports: [...repositories],
 })
 export class AttachmentModule {}
