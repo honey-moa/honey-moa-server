@@ -38,6 +38,13 @@ import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.
         [ENV_KEY.CLOUDWATCH_AWS_REGION]: Joi.string().required(),
         [ENV_KEY.CLOUDWATCH_AWS_LOG_GROUP_NAME]: Joi.string().required(),
         [ENV_KEY.CLOUDWATCH_AWS_LOG_STREAM_NAME]: Joi.string().required(),
+
+        [ENV_KEY.AWS_S3_ACCESS_KEY]: Joi.string().required(),
+        [ENV_KEY.AWS_S3_SECRET_KEY]: Joi.string().required(),
+        [ENV_KEY.AWS_S3_REGION]: Joi.string().required(),
+        [ENV_KEY.AWS_S3_BUCKET]: Joi.string().required(),
+        [ENV_KEY.AWS_S3_BUCKET_URL]: Joi.string().required(),
+        [ENV_KEY.AWS_S3_ATTACHMENT_PATH]: Joi.string().required(),
       }),
     }),
   ],
