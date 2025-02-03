@@ -7,6 +7,7 @@ import { baseSchema } from '@libs/db/base.schema';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
+import { Location } from '@features/attachment/domain/value-objects/location.value-object';
 
 export const attachmentSchema = baseSchema.extend({
   userId: z.bigint(),
@@ -30,8 +31,10 @@ export class AttachmentMapper
       id: record.id,
       props: {
         userId: record.userId,
-        url: record.url,
-        path: record.path,
+        location: new Location({
+          url: record.url,
+          path: record.path,
+        }),
         mimeType: record.mimeType,
         capacity: record.capacity,
         uploadType: record.uploadType,
@@ -46,6 +49,18 @@ export class AttachmentMapper
   toPersistence(entity: AttachmentEntity): AttachmentModel {
     const props = entity.getProps();
 
-    return attachmentSchema.parse(props);
+    const record: AttachmentModel = {
+      id: props.id,
+      userId: props.userId,
+      url: props.location.url,
+      path: props.location.path,
+      mimeType: props.mimeType,
+      capacity: props.capacity,
+      uploadType: props.uploadType,
+      createdAt: props.createdAt,
+      updatedAt: props.updatedAt,
+    };
+
+    return attachmentSchema.parse(record);
   }
 }

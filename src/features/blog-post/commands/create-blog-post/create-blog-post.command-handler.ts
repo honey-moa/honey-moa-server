@@ -22,6 +22,14 @@ import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
 import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
 import { TagEntity } from '@features/tag/domain/tag.entity';
+import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
+import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import { S3_SERVICE_TOKEN } from '@libs/s3/tokens/di.token';
+import { S3ServicePort } from '@libs/s3/services/s3.service-port';
+import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
+import { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
 
 @CommandHandler(CreateBlogPostCommand)
 export class CreateBlogPostCommandHandler
@@ -38,12 +46,26 @@ export class CreateBlogPostCommandHandler
     private readonly userConnectionRepository: UserConnectionRepositoryPort,
     @Inject(TAG_REPOSITORY_DI_TOKEN)
     private readonly tagRepository: TagRepositoryPort,
+    @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
+    private readonly attachmentRepository: AttachmentRepositoryPort,
+    @Inject(S3_SERVICE_TOKEN)
+    private readonly s3Service: S3ServicePort,
+    @Inject(BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN)
+    private readonly blogPostAttachmentRepository: BlogPostAttachmentRepositoryPort,
   ) {}
 
   @Transactional()
   async execute(command: CreateBlogPostCommand): Promise<AggregateID> {
-    const { blogId, userId, title, contents, date, location, tagNames } =
-      command;
+    const {
+      blogId,
+      userId,
+      title,
+      contents,
+      date,
+      location,
+      tagNames,
+      fileUrls,
+    } = command;
 
     const blog = await this.blogRepository.findOneById(blogId);
 
@@ -84,12 +106,8 @@ export class CreateBlogPostCommandHandler
       location,
     });
 
-    await this.blogPostRepository.create(blogPost);
-
     const tags = await this.tagRepository.findByNames(tagNames);
-
     const existingTagNamesSet = new Set(tags.map((tag) => tag.name));
-
     const newTagNames = tagNames.filter(
       (name) => !existingTagNamesSet.has(name),
     );
@@ -99,14 +117,74 @@ export class CreateBlogPostCommandHandler
     );
 
     await this.tagRepository.bulkCreate(newTagEntities);
-
     tags.push(...newTagEntities);
 
     const blogPostTags = tags.map((tag) => blogPost.createBlogPostTag(tag));
 
-    await this.blogPostTagRepository.bulkCreate(blogPostTags);
+    const attachments = await this.attachmentRepository.findByUrls(fileUrls);
+    const result = await this.s3Service.moveFiles(
+      attachments.map((attachment) => attachment.path),
+      BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+      AttachmentEntity.ATTACHMENT_PATH_PREFIX,
+    );
 
-    tags.forEach((tag) => blogPost.hydrateTag(tag));
+    const changedAttachments: AttachmentEntity[] = [];
+    const notExistingAttachments: AttachmentEntity[] = [];
+    const changedUrlInfos: {
+      oldAttachmentUrl: string;
+      newAttachmentUrl: string;
+    }[] = [];
+
+    attachments.forEach((attachment) => {
+      const pathInfo = result[attachment.path];
+
+      if (pathInfo.isExiting) {
+        changedUrlInfos.push({
+          oldAttachmentUrl: attachment.url,
+          newAttachmentUrl: pathInfo.movedUrl,
+        });
+
+        attachment.changeLocation({
+          path: pathInfo.movedPath,
+          url: pathInfo.movedUrl,
+        });
+
+        changedAttachments.push(attachment);
+      } else {
+        notExistingAttachments.push(attachment);
+      }
+    });
+
+    if (changedAttachments.length) {
+      await Promise.all(
+        changedAttachments.map(
+          async (attachment) =>
+            await this.attachmentRepository.update(attachment),
+        ),
+      );
+
+      let jsonContents = JSON.stringify(blogPost.contents);
+
+      changedUrlInfos.forEach(({ oldAttachmentUrl, newAttachmentUrl }) => {
+        jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
+      });
+
+      blogPost.reviseContents(JSON.parse(jsonContents));
+    }
+
+    if (notExistingAttachments.length) {
+      notExistingAttachments.forEach((attachment) => attachment.delete());
+
+      await this.attachmentRepository.bulkDelete(notExistingAttachments);
+    }
+
+    const blogPostAttachments = changedAttachments.map((attachment) =>
+      blogPost.createBlogPostAttachment(attachment),
+    );
+
+    await this.blogPostRepository.create(blogPost);
+    await this.blogPostTagRepository.bulkCreate(blogPostTags);
+    await this.blogPostAttachmentRepository.bulkCreate(blogPostAttachments);
 
     return blogPost.id;
   }

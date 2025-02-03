@@ -44,7 +44,7 @@ export class CreateBlogPostRequestBodyDto {
 
   @ApiPropertyOptional({
     description: '해당 게시글 내용의 태그 이름',
-    isArray: true,
+    type: 'array',
     default: [],
     uniqueItems: true,
     items: {
@@ -56,4 +56,17 @@ export class CreateBlogPostRequestBodyDto {
   @Length(1, 20, { each: true })
   @ArrayUnique()
   tagNames: string[] = [];
+
+  @ApiPropertyOptional({
+    description: '해당 게시글에 업로드된 파일들의 url',
+    type: 'array',
+    items: {
+      type: 'string',
+      format: 'uri',
+    },
+    default: [],
+    uniqueItems: true,
+  })
+  @ArrayUnique()
+  fileUrls: string[] = [];
 }
