@@ -1,7 +1,7 @@
 import { IsBigIntString } from '@libs/api/decorators/is-big-int.decorator';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length } from 'class-validator';
+import { IsOptional, IsString, IsUrl, Length } from 'class-validator';
 
 export class CreateChatMessageDto {
   @ApiProperty({
@@ -20,4 +20,12 @@ export class CreateChatMessageDto {
   @IsString()
   @Length(1, 1000)
   message: string;
+
+  @ApiProperty({
+    description: '블로그 URL',
+    example: 'https://honeymoa.com/blog/2',
+  })
+  @IsOptional()
+  @IsUrl()
+  blogUrl?: string;
 }

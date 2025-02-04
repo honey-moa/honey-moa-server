@@ -107,7 +107,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
      * (event를 발생시켜서 chatMessage 테이블에 저장하는 방식으로 개선하면 좋을듯.)
      */
 
-    const { roomId, message } = data;
+    const { roomId, message, blogUrl } = data;
     const { sub: userId } = socket.user;
 
     const command = new CreateChatMessageCommand({
@@ -118,6 +118,6 @@ export class ChatMessageGateway implements OnGatewayConnection {
 
     await this.commandBus.execute<CreateChatMessageCommand, void>(command);
 
-    socket.to(String(roomId)).emit('receive_message', message);
+    socket.to(String(roomId)).emit('receive_message', { message, blogUrl });
   }
 }
