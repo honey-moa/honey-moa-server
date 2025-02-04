@@ -35,7 +35,6 @@ export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
   get hydrateProps(): HydratedChatRoomEntityProps {
     return {
       id: this.id,
-      name: this.props.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
