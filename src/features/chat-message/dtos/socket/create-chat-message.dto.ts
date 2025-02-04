@@ -32,5 +32,5 @@ export class CreateChatMessageDto {
   @IsNullable()
   @IsUrl()
   @Length(1, 1000)
-  blogUrl: string | null = null;
+  blogPostUrl: string | null = null;
 }

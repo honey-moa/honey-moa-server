@@ -10,7 +10,7 @@ export interface CreateChatMessageResponseDtoProps
   roomId: AggregateID;
   senderId: AggregateID;
   message: string;
-  blogUrl: string | null;
+  blogPostUrl: string | null;
 }
 
 export class ChatMessageResponseDto
@@ -40,16 +40,16 @@ export class ChatMessageResponseDto
     description: '블로그 게시글 URL',
     nullable: true,
   })
-  readonly blogUrl: string | null;
+  readonly blogPostUrl: string | null;
 
   constructor(create: CreateChatMessageResponseDtoProps) {
     super(create);
 
-    const { roomId, senderId, message, blogUrl } = create;
+    const { roomId, senderId, message, blogPostUrl } = create;
 
     this.roomId = roomId;
     this.senderId = senderId;
     this.message = message;
-    this.blogUrl = blogUrl;
+    this.blogPostUrl = blogPostUrl;
   }
 }

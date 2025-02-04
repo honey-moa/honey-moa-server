@@ -100,14 +100,14 @@ model ChatRoom {
 }
 
 model ChatMessage {
-  id        BigInt    @id(map: "pk_chat_messages")
-  roomId    BigInt    @map("room_id") @db.BigInt()
-  senderId  BigInt    @map("sender_id") @db.BigInt()
-  message   String    @db.VarChar(1000)
-  blogUrl   String?   @map("blog_url") @db.VarChar(1000)
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id          BigInt    @id(map: "pk_chat_messages")
+  roomId      BigInt    @map("room_id") @db.BigInt()
+  senderId    BigInt    @map("sender_id") @db.BigInt()
+  message     String    @db.VarChar(1000)
+  blogPostUrl String?   @map("blog_post_url") @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   chatRoom ChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
   sender   User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
