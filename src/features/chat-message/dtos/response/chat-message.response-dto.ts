@@ -38,6 +38,7 @@ export class ChatMessageResponseDto
   @ApiProperty({
     example: 'https://honeymoa.com/blog/2',
     description: '블로그 게시글 URL',
+    nullable: true,
   })
   readonly blogUrl: string | null;
 
