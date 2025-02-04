@@ -10,6 +10,7 @@ export interface CreateChatMessageResponseDtoProps
   roomId: AggregateID;
   senderId: AggregateID;
   message: string;
+  blogPostUrl: string | null;
 }
 
 export class ChatMessageResponseDto
@@ -34,13 +35,21 @@ export class ChatMessageResponseDto
   })
   readonly message: string;
 
+  @ApiProperty({
+    example: 'https://honeymoa.com/blog/2',
+    description: '블로그 게시글 URL',
+    nullable: true,
+  })
+  readonly blogPostUrl: string | null;
+
   constructor(create: CreateChatMessageResponseDtoProps) {
     super(create);
 
-    const { roomId, senderId, message } = create;
+    const { roomId, senderId, message, blogPostUrl } = create;
 
     this.roomId = roomId;
     this.senderId = senderId;
     this.message = message;
+    this.blogPostUrl = blogPostUrl;
   }
 }

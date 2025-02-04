@@ -24,7 +24,7 @@ export class CreateChatMessageCommandHandler
   ) {}
 
   async execute(command: CreateChatMessageCommand): Promise<void> {
-    const { roomId, userId, message } = command;
+    const { roomId, userId, message, blogPostUrl } = command;
 
     const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
@@ -57,6 +57,7 @@ export class CreateChatMessageCommandHandler
       roomId,
       senderId: userId,
       message,
+      blogPostUrl,
     });
 
     await this.chatRoomRepository.createChatMessage(chatMessage);

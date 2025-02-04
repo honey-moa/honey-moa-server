@@ -12,6 +12,7 @@ export const chatMessageSchema = baseSchema.extend({
   roomId: z.bigint(),
   senderId: z.bigint(),
   message: z.string().max(1000),
+  blogPostUrl: z.string().max(255).nullable(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -32,6 +33,7 @@ export class ChatMessageMapper
         roomId: record.roomId,
         senderId: record.senderId,
         message: record.message,
+        blogPostUrl: record.blogPostUrl,
         deletedAt: record.deletedAt,
       },
       createdAt: record.createdAt,
