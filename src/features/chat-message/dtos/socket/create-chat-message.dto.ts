@@ -27,10 +27,10 @@ export class CreateChatMessageDto {
     example: 'https://honeymoa.com/blog/2',
     default: null,
     minLength: 1,
-    maxLength: 1000,
+    maxLength: 255,
   })
   @IsNullable()
   @IsUrl()
-  @Length(1, 1000)
+  @Length(1, 255)
   blogPostUrl: string | null = null;
 }
