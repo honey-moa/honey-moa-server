@@ -18,8 +18,8 @@ export interface UserProps {
   deletedAt: Date | null;
 
   userVerifyTokens?: UserVerifyTokenEntity[];
-  requestedConnection?: UserConnectionEntity[];
-  requesterConnection?: UserConnectionEntity[];
+  requestedConnections?: UserConnectionEntity[];
+  requesterConnections?: UserConnectionEntity[];
 }
 
 export interface CreateUserProps {

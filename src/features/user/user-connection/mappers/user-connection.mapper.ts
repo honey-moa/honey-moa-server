@@ -112,7 +112,6 @@ export class UserConnectionMapper
     if (!isNil(chatRoom)) {
       createDtoProps.chatRoom = new HydratedChatRoomResponseDto({
         id: chatRoom.id,
-        name: chatRoom.name,
         createdAt: chatRoom.createdAt,
         updatedAt: chatRoom.updatedAt,
       });

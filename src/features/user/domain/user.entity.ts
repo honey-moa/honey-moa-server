@@ -119,8 +119,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
       ...props,
     });
 
-    this.props.requestedConnection = [
-      ...(this.props.requestedConnection || []),
+    this.props.requestedConnections = [
+      ...(this.props.requestedConnections || []),
       userConnection,
     ];
 
@@ -134,8 +134,8 @@ export class UserEntity extends AggregateRoot<UserProps> {
       ...props,
     });
 
-    this.props.requesterConnection = [
-      ...(this.props.requesterConnection || []),
+    this.props.requesterConnections = [
+      ...(this.props.requesterConnections || []),
       userConnection,
     ];
 
@@ -204,17 +204,17 @@ export class UserEntity extends AggregateRoot<UserProps> {
   }
 
   get acceptedConnection(): UserConnectionEntity | null {
-    if (this.requestedConnection) {
+    if (this.requestedConnections) {
       return (
-        this.requestedConnection.find((connection) =>
+        this.requestedConnections.find((connection) =>
           connection.isConnected(),
         ) || null
       );
     }
 
-    if (this.requesterConnection) {
+    if (this.requesterConnections) {
       return (
-        this.requesterConnection.find((connection) =>
+        this.requesterConnections.find((connection) =>
           connection.isConnected(),
         ) || null
       );
@@ -225,14 +225,14 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
   hasSentPendingConnection(): boolean {
     return (
-      this.requesterConnection?.some((connection) => connection.isPending()) ||
+      this.requesterConnections?.some((connection) => connection.isPending()) ||
       false
     );
   }
 
   get requestedPendingConnections(): UserConnectionEntity[] | null {
     return (
-      this.requestedConnection?.filter((connection) =>
+      this.requestedConnections?.filter((connection) =>
         connection.isPending(),
       ) || null
     );
@@ -240,7 +240,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
   get requestPendingConnection(): UserConnectionEntity | null {
     return (
-      this.requesterConnection?.find((connection) => connection.isPending()) ||
+      this.requesterConnections?.find((connection) => connection.isPending()) ||
       null
     );
   }
@@ -249,7 +249,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
     connectionId: AggregateID,
   ): UserConnectionEntity | null {
     return (
-      this.requestedConnection?.find(
+      this.requestedConnections?.find(
         (connection) => connection.id === connectionId,
       ) || null
     );
@@ -259,18 +259,18 @@ export class UserEntity extends AggregateRoot<UserProps> {
     connectionId: AggregateID,
   ): UserConnectionEntity | null {
     return (
-      this.requesterConnection?.find(
+      this.requesterConnections?.find(
         (connection) => connection.id === connectionId,
       ) || null
     );
   }
 
-  private get requestedConnection() {
-    return this.props.requestedConnection;
+  private get requestedConnections() {
+    return this.props.requestedConnections;
   }
 
-  private get requesterConnection() {
-    return this.props.requesterConnection;
+  private get requesterConnections() {
+    return this.props.requesterConnections;
   }
 
   get isEmailVerified() {
