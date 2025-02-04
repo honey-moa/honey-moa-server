@@ -6,10 +6,12 @@ export class CreateChatMessageCommand implements ICommand {
   readonly userId: AggregateID;
   readonly roomId: AggregateID;
   readonly message: string;
+  readonly blogUrl: string | null;
 
   constructor(props: CommandProps<CreateChatMessageCommand>) {
     this.userId = props.userId;
     this.roomId = props.roomId;
     this.message = props.message;
+    this.blogUrl = props.blogUrl;
   }
 }

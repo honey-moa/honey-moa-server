@@ -114,6 +114,7 @@ export class ChatMessageGateway implements OnGatewayConnection {
       roomId: BigInt(roomId),
       userId: BigInt(userId),
       message,
+      blogUrl,
     });
 
     await this.commandBus.execute<CreateChatMessageCommand, void>(command);
