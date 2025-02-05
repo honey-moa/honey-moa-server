@@ -157,7 +157,7 @@ model BlogPost {
   deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   blog                Blog                 @relation(fields: [blogId], references: [id], onDelete: Cascade)
-  tags                BlogPostTag[]
+  blogPostTags        BlogPostTag[]
   blogPostAttachments BlogPostAttachment[]
 
   @@map("blog_posts")

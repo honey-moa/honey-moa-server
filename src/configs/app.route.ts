@@ -39,8 +39,17 @@ export const routesV1 = {
   },
 
   blogPost: {
+    /**
+     * 블로그의 ID가 필요한 요청
+     */
     root: `${blogRoot}/:id/${blogPostRoot}`,
     create: `${blogRoot}/:id/${blogPostRoot}`,
+
+    /**
+     * 블로그의 ID가 필요하지 않은 요청
+     * 따로 만든 이유는 대표적으로 게시글 단일 조회의 경우 블로그가 아닌 다른 경로(커뮤니티 등)를 통할 수도 있음
+     */
+    findOne: `${blogPostRoot}/:id`,
   },
 
   chatRoom: {

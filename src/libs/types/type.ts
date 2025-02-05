@@ -1,6 +1,7 @@
 import { ApiOperationOptions } from '@nestjs/swagger';
 import { CursorBy, OrderBy } from '@libs/api/types/api.type';
 import { BaseModel } from '@libs/db/base.schema';
+import { ICommandHandler, IQueryHandler } from '@nestjs/cqrs';
 
 export type ApiOperationOptionsWithSummary = Required<
   Pick<ApiOperationOptions, 'summary'>
@@ -33,3 +34,6 @@ export type SingleProperty<T> = {
     Record<Exclude<keyof T, K>, never>
   >;
 }[keyof T];
+
+export type HandlerReturnType<T extends IQueryHandler | ICommandHandler> =
+  ReturnType<T['execute']>;
