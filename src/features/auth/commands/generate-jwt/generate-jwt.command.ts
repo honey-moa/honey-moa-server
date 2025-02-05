@@ -1,11 +1,11 @@
 import { ICommand } from '@nestjs/cqrs';
 import { Command, CommandProps } from '@libs/ddd/command.base';
 
-export class GenerateAccessTokenCommand extends Command implements ICommand {
+export class GenerateJwtCommand extends Command implements ICommand {
   readonly email: string;
   readonly password: string;
 
-  constructor(props: CommandProps<GenerateAccessTokenCommand>) {
+  constructor(props: CommandProps<GenerateJwtCommand>) {
     super(props);
 
     this.email = props.email;

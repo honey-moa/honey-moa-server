@@ -19,19 +19,19 @@ export class AppJwtService implements AppJwtServicePort {
   /**
    * @todo 이후 클라이언트의 도메인이 정해지면 audience 추가
    */
-  generateAccessToken(payload: JwtPayload): Promise<string> {
+  generateToken(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(
-      {},
+      { tokenType: payload.tokenType },
       {
-        expiresIn: '1d',
+        expiresIn: payload.exp,
         subject: payload.sub,
       },
     );
   }
 
-  verifyAccessToken(accessToken: string): Promise<JwtPayload> {
+  verifyToken(token: string): Promise<JwtPayload> {
     try {
-      return this.jwtService.verifyAsync(accessToken);
+      return this.jwtService.verifyAsync(token);
     } catch {
       throw new HttpUnauthorizedException({
         code: COMMON_ERROR_CODE.INVALID_TOKEN,

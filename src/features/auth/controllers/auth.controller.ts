@@ -9,12 +9,13 @@ import { GuardType } from '@libs/guards/types/guard.constant';
 import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { ApiAuth } from '@features/auth/controllers/auth.swagger';
-import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
+import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
 import { CreateUserCommand } from '@features/user/commands/create-user/create-user.command';
 import { UserLoginType } from '@features/user/types/user.constant';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
+import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
 
 @ApiTags('Auth')
 @ApiSecurity('Api-Key')
@@ -54,18 +55,16 @@ export class AuthController {
     @User('email') email: string,
     @User('password') password: string,
   ): Promise<JwtResponseDto> {
-    const command = new GenerateAccessTokenCommand({
+    const command = new GenerateJwtCommand({
       email,
       password,
     });
 
-    const result = await this.commandBus.execute<
-      GenerateAccessTokenCommand,
-      string
+    const jwtTokens = await this.commandBus.execute<
+      GenerateJwtCommand,
+      JwtTokens
     >(command);
 
-    return new JwtResponseDto({
-      accessToken: result,
-    });
+    return new JwtResponseDto(jwtTokens);
   }
 }

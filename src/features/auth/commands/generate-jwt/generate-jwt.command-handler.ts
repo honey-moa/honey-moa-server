@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
+import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
 import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserLoginType } from '@features/user/types/user.constant';
@@ -9,10 +9,12 @@ import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token'
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
 import { isNil } from '@libs/utils/util';
+import { TokenExpiration, TokenType } from '@libs/app-jwt/types/jwt.enum';
+import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
 
-@CommandHandler(GenerateAccessTokenCommand)
-export class GenerateAccessTokenCommandHandler
-  implements ICommandHandler<GenerateAccessTokenCommand, string>
+@CommandHandler(GenerateJwtCommand)
+export class GenerateJwtCommandHandler
+  implements ICommandHandler<GenerateJwtCommand, JwtTokens>
 {
   constructor(
     @Inject(APP_JWT_SERVICE_DI_TOKEN)
@@ -21,7 +23,7 @@ export class GenerateAccessTokenCommandHandler
     private readonly userRepository: UserRepositoryPort,
   ) {}
 
-  async execute(command: GenerateAccessTokenCommand): Promise<string> {
+  async execute(command: GenerateJwtCommand): Promise<JwtTokens> {
     const { email, password } = command;
 
     const existingUser = await this.userRepository.findOneByEmailAndLoginType(
@@ -43,8 +45,18 @@ export class GenerateAccessTokenCommandHandler
       });
     }
 
-    return this.appJwtService.generateAccessToken({
+    const accessToken = await this.appJwtService.generateToken({
       sub: existingUser.id.toString(),
+      exp: TokenExpiration.AccessToken,
+      tokenType: TokenType.AccessToken,
     });
+
+    const refreshToken = await this.appJwtService.generateToken({
+      sub: existingUser.id.toString(),
+      exp: TokenExpiration.RefreshToken,
+      tokenType: TokenType.RefreshToken,
+    });
+
+    return { accessToken, refreshToken };
   }
 }

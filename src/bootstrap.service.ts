@@ -21,7 +21,7 @@ import { HttpProcessErrorExceptionFilter } from '@libs/exceptions/server-errors/
 import { HttpRemainderExceptionFilter } from '@libs/exceptions/server-errors/filters/http-remainder.exception-filter';
 import { ZodErrorExceptionFilter } from '@libs/exceptions/server-errors/filters/zod-error.exception-filter';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { JwtBearerAuthGuard } from '@libs/guards/providers/jwt-bearer-auth.guard';
+import { JwtAccessTokenAuthGuard } from '@libs/guards/providers/jwt-access-token-auth.guard';
 import { ContextInterceptor } from '@libs/interceptors/context/context.interceptor';
 import { RequestResponseLoggingInterceptor } from '@libs/interceptors/logging/request-response-logging.interceptor';
 import { PaginationInterceptor } from '@libs/interceptors/pagination/pagination.interceptor';
@@ -126,7 +126,7 @@ export class BootstrapService {
   }
 
   setGuards(app: INestApplication) {
-    app.useGlobalGuards(app.get(JwtBearerAuthGuard));
+    app.useGlobalGuards(app.get(JwtAccessTokenAuthGuard));
   }
 
   setSwagger(app: INestApplication) {
