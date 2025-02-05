@@ -159,6 +159,15 @@ export class BootstrapService {
         },
         'access-token',
       )
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: '리프레시 토큰',
+        },
+        'refresh-token',
+      )
       .addBasicAuth({
         type: 'http',
         description: 'Username에 email',

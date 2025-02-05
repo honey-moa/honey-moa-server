@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional } from 'class-validator';
 
 export class JwtResponseDto {
   @ApiProperty({
@@ -9,7 +10,8 @@ export class JwtResponseDto {
   @ApiProperty({
     description: '리프레시 토큰',
   })
-  refreshToken: string;
+  @IsOptional()
+  refreshToken?: string;
 
   constructor(create: JwtResponseDto) {
     this.accessToken = create.accessToken;

@@ -1,6 +1,7 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBasicAuth,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
+import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 
 export const ApiAuth: ApiOperator<keyof AuthController> = {
   SignUp: (
@@ -78,6 +80,35 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         {
           code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
           description: '이메일 또는 비밀번호가 잘못된 경우',
+        },
+      ]),
+    );
+  },
+
+  GenerateAccessToken: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('refresh-token'),
+      ApiCreatedResponse({
+        description: '정상적으로 토큰이 재발급 됨.',
+        example: {
+          accessToken: 'string',
+        },
+      }),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '유저를 찾을 수 없는 경우',
         },
       ]),
     );

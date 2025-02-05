@@ -22,7 +22,11 @@ export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
       typeof GUARD_TYPE_TOKEN
     >(GUARD_TYPE_TOKEN, [context.getHandler(), context.getClass()]);
 
-    if (guardType === GuardType.PUBLIC || guardType === GuardType.BASIC) {
+    if (
+      guardType === GuardType.PUBLIC ||
+      GuardType.REFRESH ||
+      guardType === GuardType.BASIC
+    ) {
       return true;
     }
 
