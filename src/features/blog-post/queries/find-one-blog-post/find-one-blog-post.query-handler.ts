@@ -50,8 +50,8 @@ export class FindOneBlogPostQueryHandler
 
     if (!blogPost.isPublic) {
       if (
-        connection.requestedId !== userId ||
-        connection.requestedId !== userId
+        connection.requestedId !== userId &&
+        connection.requesterId !== userId
       ) {
         throw new HttpForbiddenException({
           code: COMMON_ERROR_CODE.PERMISSION_DENIED,
