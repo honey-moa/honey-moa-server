@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
 import { BlogController } from '@features/blog/controllers/blog.controller';
@@ -17,6 +18,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
+import { BlogResponseDto } from '@features/blog/dtos/response/blog.response-dto';
 
 export const ApiBlog: ApiOperator<keyof BlogController> = {
   Create: (
@@ -84,6 +86,42 @@ export const ApiBlog: ApiOperator<keyof BlogController> = {
         {
           code: BLOG_ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG,
           description: '유저가 이미 블로그를 가지고 있음.',
+        },
+      ]),
+    );
+  },
+
+  FindOneByUserId: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiOkResponse({
+        description: '정상적으로 블로그 조회됨.',
+        type: BlogResponseDto,
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'userId가 numeric string이 아님',
+          additionalErrors: {
+            errors: [
+              {
+                value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                property: 'id',
+                reason: 'param internal the id must be a numeric string',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '블로그가 존재하지 않음.',
         },
       ]),
     );

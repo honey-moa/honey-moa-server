@@ -33,9 +33,9 @@ import { UpdateUserPasswordCommand } from '@features/user/commands/update-user-p
 import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users.request-query-dto';
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import { Paginated } from '@libs/types/type';
-import { FindOneUserWithAcceptedConnectionQuery } from '@features/user/queries/find-one-user/find-one-user-with-accepted-connection.query';
-import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
+import { HandlerReturnType, Paginated } from '@libs/types/type';
+import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
+import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -73,23 +73,16 @@ export class UserController {
   })
   @Get(routesV1.user.findMe)
   async findMe(@User('sub') userId: AggregateID): Promise<UserResponseDto> {
-    const query = new FindOneUserWithAcceptedConnectionQuery({
+    const query = new FindOneUserQuery({
       userId,
     });
 
-    const user =
-      await this.queryBus.execute<FindOneUserWithAcceptedConnectionQuery>(
-        query,
-      );
+    const user = await this.queryBus.execute<
+      FindOneUserQuery,
+      HandlerReturnType<FindOneUserQueryHandler>
+    >(query);
 
-    return new UserResponseDto({
-      ...user,
-      ...(user.acceptedConnection && {
-        acceptedConnection: new UserConnectionResponseDto(
-          user.acceptedConnection,
-        ),
-      }),
-    });
+    return new UserResponseDto(user);
   }
 
   /**

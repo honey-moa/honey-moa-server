@@ -1,3 +1,4 @@
+import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
 
 export interface BlogProps {
@@ -5,6 +6,8 @@ export interface BlogProps {
   connectionId: AggregateID;
   name: string;
   deletedAt: Date | null;
+
+  members?: HydratedUserEntityProps[];
 }
 
 export interface CreateBlogProps {

@@ -8,7 +8,5 @@ export interface ChatRoomRepositoryPort extends RepositoryPort<ChatRoomEntity> {
     connectionId: AggregateID,
   ): Promise<ChatRoomEntity | undefined>;
 
-  createChatRoom(entity: ChatRoomEntity): Promise<void>;
-
   createChatMessage(entity: ChatMessageEntity): Promise<void>;
 }

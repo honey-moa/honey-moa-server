@@ -29,13 +29,13 @@ export const routesV1 = {
     root: `${userRoot}/me/${userConnectionRoot}`,
     create: `${userRoot}/me/${userConnectionRoot}`,
     findConnections: `${userRoot}/me/${userConnectionRoot}`,
-    findOneConnection: `${userRoot}/me/${userConnectionRoot}/:id`,
     update: `${userRoot}/me/${userConnectionRoot}/:id`,
   },
 
   blog: {
     root: blogRoot,
     create: `${blogRoot}`,
+    findOneByUserId: `${userRoot}/:id/blog`,
   },
 
   blogPost: {
@@ -55,6 +55,7 @@ export const routesV1 = {
   chatRoom: {
     root: chatRoomRoot,
     create: `${chatRoomRoot}`,
+    findMyChatRoom: `${userRoot}/me/chat-room`,
   },
 
   chatMessage: {
