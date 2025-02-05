@@ -24,7 +24,7 @@ export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
 
     if (
       guardType === GuardType.PUBLIC ||
-      GuardType.REFRESH ||
+      guardType === GuardType.REFRESH ||
       guardType === GuardType.BASIC
     ) {
       return true;
