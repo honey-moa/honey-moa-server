@@ -66,6 +66,7 @@ export const routesV1 = {
     root: authRoot,
     signIn: `${authRoot}/sign-in`,
     signUp: `${authRoot}/sign-up`,
+    refresh: `${authRoot}/reissue/access-token`,
   },
 
   attachment: {

@@ -6,9 +6,10 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { GUARD_TYPE_TOKEN, GuardType } from '@libs/guards/types/guard.constant';
 import { GuardTypeUnion } from '@libs/guards/types/guard.type';
 import { Observable } from 'rxjs';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 
 @Injectable()
-export class JwtBearerAuthGuard extends AuthGuard('jwt') {
+export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
   constructor(private readonly reflector: Reflector) {
     super();
   }
@@ -21,15 +22,25 @@ export class JwtBearerAuthGuard extends AuthGuard('jwt') {
       typeof GUARD_TYPE_TOKEN
     >(GUARD_TYPE_TOKEN, [context.getHandler(), context.getClass()]);
 
-    if (guardType === GuardType.PUBLIC || guardType === GuardType.BASIC) {
+    if (
+      guardType === GuardType.PUBLIC ||
+      guardType === GuardType.REFRESH ||
+      guardType === GuardType.BASIC
+    ) {
       return true;
     }
 
     return super.canActivate(context);
   }
 
-  handleRequest<JwtPayload>(err, payload: JwtPayload) {
+  handleRequest(err: any, payload: any) {
     if (err || !payload) {
+      throw new HttpUnauthorizedException({
+        code: COMMON_ERROR_CODE.INVALID_TOKEN,
+      });
+    }
+
+    if (payload.tokenType !== TokenType.AccessToken) {
       throw new HttpUnauthorizedException({
         code: COMMON_ERROR_CODE.INVALID_TOKEN,
       });
