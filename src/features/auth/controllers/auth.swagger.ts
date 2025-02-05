@@ -1,6 +1,7 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBasicAuth,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger';
@@ -78,6 +79,29 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         {
           code: AUTH_ERROR_CODE.WRONG_EMAIL_OR_PASSWORD,
           description: '이메일 또는 비밀번호가 잘못된 경우',
+        },
+      ]),
+    );
+  },
+
+  GenerateAccessToken: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('refresh-token'),
+      ApiCreatedResponse({
+        description: '정상적으로 액세스 토큰이 재발급 됨.',
+        example: {
+          accessToken: 'string',
+        },
+      }),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
         },
       ]),
     );

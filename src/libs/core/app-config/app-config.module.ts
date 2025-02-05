@@ -25,6 +25,8 @@ import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.
         [ENV_KEY.HASH_ROUND]: Joi.number().required(),
 
         [ENV_KEY.JWT_SECRET]: Joi.string().required(),
+        [ENV_KEY.JWT_ACCESS_TOKEN_EXPIRES_IN]: Joi.string().required(),
+        [ENV_KEY.JWT_REFRESH_TOKEN_EXPIRES_IN]: Joi.string().required(),
 
         [ENV_KEY.DATABASE_URL]: Joi.string().required(),
 

@@ -1,14 +1,13 @@
-import { ICommand } from '@nestjs/cqrs';
 import { Command, CommandProps } from '@libs/ddd/command.base';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { ICommand } from '@nestjs/cqrs';
 
 export class GenerateAccessTokenCommand extends Command implements ICommand {
-  readonly email: string;
-  readonly password: string;
+  readonly userId: AggregateID;
 
   constructor(props: CommandProps<GenerateAccessTokenCommand>) {
     super(props);
 
-    this.email = props.email;
-    this.password = props.password;
+    this.userId = props.userId;
   }
 }

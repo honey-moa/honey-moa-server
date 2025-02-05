@@ -6,7 +6,13 @@ export class JwtResponseDto {
   })
   accessToken: string;
 
+  @ApiProperty({
+    description: '리프레시 토큰',
+  })
+  refreshToken?: string;
+
   constructor(create: JwtResponseDto) {
     this.accessToken = create.accessToken;
+    this.refreshToken = create.refreshToken;
   }
 }
