@@ -7,6 +7,8 @@ import type { JwtPayload } from '@libs/app-jwt/types/app-jwt.interface';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { Key } from '@libs/core/app-config/types/app-config.type';
+import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
+import { TokenType } from '@libs/app-jwt/types/jwt.enum';
 
 @Injectable()
 export class AppJwtService implements AppJwtServicePort {
@@ -20,10 +22,19 @@ export class AppJwtService implements AppJwtServicePort {
    * @todo 이후 클라이언트의 도메인이 정해지면 audience 추가
    */
   generateToken(payload: JwtPayload): Promise<string> {
+    const expiresIn =
+      payload.tokenType === TokenType.RefreshToken
+        ? this.appConfigService.get<number>(
+            ENV_KEY.JWT_REFRESH_TOKEN_EXPIRES_IN,
+          )
+        : this.appConfigService.get<number>(
+            ENV_KEY.JWT_ACCESS_TOKEN_EXPIRES_IN,
+          );
+
     return this.jwtService.signAsync(
       { tokenType: payload.tokenType },
       {
-        expiresIn: payload.exp,
+        expiresIn,
         subject: payload.sub,
       },
     );
