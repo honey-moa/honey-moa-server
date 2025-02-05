@@ -55,6 +55,7 @@ export const routesV1 = {
   chatRoom: {
     root: chatRoomRoot,
     create: `${chatRoomRoot}`,
+    findMyChatRoom: `${userRoot}/me/chat-room`,
   },
 
   chatMessage: {
