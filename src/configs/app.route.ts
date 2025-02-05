@@ -29,7 +29,6 @@ export const routesV1 = {
     root: `${userRoot}/me/${userConnectionRoot}`,
     create: `${userRoot}/me/${userConnectionRoot}`,
     findConnections: `${userRoot}/me/${userConnectionRoot}`,
-    findOneConnection: `${userRoot}/me/${userConnectionRoot}/:id`,
     update: `${userRoot}/me/${userConnectionRoot}/:id`,
   },
 

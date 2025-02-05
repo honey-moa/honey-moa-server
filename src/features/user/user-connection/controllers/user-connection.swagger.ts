@@ -3,7 +3,6 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
-  ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
 import { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
@@ -99,49 +98,6 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
           code: USER_CONNECTION_ERROR_CODE.REQUESTER_ALREADY_SENT_PENDING_CONNECTION,
           description:
             '요청한 유저는 이미 대기중인 커넥션 요청이 있음. 여러개의 요청 생성 불가.',
-        },
-      ]),
-    );
-  },
-
-  FindOneUserConnection: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): MethodDecorator => {
-    return applyDecorators(
-      ApiOperation({
-        ...apiOperationOptions,
-      }),
-      ApiBearerAuth('access-token'),
-      ApiOkResponse({
-        description: '정상적으로 유저 커넥션 상세 조회됨.',
-        type: UserConnectionResponseDto,
-      }),
-      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
-        {
-          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
-          description: 'userConnectionId가 양의 정수가 아님',
-          additionalErrors: {
-            errors: [
-              {
-                property: 'userConnectionId',
-                value: '-1',
-                reason: 'userConnectionId must be greater than 1',
-              },
-            ],
-            errorType: CustomValidationError,
-          },
-        },
-      ]),
-      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
-        {
-          code: COMMON_ERROR_CODE.INVALID_TOKEN,
-          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
-        },
-      ]),
-      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
-        {
-          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
-          description: '유저 커넥션이 존재하지 않음.',
         },
       ]),
     );
