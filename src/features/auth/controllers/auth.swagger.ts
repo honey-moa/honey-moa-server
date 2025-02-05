@@ -94,7 +94,7 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       }),
       ApiBearerAuth('refresh-token'),
       ApiCreatedResponse({
-        description: '정상적으로 토큰이 재발급 됨.',
+        description: '정상적으로 액세스 토큰이 재발급 됨.',
         example: {
           accessToken: 'string',
         },

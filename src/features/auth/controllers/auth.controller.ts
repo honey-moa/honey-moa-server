@@ -71,7 +71,7 @@ export class AuthController {
   }
 
   @SetGuardType(GuardType.REFRESH)
-  @ApiAuth.GenerateAccessToken({ summary: '토큰 재발급 API' })
+  @ApiAuth.GenerateAccessToken({ summary: '액세스 토큰 재발급 API' })
   @UseGuards(JwtRefreshTokenAuthGuard)
   @Post(routesV1.auth.refresh)
   async generateAccessToken(
