@@ -10,6 +10,7 @@ import {
 } from '@features/blog/domain/blog.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { UserEntity } from '@features/user/domain/user.entity';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
   static create(create: CreateBlogProps): BlogEntity {
@@ -43,6 +44,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
 
   get connectionId(): AggregateID {
     return this.props.connectionId;
+  }
+
+  hydrateMember(user: UserEntity) {
+    (this.props.members = this.props.members ?? []).push(user.hydrateProps);
   }
 
   public validate(): void {

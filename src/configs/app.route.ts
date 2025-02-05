@@ -35,6 +35,7 @@ export const routesV1 = {
   blog: {
     root: blogRoot,
     create: `${blogRoot}`,
+    findOneByUserId: `${userRoot}/:id/blog`,
   },
 
   blogPost: {
