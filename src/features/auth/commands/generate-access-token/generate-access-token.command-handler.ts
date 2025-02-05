@@ -4,7 +4,7 @@ import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { TokenExpiration, TokenType } from '@libs/app-jwt/types/jwt.enum';
-import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
+import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
@@ -27,8 +27,8 @@ export class GenerateAccessTokenCommandHandler
     const existingUser = await this.userRepository.findOneById(userId);
 
     if (isNil(existingUser)) {
-      throw new HttpNotFoundException({
-        code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+      throw new HttpUnauthorizedException({
+        code: COMMON_ERROR_CODE.INVALID_TOKEN,
       });
     }
 

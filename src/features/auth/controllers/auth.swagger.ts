@@ -16,7 +16,6 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 
 export const ApiAuth: ApiOperator<keyof AuthController> = {
   SignUp: (
@@ -103,12 +102,6 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         {
           code: COMMON_ERROR_CODE.INVALID_TOKEN,
           description: '유효하지 않은 토큰으로 인해 발생하는 에러',
-        },
-      ]),
-      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
-        {
-          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
-          description: '유저를 찾을 수 없는 경우',
         },
       ]),
     );
