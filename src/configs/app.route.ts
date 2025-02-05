@@ -29,23 +29,33 @@ export const routesV1 = {
     root: `${userRoot}/me/${userConnectionRoot}`,
     create: `${userRoot}/me/${userConnectionRoot}`,
     findConnections: `${userRoot}/me/${userConnectionRoot}`,
-    findOneConnection: `${userRoot}/me/${userConnectionRoot}/:id`,
     update: `${userRoot}/me/${userConnectionRoot}/:id`,
   },
 
   blog: {
     root: blogRoot,
     create: `${blogRoot}`,
+    findOneByUserId: `${userRoot}/:id/blog`,
   },
 
   blogPost: {
+    /**
+     * 블로그의 ID가 필요한 요청
+     */
     root: `${blogRoot}/:id/${blogPostRoot}`,
     create: `${blogRoot}/:id/${blogPostRoot}`,
+
+    /**
+     * 블로그의 ID가 필요하지 않은 요청
+     * 따로 만든 이유는 대표적으로 게시글 단일 조회의 경우 블로그가 아닌 다른 경로(커뮤니티 등)를 통할 수도 있음
+     */
+    findOne: `${blogPostRoot}/:id`,
   },
 
   chatRoom: {
     root: chatRoomRoot,
     create: `${chatRoomRoot}`,
+    findMyChatRoom: `${userRoot}/me/chat-room`,
   },
 
   chatMessage: {

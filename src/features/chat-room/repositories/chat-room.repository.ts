@@ -84,14 +84,6 @@ export class ChatRoomRepository implements ChatRoomRepositoryPort {
     return record ? this.mapper.toEntity(record) : undefined;
   }
 
-  async createChatRoom(entity: ChatRoomEntity): Promise<void> {
-    const record = this.mapper.toPersistence(entity);
-
-    await this.txHost.tx.chatRoom.create({
-      data: record,
-    });
-  }
-
   async createChatMessage(entity: ChatMessageEntity): Promise<void> {
     const record = this.chatMessageMapper.toPersistence(entity);
 

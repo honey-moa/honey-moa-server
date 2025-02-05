@@ -2,13 +2,10 @@ import { IQuery } from '@nestjs/cqrs';
 import { QueryBase } from '@libs/ddd/query.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 
-export class FindOneUserWithAcceptedConnectionQuery
-  extends QueryBase
-  implements IQuery
-{
+export class FindOneUserQuery extends QueryBase implements IQuery {
   readonly userId: AggregateID;
 
-  constructor(props: FindOneUserWithAcceptedConnectionQuery) {
+  constructor(props: FindOneUserQuery) {
     super();
 
     const { userId } = props;

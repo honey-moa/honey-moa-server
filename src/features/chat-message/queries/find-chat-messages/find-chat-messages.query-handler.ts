@@ -66,17 +66,21 @@ export class FindChatMessagesQueryHandler
 
     const [chatMessages, count] = await Promise.all([
       this.txHost.tx.chatMessage.findMany({
-        ...(cursor?.id && {
-          cursor: {
-            id: cursor?.id,
-            createdAt: cursor?.createdAt,
-            ...(cursor?.updatedAt && { updatedAt: cursor?.updatedAt }),
-          },
-        }),
+        cursor: cursor ? { id: cursor.id } : undefined,
         where: {
           roomId,
         },
-        orderBy,
+        orderBy: [
+          {
+            id: orderBy?.id,
+          },
+          {
+            createdAt: orderBy?.createdAt,
+          },
+          {
+            updatedAt: orderBy?.updatedAt,
+          },
+        ],
         skip,
         take,
       }),
@@ -85,7 +89,7 @@ export class FindChatMessagesQueryHandler
         where: {
           roomId,
         },
-        cursor: { id: cursor?.id },
+        cursor: cursor ? { id: cursor.id } : undefined,
       }),
     ]);
 

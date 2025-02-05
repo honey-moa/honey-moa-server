@@ -5,7 +5,6 @@ import {
 } from '@libs/api/dtos/response/base.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
-import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { BlogPostContents } from '@features/blog-post/types/blog-post.type';
 
 export interface CreateBlogPostResponseDtoProps
@@ -18,7 +17,6 @@ export interface CreateBlogPostResponseDtoProps
   location: string;
   isPublic: boolean;
   tags?: HydratedTagResponseDto[];
-  user?: HydratedUserResponseDto;
 }
 
 export class BlogPostResponseDto
@@ -83,26 +81,11 @@ export class BlogPostResponseDto
   })
   readonly tags?: HydratedTagResponseDto[];
 
-  @ApiPropertyOptional({
-    description: '게시글 작성자',
-    type: HydratedUserResponseDto,
-  })
-  readonly user?: HydratedUserResponseDto;
-
   constructor(create: CreateBlogPostResponseDtoProps) {
     super(create);
 
-    const {
-      userId,
-      blogId,
-      title,
-      contents,
-      date,
-      location,
-      tags,
-      user,
-      isPublic,
-    } = create;
+    const { userId, blogId, title, contents, date, location, tags, isPublic } =
+      create;
 
     this.userId = userId;
     this.blogId = blogId;
@@ -111,7 +94,6 @@ export class BlogPostResponseDto
     this.date = date;
     this.location = location;
     this.tags = tags;
-    this.user = user;
     this.isPublic = isPublic;
   }
 }

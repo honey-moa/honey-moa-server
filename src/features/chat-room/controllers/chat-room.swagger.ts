@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
 import { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
@@ -17,6 +18,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
+import { ChatRoomResponseDto } from '@features/chat-room/dtos/response/chat-room.response-dto';
 
 export const ApiChatRoom: ApiOperator<keyof ChatRoomController> = {
   Create: (
@@ -69,6 +71,33 @@ export const ApiChatRoom: ApiOperator<keyof ChatRoomController> = {
         {
           code: CHAT_ROOM_ERROR_CODE.YOU_ALREADY_HAVE_A_CHAT_ROOM,
           description: '유저가 이미 채팅방을 가지고 있음.',
+        },
+      ]),
+    );
+  },
+
+  FindMyChatRoom: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiOkResponse({
+        description: '정상적으로 채팅방 조회됨.',
+        type: ChatRoomResponseDto,
+      }),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '채팅방을 찾을 수 없음.',
         },
       ]),
     );

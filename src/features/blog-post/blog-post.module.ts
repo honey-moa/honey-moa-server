@@ -8,6 +8,7 @@ import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post
 import { CreateBlogPostCommandHandler } from '@features/blog-post/commands/create-blog-post/create-blog-post.command-handler';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
 import { BlogPostMapper } from '@features/blog-post/mappers/blog-post.mapper';
+import { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
 import { BlogPostRepository } from '@features/blog-post/repositories/blog-post.repository';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogModule } from '@features/blog/blog.module';
@@ -26,6 +27,8 @@ const mappers: Provider[] = [
 
 const commandHandlers: Provider[] = [CreateBlogPostCommandHandler];
 
+const queryHandlers: Provider[] = [FindOneBlogPostQueryHandler];
+
 const repositories: Provider[] = [
   { provide: BLOG_POST_REPOSITORY_DI_TOKEN, useClass: BlogPostRepository },
   {
@@ -41,6 +44,11 @@ const repositories: Provider[] = [
 @Module({
   imports: [BlogModule, TagModule, UserModule, AttachmentModule, S3Module],
   controllers: [...controllers],
-  providers: [...mappers, ...commandHandlers, ...repositories],
+  providers: [
+    ...mappers,
+    ...commandHandlers,
+    ...queryHandlers,
+    ...repositories,
+  ],
 })
 export class BlogPostModule {}

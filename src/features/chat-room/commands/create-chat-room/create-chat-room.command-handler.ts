@@ -64,7 +64,7 @@ export class CreateChatRoomCommandHandler
       connectionId: acceptedConnection.id,
     });
 
-    await this.chatRoomRepository.createChatRoom(chatRoom);
+    await this.chatRoomRepository.create(chatRoom);
 
     return chatRoom.id;
   }

@@ -9,7 +9,6 @@ import {
   CreateBlogPostResponseDtoProps,
 } from '@features/blog-post/dtos/response/blog-post.response-dto';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
-import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
 import { CreateEntityProps } from '@libs/ddd/entity.base';
 import { Mapper } from '@libs/ddd/mapper.interface';
@@ -82,7 +81,7 @@ export class BlogPostMapper
   }
 
   toResponseDto(entity: BlogPostEntity): BlogPostResponseDto {
-    const { user, tags, ...props } = entity.getProps();
+    const { tags, ...props } = entity.getProps();
 
     const createDtoProps: CreateBlogPostResponseDtoProps = {
       ...props,
@@ -90,10 +89,6 @@ export class BlogPostMapper
 
     if (!isNil(tags)) {
       createDtoProps.tags = tags.map((tag) => new HydratedTagResponseDto(tag));
-    }
-
-    if (!isNil(user)) {
-      createDtoProps.user = new HydratedUserResponseDto(user);
     }
 
     return new BlogPostResponseDto(createDtoProps);

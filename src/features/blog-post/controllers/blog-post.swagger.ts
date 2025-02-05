@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
@@ -15,6 +16,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
+import { BlogPostResponseDto } from '@features/blog-post/dtos/response/blog-post.response-dto';
 
 export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
   Create: (
@@ -133,6 +135,58 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
         {
           code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
           description: '해당 blog가 존재하지 않음.',
+        },
+      ]),
+    );
+  },
+
+  FindOne: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiOkResponse({
+        description:
+          '정상적으로 블로그 게시글 상세 조회 됨.<br>' +
+          '해당 API의 response에선 optional 필드 중 tags만 return 됨',
+        type: BlogPostResponseDto,
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'blogPost의 id가 numeric string이 아님.',
+          additionalErrors: {
+            errors: [
+              {
+                value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                property: 'id',
+                reason: 'param internal the id must be a numeric string',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+      ]),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+          description:
+            '비공개 게시글의 경우 커넥션에 속해 있지 않으면 403 에러 처리',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '해당 blogPost가 존재하지 않음.',
         },
       ]),
     );

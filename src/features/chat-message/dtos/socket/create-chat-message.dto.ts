@@ -1,7 +1,8 @@
 import { IsBigIntString } from '@libs/api/decorators/is-big-int.decorator';
+import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsUrl, Length } from 'class-validator';
 
 export class CreateChatMessageDto {
   @ApiProperty({
@@ -20,4 +21,16 @@ export class CreateChatMessageDto {
   @IsString()
   @Length(1, 1000)
   message: string;
+
+  @ApiPropertyOptional({
+    description: '블로그 게시글 URL',
+    example: 'https://honeymoa.com/blog/2',
+    default: null,
+    minLength: 1,
+    maxLength: 255,
+  })
+  @IsNullable()
+  @IsUrl()
+  @Length(1, 255)
+  blogPostUrl: string | null = null;
 }

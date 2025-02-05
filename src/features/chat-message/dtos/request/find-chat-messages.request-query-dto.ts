@@ -18,7 +18,6 @@ export class FindChatMessagesRequestQueryDto extends CursorPaginationRequestQuer
     },
     createdAt: {
       type: 'date',
-      required: true,
     },
     updatedAt: {
       type: 'date',
