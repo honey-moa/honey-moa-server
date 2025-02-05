@@ -1,6 +1,10 @@
 import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { BlogProps } from '@features/blog/domain/blog.entity-interface';
-import { BlogResponseDto } from '@features/blog/dtos/response/blog.response-dto';
+import {
+  BlogResponseDto,
+  CreateBlogResponseDtoProps,
+} from '@features/blog/dtos/response/blog.response-dto';
+import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
 import { CreateEntityProps } from '@libs/ddd/entity.base';
 import { Mapper } from '@libs/ddd/mapper.interface';
@@ -46,8 +50,23 @@ export class BlogMapper
   }
 
   toResponseDto(entity: BlogEntity): BlogResponseDto {
-    return new BlogResponseDto({
-      ...entity.getProps(),
-    });
+    const props = entity.getProps();
+
+    const createdDtoProps: CreateBlogResponseDtoProps = {
+      id: props.id,
+      name: props.name,
+      connectionId: props.connectionId,
+      createdBy: props.createdBy,
+      createdAt: entity.createdAt,
+      updatedAt: entity.updatedAt,
+    };
+
+    if (props.members) {
+      createdDtoProps.members = props.members.map(
+        (member) => new HydratedUserResponseDto(member),
+      );
+    }
+
+    return new BlogResponseDto(createdDtoProps);
   }
 }

@@ -16,6 +16,7 @@ import { BlogResponseDto } from '@features/blog/dtos/response/blog.response-dto'
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
+import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
 
 @ApiTags('Blog')
 @ApiInternalServerErrorBuilder()
@@ -56,9 +57,9 @@ export class BlogController {
   })
   @Get(routesV1.blog.findOneByUserId)
   async findOneByUserId(
-    @Param('id') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) userId: string,
   ): Promise<BlogResponseDto> {
-    const query = new FindOneBlogByUserIdQuery({ userId });
+    const query = new FindOneBlogByUserIdQuery({ userId: BigInt(userId) });
 
     const result = await this.queryBus.execute<
       FindOneBlogByUserIdQuery,
