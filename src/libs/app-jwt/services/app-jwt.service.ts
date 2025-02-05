@@ -8,7 +8,7 @@ import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-co
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { Key } from '@libs/core/app-config/types/app-config.type';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { TokenType } from '@libs/app-jwt/types/jwt.enum';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 
 @Injectable()
 export class AppJwtService implements AppJwtServicePort {

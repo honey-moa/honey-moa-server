@@ -1,4 +1,4 @@
-import { TokenType } from '@libs/app-jwt/types/jwt.enum';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 
 export interface JwtPayload {
   sub: string;

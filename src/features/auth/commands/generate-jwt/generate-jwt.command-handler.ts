@@ -9,7 +9,7 @@ import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token'
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
 import { isNil } from '@libs/utils/util';
-import { TokenType } from '@libs/app-jwt/types/jwt.enum';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
 
 @CommandHandler(GenerateJwtCommand)

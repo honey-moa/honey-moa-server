@@ -6,7 +6,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { GUARD_TYPE_TOKEN, GuardType } from '@libs/guards/types/guard.constant';
 import { GuardTypeUnion } from '@libs/guards/types/guard.type';
 import { Observable } from 'rxjs';
-import { TokenType } from '@libs/app-jwt/types/jwt.enum';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 
 @Injectable()
 export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
