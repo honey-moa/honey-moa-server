@@ -20,7 +20,7 @@ model User {
   loginType        LoginTypeEnum @map("login_type")
   role             UserRoleEnum  @default(USER)
   isEmailVerified  Boolean       @default(false) @map("is_email_verified") @db.Boolean
-  profileImagePath String        @default("temp") @map("profile_image_path") @db.VarChar(255)
+  profileImagePath String        @map("profile_image_path") @db.VarChar(255)
   mbti             MbtiEnum?
   createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
@@ -76,8 +76,8 @@ model Blog {
   createdBy           BigInt    @map("created_by") @db.BigInt()
   connectionId        BigInt    @unique(map: "uq_blogs_connection_id") @map("connection_id") @db.BigInt()
   name                String    @db.VarChar(30)
-  description         String    @default("temp") @db.VarChar(255)
-  dDayStartDate       String    @default("temp") @map("d_day_start_date") @db.VarChar(20)
+  description         String    @db.VarChar(255)
+  dDayStartDate       String    @map("d_day_start_date") @db.VarChar(20)
   backgroundImagePath String?   @map("background_image_path") @db.VarChar(255)
   createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt           DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
