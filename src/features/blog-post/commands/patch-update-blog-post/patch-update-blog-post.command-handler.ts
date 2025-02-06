@@ -178,7 +178,7 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.editContents(contents);
     }
 
-    if (tagNames?.length) {
+    if (tagNames) {
       await this.blogPostTagRepository.bulkDeleteByBlogPostId(blogPostId);
 
       const tags = await this.tagRepository.findByNames(tagNames);
