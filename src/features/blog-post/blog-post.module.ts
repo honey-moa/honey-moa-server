@@ -6,6 +6,7 @@ import { BlogPostTagMapper } from '@features/blog-post/blog-post-tag/mappers/blo
 import { BlogPostTagRepository } from '@features/blog-post/blog-post-tag/repositories/blog-post-tag.repository';
 import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-tag/tokens/di.token';
 import { CreateBlogPostCommandHandler } from '@features/blog-post/commands/create-blog-post/create-blog-post.command-handler';
+import { DeleteBlogPostCommandHandler } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command-handler';
 import { PatchUpdateBlogPostCommandHandler } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command-handler';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
 import { BlogPostMapper } from '@features/blog-post/mappers/blog-post.mapper';
@@ -29,6 +30,7 @@ const mappers: Provider[] = [
 const commandHandlers: Provider[] = [
   CreateBlogPostCommandHandler,
   PatchUpdateBlogPostCommandHandler,
+  DeleteBlogPostCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [FindOneBlogPostQueryHandler];

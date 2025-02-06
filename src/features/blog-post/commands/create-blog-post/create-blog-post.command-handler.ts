@@ -88,10 +88,7 @@ export class CreateBlogPostCommandHandler
       });
     }
 
-    if (
-      userConnection.requestedId !== userId &&
-      userConnection.requesterId !== userId
-    ) {
+    if (!userConnection.isPartOfConnection(userId)) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
       });

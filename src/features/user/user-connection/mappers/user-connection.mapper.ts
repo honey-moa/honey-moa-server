@@ -14,8 +14,6 @@ import {
 } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
-import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
-import { HydratedChatRoomResponseDto } from '@features/chat-room/dtos/response/hydrated-chat-room.response-dto';
 import { isNil } from '@libs/utils/util';
 
 export const userConnectionSchema = baseSchema.extend({
@@ -93,29 +91,11 @@ export class UserConnectionMapper
   }
 
   toResponseDto(entity: UserConnectionEntity): UserConnectionResponseDto {
-    const { blog, requestedUser, requesterUser, chatRoom, ...props } =
-      entity.getProps();
+    const { requestedUser, requesterUser, ...props } = entity.getProps();
 
     const createDtoProps: CreateUserConnectionResponseDtoProps = {
       ...props,
     };
-
-    if (!isNil(blog)) {
-      createDtoProps.blog = new HydratedBlogResponseDto({
-        id: blog.id,
-        name: blog.name,
-        createdAt: blog.createdAt,
-        updatedAt: blog.updatedAt,
-      });
-    }
-
-    if (!isNil(chatRoom)) {
-      createDtoProps.chatRoom = new HydratedChatRoomResponseDto({
-        id: chatRoom.id,
-        createdAt: chatRoom.createdAt,
-        updatedAt: chatRoom.updatedAt,
-      });
-    }
 
     if (!isNil(requestedUser)) {
       createDtoProps.requested = new HydratedUserResponseDto({
