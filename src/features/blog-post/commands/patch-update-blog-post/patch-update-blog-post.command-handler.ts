@@ -181,22 +181,24 @@ export class PatchUpdateBlogPostCommandHandler
     if (tagNames) {
       await this.blogPostTagRepository.bulkDeleteByBlogPostId(blogPostId);
 
-      const tags = await this.tagRepository.findByNames(tagNames);
-      const existingTagNamesSet = new Set(tags.map((tag) => tag.name));
-      const newTagNames = tagNames.filter(
-        (name) => !existingTagNamesSet.has(name),
-      );
+      if (tagNames.length) {
+        const tags = await this.tagRepository.findByNames(tagNames);
+        const existingTagNamesSet = new Set(tags.map((tag) => tag.name));
+        const newTagNames = tagNames.filter(
+          (name) => !existingTagNamesSet.has(name),
+        );
 
-      const newTagEntities = newTagNames.map((name) =>
-        TagEntity.create({ name, userId }),
-      );
+        const newTagEntities = newTagNames.map((name) =>
+          TagEntity.create({ name, userId }),
+        );
 
-      await this.tagRepository.bulkCreate(newTagEntities);
-      tags.push(...newTagEntities);
+        await this.tagRepository.bulkCreate(newTagEntities);
+        tags.push(...newTagEntities);
 
-      newBlogPostTags.push(
-        ...tags.map((tag) => blogPost.createBlogPostTag(tag)),
-      );
+        newBlogPostTags.push(
+          ...tags.map((tag) => blogPost.createBlogPostTag(tag)),
+        );
+      }
     }
 
     if (fileUrls?.length) {
