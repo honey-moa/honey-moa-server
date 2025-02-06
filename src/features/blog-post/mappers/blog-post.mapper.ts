@@ -1,4 +1,8 @@
 import {
+  BlogPostAttachmentMapper,
+  blogPostAttachmentSchema,
+} from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
+import {
   BlogPostTagMapper,
   blogPostTagSchema,
 } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
@@ -13,6 +17,7 @@ import { baseSchema } from '@libs/db/base.schema';
 import { CreateEntityProps } from '@libs/ddd/entity.base';
 import { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
+import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 export const blogPostSchema = baseSchema.extend({
@@ -31,6 +36,7 @@ export const blogPostSchema = baseSchema.extend({
 
 export const blogPostWithEntitiesSchema = blogPostSchema.extend({
   blogPostTags: z.array(blogPostTagSchema).optional(),
+  blogPostAttachments: z.array(blogPostAttachmentSchema).optional(),
 });
 
 export type BlogPostModel = z.TypeOf<typeof blogPostSchema>;
@@ -39,10 +45,14 @@ export type BlogPostWithEntitiesModel = z.TypeOf<
   typeof blogPostWithEntitiesSchema
 >;
 
+@Injectable()
 export class BlogPostMapper
   implements Mapper<BlogPostEntity, BlogPostModel, BlogPostResponseDto>
 {
-  constructor(private readonly blogPostTagMapper: BlogPostTagMapper) {}
+  constructor(
+    private readonly blogPostTagMapper: BlogPostTagMapper,
+    private readonly blogPostAttachmentMapper: BlogPostAttachmentMapper,
+  ) {}
 
   toEntity(record: BlogPostWithEntitiesModel): BlogPostEntity {
     const blogPostProps: CreateEntityProps<BlogPostProps> = {
@@ -61,9 +71,15 @@ export class BlogPostMapper
       updatedAt: record.updatedAt,
     };
 
-    if (record.blogPostTags) {
+    if (!isNil(record.blogPostTags)) {
       blogPostProps.props.blogPostTags = record.blogPostTags.map((tag) =>
         this.blogPostTagMapper.toEntity(tag),
+      );
+    }
+
+    if (!isNil(record.blogPostAttachments)) {
+      blogPostProps.props.blogPostAttachments = record.blogPostAttachments.map(
+        (attachment) => this.blogPostAttachmentMapper.toEntity(attachment),
       );
     }
 

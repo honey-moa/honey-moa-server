@@ -68,10 +68,20 @@ export class BlogPostTagRepository implements BlogPostTagRepositoryPort {
   }
 
   async bulkCreate(entities: BlogPostTagEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
     const records = entities.map((entity) => this.mapper.toPersistence(entity));
 
     await this.txHost.tx.blogPostTag.createMany({
       data: records,
+    });
+  }
+
+  async bulkDeleteByBlogPostId(blogPostId: AggregateID): Promise<void> {
+    await this.txHost.tx.blogPostTag.deleteMany({
+      where: { blogPostId },
     });
   }
 }
