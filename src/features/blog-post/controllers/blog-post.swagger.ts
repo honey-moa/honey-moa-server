@@ -311,7 +311,7 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
       ]),
       HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
         {
-          code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
           description:
             '비공개 게시글의 경우 커넥션에 속해 있지 않으면 403 에러 처리',
         },
@@ -320,6 +320,54 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
         {
           code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
           description: '해당 blogPost가 존재하지 않음.',
+        },
+      ]),
+    );
+  },
+
+  Delete: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiNoContentResponse({
+        description: '정상적으로 블로그 게시글 삭제됨.',
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'blogPost 혹은 blog의 id가 numeric string이 아님.',
+          additionalErrors: {
+            errors: [
+              {
+                value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                property: 'id',
+                reason: 'param internal the id must be a numeric string',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+      ]),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+          description: '커넥션에 속해있지 않음.',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '해당 blogPost 혹은 blog가 존재하지 않음.',
         },
       ]),
     );
