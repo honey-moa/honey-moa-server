@@ -7,6 +7,7 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper';
+import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
 
 @Injectable()
 export class AttachmentRepository implements AttachmentRepositoryPort {
@@ -70,6 +71,10 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
   }
 
   async bulkCreate(entities: AttachmentEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
     const records = entities.map((entity) => {
       entity.validate();
 
@@ -86,6 +91,10 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
   }
 
   async findByUrls(urls: string[]): Promise<AttachmentEntity[]> {
+    if (!urls.length) {
+      return [];
+    }
+
     const records = await this.txHost.tx.attachment.findMany({
       where: {
         url: {
@@ -97,7 +106,26 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
     return records.map(this.mapper.toEntity);
   }
 
+  async findByIdsAndUploadType(
+    ids: AggregateID[],
+    uploadType?: AttachmentUploadTypeUnion,
+  ): Promise<AttachmentEntity[]> {
+    if (!ids.length) {
+      return [];
+    }
+
+    const records = await this.txHost.tx.attachment.findMany({
+      where: { id: { in: ids }, uploadType },
+    });
+
+    return records.map((record) => this.mapper.toEntity(record));
+  }
+
   async bulkDelete(entities: AttachmentEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
     const ids = entities.map((entity) => entity.id);
 
     await this.txHost.tx.attachment.deleteMany({

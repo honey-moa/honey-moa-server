@@ -3,6 +3,7 @@ import { BlogPostTagProps } from '@features/blog-post/blog-post-tag/domain/blog-
 import { baseSchema } from '@libs/db/base.schema';
 import { CreateEntityProps } from '@libs/ddd/entity.base';
 import { Mapper } from '@libs/ddd/mapper.interface';
+import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 export const blogPostTagSchema = baseSchema.extend({
@@ -12,11 +13,10 @@ export const blogPostTagSchema = baseSchema.extend({
 
 export type BlogPostTagModel = z.TypeOf<typeof blogPostTagSchema>;
 
+@Injectable()
 export class BlogPostTagMapper
   implements Omit<Mapper<BlogPostTagEntity, BlogPostTagModel>, 'toResponseDto'>
 {
-  constructor() {}
-
   toEntity(record: BlogPostTagModel): BlogPostTagEntity {
     const props: CreateEntityProps<BlogPostTagProps> = {
       id: record.id,

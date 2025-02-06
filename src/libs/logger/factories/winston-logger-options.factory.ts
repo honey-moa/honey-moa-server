@@ -24,7 +24,7 @@ export class WinstonLoggerModuleOptionsFactory
     return {
       transports: [
         new winston.transports.Console({
-          level: 'info',
+          level: this.appConfigService.isLocal() ? 'debug' : 'info',
           format: winston.format.combine(
             winston.format.colorize({ level: true }), // 색깔 넣어서 출력
             winston.format.timestamp({

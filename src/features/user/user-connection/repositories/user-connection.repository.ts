@@ -92,13 +92,12 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
         OR: [
           {
             requesterId: userId,
-            status,
           },
           {
             requestedId: userId,
-            status,
           },
         ],
+        status,
         deletedAt: null,
       },
     });

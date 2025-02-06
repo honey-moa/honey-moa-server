@@ -9,7 +9,10 @@ import {
 } from '@features/blog-post/mappers/blog-post.mapper';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import {
+  BlogPostInclude,
+  BlogPostRepositoryPort,
+} from '@features/blog-post/repositories/blog-post.repository-port';
 
 @Injectable()
 export class BlogPostRepository implements BlogPostRepositoryPort {
@@ -21,9 +24,13 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
     private readonly mapper: BlogPostMapper,
   ) {}
 
-  async findOneById(id: AggregateID): Promise<BlogPostEntity | undefined> {
+  async findOneById(
+    id: AggregateID,
+    include: BlogPostInclude,
+  ): Promise<BlogPostEntity | undefined> {
     const record = await this.txHost.tx.blogPost.findUnique({
       where: { id, deletedAt: null },
+      include,
     });
 
     return record
