@@ -7,8 +7,6 @@ import {
   CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
-import { HydratedChatRoomResponseDto } from '@features/chat-room/dtos/response/hydrated-chat-room.response-dto';
 
 export interface CreateUserConnectionResponseDtoProps
   extends CreateBaseResponseDtoProps {
@@ -17,9 +15,6 @@ export interface CreateUserConnectionResponseDtoProps
   requestedId: AggregateID;
   requested?: HydratedUserResponseDto;
   status: UserConnectionStatusUnion;
-
-  blog?: HydratedBlogResponseDto;
-  chatRoom?: HydratedChatRoomResponseDto;
 }
 
 export class UserConnectionResponseDto
@@ -60,39 +55,15 @@ export class UserConnectionResponseDto
   })
   status: UserConnectionStatusUnion;
 
-  @ApiPropertyOptional({
-    description:
-      '블로그 정보. 해당 프로퍼티가 falsy한 값일 경우 블로그가 존재하지 않음.',
-    type: HydratedBlogResponseDto,
-  })
-  blog?: HydratedBlogResponseDto;
-
-  @ApiPropertyOptional({
-    description:
-      '채팅방 정보. 해당 프로퍼티가 falsy한 값일 경우 채팅방이 존재하지 않음.',
-    type: HydratedChatRoomResponseDto,
-  })
-  chatRoom?: HydratedChatRoomResponseDto;
-
   constructor(props: CreateUserConnectionResponseDtoProps) {
     super(props);
 
-    const {
-      requester,
-      requesterId,
-      requested,
-      requestedId,
-      status,
-      blog,
-      chatRoom,
-    } = props;
+    const { requester, requesterId, requested, requestedId, status } = props;
 
     this.requester = requester;
     this.requesterId = requesterId.toString();
     this.requested = requested;
     this.requestedId = requestedId.toString();
     this.status = status;
-    this.blog = blog;
-    this.chatRoom = chatRoom;
   }
 }

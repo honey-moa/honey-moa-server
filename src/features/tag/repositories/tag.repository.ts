@@ -68,6 +68,10 @@ export class TagRepository implements TagRepositoryPort {
   }
 
   async findByNames(names: string[]): Promise<TagEntity[]> {
+    if (!names.length) {
+      return [];
+    }
+
     const record = await this.txHost.tx.tag.findMany({
       where: { name: { in: names } },
     });
@@ -76,6 +80,10 @@ export class TagRepository implements TagRepositoryPort {
   }
 
   async bulkCreate(entities: TagEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
     const record = entities.map((entity) => this.mapper.toPersistence(entity));
 
     await this.txHost.tx.tag.createMany({ data: record });

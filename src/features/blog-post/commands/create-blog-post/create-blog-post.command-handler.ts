@@ -24,7 +24,7 @@ import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
 import { TagEntity } from '@features/tag/domain/tag.entity';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
-import { S3_SERVICE_TOKEN } from '@libs/s3/tokens/di.token';
+import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
@@ -48,7 +48,7 @@ export class CreateBlogPostCommandHandler
     private readonly tagRepository: TagRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly attachmentRepository: AttachmentRepositoryPort,
-    @Inject(S3_SERVICE_TOKEN)
+    @Inject(S3_SERVICE_DI_TOKEN)
     private readonly s3Service: S3ServicePort,
     @Inject(BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly blogPostAttachmentRepository: BlogPostAttachmentRepositoryPort,
@@ -88,10 +88,7 @@ export class CreateBlogPostCommandHandler
       });
     }
 
-    if (
-      userConnection.requestedId !== userId &&
-      userConnection.requesterId !== userId
-    ) {
+    if (!userConnection.isPartOfConnection(userId)) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
       });
@@ -169,7 +166,7 @@ export class CreateBlogPostCommandHandler
         jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
       });
 
-      blogPost.reviseContents(JSON.parse(jsonContents));
+      blogPost.editContents(JSON.parse(jsonContents));
     }
 
     if (notExistingAttachments.length) {

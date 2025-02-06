@@ -13,6 +13,9 @@ import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog
 import { UserEntity } from '@features/user/domain/user.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
+import { isNil } from '@libs/utils/util';
+import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
+import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -33,11 +36,42 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
       updatedAt: now,
     });
 
+    blogPost.addEvent(
+      new BlogPostCreatedDomainEvent({
+        aggregateId: id,
+        ...props,
+      }),
+    );
+
     return blogPost;
   }
 
-  reviseContents(contents: Array<Record<string, any>>): void {
+  editContents(contents: Array<Record<string, any>>): void {
     this.props.contents = contents;
+  }
+
+  editTitle(title: string): void {
+    this.props.title = title;
+  }
+
+  editDate(date: string): void {
+    this.props.date = date;
+  }
+
+  editLocation(location: string): void {
+    this.props.location = location;
+  }
+
+  private changeIsPublic(isPublic: boolean): void {
+    this.props.isPublic = isPublic;
+  }
+
+  switchToPublic(): void {
+    this.changeIsPublic(true);
+  }
+
+  switchToPrivate(): void {
+    this.changeIsPublic(false);
   }
 
   hydrateUser(user: UserEntity): void {
@@ -75,8 +109,36 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     return blogPostAttachment;
   }
 
+  deleteBlogPostAttachment(blogPostAttachment: BlogPostAttachmentEntity): void {
+    if (isNil(this.props.blogPostAttachments)) {
+      return;
+    }
+
+    const index = this.props.blogPostAttachments.findIndex(
+      (attachment) => attachment.id === blogPostAttachment.id,
+    );
+
+    if (index === -1) {
+      return;
+    }
+
+    this.props.blogPostAttachments.splice(index, 1);
+  }
+
+  delete(): void {
+    this.addEvent(
+      new BlogPostDeletedDomainEvent({
+        aggregateId: this.id,
+      }),
+    );
+  }
+
   get contents(): Array<Record<string, any>> {
     return this.props.contents;
+  }
+
+  get blogPostAttachments(): BlogPostAttachmentEntity[] {
+    return this.props.blogPostAttachments || [];
   }
 
   public validate(): void {

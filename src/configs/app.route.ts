@@ -44,6 +44,8 @@ export const routesV1 = {
      */
     root: `${blogRoot}/:id/${blogPostRoot}`,
     create: `${blogRoot}/:id/${blogPostRoot}`,
+    patchUpdate: `${blogRoot}/:id/${blogPostRoot}/:blogPostId`,
+    delete: `${blogRoot}/:id/${blogPostRoot}/:blogPostId`,
 
     /**
      * 블로그의 ID가 필요하지 않은 요청
