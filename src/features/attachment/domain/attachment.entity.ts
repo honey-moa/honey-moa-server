@@ -4,7 +4,7 @@ import {
   AttachmentProps,
   CreateAttachmentProps,
 } from '@features/attachment/domain/attachment.entity-interface';
-import { AttachmentCreatedDomainEvent } from '@features/attachment/domain/events/attachment-created.event';
+import { AttachmentCreatedDomainEvent } from '@features/attachment/domain/events/attachment-created.domain-event';
 import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';

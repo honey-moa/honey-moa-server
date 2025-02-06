@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -26,6 +27,7 @@ import { BlogPostResponseDto } from '@features/blog-post/dtos/response/blog-post
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import { PatchUpdateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/patch-update-blog-post.request-body-dto';
 import { PatchUpdateBlogPostCommand } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command';
+import { DeleteBlogPostCommand } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -88,8 +90,10 @@ export class BlogPostController {
   }
 
   @ApiBlogPost.PatchUpdate({
-    summary: '게시글 PATCH update',
-    description: 'tag값이 올 경우 기존 태그 삭제 후 새로 추가',
+    summary: '게시글 PATCH update API',
+    description:
+      'tag값이 올 경우 기존 태그 삭제 후 새로 추가.<br>' +
+      '커넥션에 속한 유저만 수정 가능',
   })
   @HttpCode(HttpStatus.NO_CONTENT)
   @Patch(routesV1.blogPost.patchUpdate)
@@ -107,5 +111,25 @@ export class BlogPostController {
     });
 
     await this.commandBus.execute<PatchUpdateBlogPostCommand, void>(command);
+  }
+
+  @ApiBlogPost.Delete({
+    summary: '블로그 게시글 삭제 API',
+    description: '커넥션에 속한 유저만 삭제 가능',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(routesV1.blogPost.delete)
+  async delete(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) blogId: string,
+    @Param('blogPostId', ParsePositiveBigIntPipe) blogPostId: string,
+  ) {
+    const command = new DeleteBlogPostCommand({
+      blogId: BigInt(blogId),
+      blogPostId: BigInt(blogPostId),
+      userId,
+    });
+
+    await this.commandBus.execute<DeleteBlogPostCommand, void>(command);
   }
 }

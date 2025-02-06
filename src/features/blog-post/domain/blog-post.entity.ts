@@ -14,6 +14,8 @@ import { UserEntity } from '@features/user/domain/user.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { isNil } from '@libs/utils/util';
+import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
+import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -33,6 +35,13 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
       createdAt: now,
       updatedAt: now,
     });
+
+    blogPost.addEvent(
+      new BlogPostCreatedDomainEvent({
+        aggregateId: id,
+        ...props,
+      }),
+    );
 
     return blogPost;
   }
@@ -114,6 +123,14 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     }
 
     this.props.blogPostAttachments.splice(index, 1);
+  }
+
+  delete(): void {
+    this.addEvent(
+      new BlogPostDeletedDomainEvent({
+        aggregateId: this.id,
+      }),
+    );
   }
 
   get contents(): Array<Record<string, any>> {

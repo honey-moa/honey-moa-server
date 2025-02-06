@@ -104,6 +104,12 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
     this.changeStatus(UserConnectionStatus.DISCONNECTED);
   }
 
+  isPartOfConnection(userId: AggregateID): boolean {
+    return (
+      this.props.requesterId === userId || this.props.requestedId === userId
+    );
+  }
+
   private changeStatus(status: UserConnectionStatusUnion): void {
     if (!this.isPending() && status !== UserConnectionStatus.DISCONNECTED) {
       throw new HttpConflictException({
