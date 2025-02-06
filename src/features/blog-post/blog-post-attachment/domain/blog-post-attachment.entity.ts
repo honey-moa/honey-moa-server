@@ -8,6 +8,7 @@ import {
   BlogPostAttachmentProps,
   CreateBlogPostAttachmentProps,
 } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity-interface';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export class BlogPostAttachmentEntity extends AggregateRoot<BlogPostAttachmentProps> {
   static readonly BLOG_POST_ATTACHMENT_PATH_PREFIX: string = 'blog-post/';
@@ -31,6 +32,10 @@ export class BlogPostAttachmentEntity extends AggregateRoot<BlogPostAttachmentPr
     });
 
     return blogPostAttachment;
+  }
+
+  get attachmentId(): AggregateID {
+    return this.props.attachmentId;
   }
 
   public validate(): void {

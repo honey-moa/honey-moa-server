@@ -3,6 +3,7 @@ import { BlogPostAttachmentProps } from '@features/blog-post/blog-post-attachmen
 import { baseSchema } from '@libs/db/base.schema';
 import { CreateEntityProps } from '@libs/ddd/entity.base';
 import { Mapper } from '@libs/ddd/mapper.interface';
+import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 export const blogPostAttachmentSchema = baseSchema.extend({
@@ -12,6 +13,7 @@ export const blogPostAttachmentSchema = baseSchema.extend({
 
 export type BlogPostAttachmentModel = z.TypeOf<typeof blogPostAttachmentSchema>;
 
+@Injectable()
 export class BlogPostAttachmentMapper
   implements
     Omit<
