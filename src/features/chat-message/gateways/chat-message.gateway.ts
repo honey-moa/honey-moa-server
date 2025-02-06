@@ -7,13 +7,11 @@ import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.tok
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { SocketCatchHttpExceptionFilter } from '@libs/exceptions/socket/filters/socket-catch-http.exception-filter';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { SocketJwtBearerAuthGuard } from '@libs/guards/providers/socket-jwt-bearer-auth.guard';
 import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
 import { isNil } from '@libs/utils/util';
 import {
   Inject,
   UseFilters,
-  UseGuards,
   UsePipes,
   ValidationPipeOptions,
 } from '@nestjs/common';
@@ -22,13 +20,18 @@ import {
   ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
 import { ValidationError } from 'class-validator';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
+import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
 
 const options: Omit<ValidationPipeOptions, 'exceptionFactory'> = {
   transform: true,
@@ -59,27 +62,58 @@ const customValidationPipe = new CustomValidationPipe({
 @WebSocketGateway({
   namespace: 'chats',
 })
-export class ChatMessageGateway implements OnGatewayConnection {
+export class ChatMessageGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   constructor(
     @Inject(CHAT_ROOM_REPOSITORY_DI_TOKEN)
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
+    @Inject(APP_JWT_SERVICE_DI_TOKEN)
+    private readonly appJwtService: AppJwtServicePort,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: Logger,
     private readonly commandBus: CommandBus,
   ) {}
 
   @WebSocketServer()
   server: Server;
 
-  handleConnection(socket: Socket) {
-    console.log(`on connect called : ${socket.id}`);
+  async handleConnection(socket: SocketWithUserDto) {
+    const authHeader = socket.handshake.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      this.logger.error(`Connection rejected: missing token ${socket.id}`);
+      socket.disconnect();
+      return;
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    try {
+      const payload = await this.appJwtService.verifyToken(token);
+
+      socket.user = { sub: payload.sub };
+      console.log(
+        `Connection accepted: ${socket.id}, userId: ${socket.user.sub}`,
+      );
+    } catch (error) {
+      this.logger.error(
+        `Token verification failed for socket ${socket.id}: ${error}`,
+      );
+      socket.disconnect();
+    }
+  }
+
+  async handleDisconnect(socket: SocketWithUserDto) {
+    console.log(`Disconnected: ${socket.id}`);
   }
 
   @UsePipes(customValidationPipe)
   @UseFilters(SocketCatchHttpExceptionFilter)
-  @UseGuards(SocketJwtBearerAuthGuard)
   @SubscribeMessage('enter_chat_room')
   async enterChat(
     @MessageBody() data: EnterChatDto,
-    @ConnectedSocket() socket: Socket,
+    @ConnectedSocket() socket: SocketWithUserDto,
   ) {
     const { roomId } = data;
 
@@ -94,7 +128,6 @@ export class ChatMessageGateway implements OnGatewayConnection {
 
   @UsePipes(customValidationPipe)
   @UseFilters(SocketCatchHttpExceptionFilter)
-  @UseGuards(SocketJwtBearerAuthGuard)
   @SubscribeMessage('send_message')
   async sendMessage(
     @MessageBody() data: CreateChatMessageDto,
