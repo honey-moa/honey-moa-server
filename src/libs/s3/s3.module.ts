@@ -6,7 +6,7 @@ import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-co
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { Key } from '@libs/core/app-config/types/app-config.type';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { S3_CLIENT_TOKEN, S3_SERVICE_TOKEN } from '@libs/s3/tokens/di.token';
+import { S3_CLIENT_TOKEN, S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { S3Service } from '@libs/s3/services/s3.service';
 
 @Module({
@@ -30,10 +30,10 @@ import { S3Service } from '@libs/s3/services/s3.service';
       },
     },
     {
-      provide: S3_SERVICE_TOKEN,
+      provide: S3_SERVICE_DI_TOKEN,
       useClass: S3Service,
     },
   ],
-  exports: [S3_SERVICE_TOKEN],
+  exports: [S3_SERVICE_DI_TOKEN],
 })
 export class S3Module {}
