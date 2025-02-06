@@ -1,4 +1,5 @@
 import { FindOneBlogByUserIdQuery } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query';
+import { UserEntity } from '@features/user/domain/user.entity';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -56,7 +57,16 @@ export class FindOneBlogByUserIdQueryHandler
       name: blog.name,
       connectionId: blog.connectionId,
       createdBy: blog.createdBy,
-      members: [blog.connection.requesterUser, blog.connection.requestedUser],
+      members: [
+        {
+          ...blog.connection.requesterUser,
+          profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requesterUser.profileImagePath}`,
+        },
+        {
+          ...blog.connection.requestedUser,
+          profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requestedUser.profileImagePath}`,
+        },
+      ],
       createdAt: blog.createdAt,
       updatedAt: blog.updatedAt,
     };

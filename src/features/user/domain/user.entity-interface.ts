@@ -14,6 +14,7 @@ export interface UserProps {
   password: string;
   loginType: UserLoginTypeUnion;
   isEmailVerified: boolean;
+  profileImagePath: string;
   mbti: UserMbtiUnion | null;
   deletedAt: Date | null;
 
@@ -32,4 +33,5 @@ export interface CreateUserProps {
 
 export interface HydratedUserEntityProps extends BaseEntityProps {
   nickname: string;
+  profileImageUrl: string;
 }
