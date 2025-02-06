@@ -204,23 +204,17 @@ export class UserEntity extends AggregateRoot<UserProps> {
   }
 
   get acceptedConnection(): UserConnectionEntity | null {
-    if (this.requestedConnections) {
-      return (
-        this.requestedConnections.find((connection) =>
-          connection.isConnected(),
-        ) || null
-      );
-    }
+    const acceptedFromRequested =
+      this.requestedConnections?.find((connection) =>
+        connection.isConnected(),
+      ) || null;
 
-    if (this.requesterConnections) {
-      return (
-        this.requesterConnections.find((connection) =>
-          connection.isConnected(),
-        ) || null
-      );
-    }
+    const acceptedFromRequester =
+      this.requesterConnections?.find((connection) =>
+        connection.isConnected(),
+      ) || null;
 
-    return null;
+    return acceptedFromRequested || acceptedFromRequester;
   }
 
   hasSentPendingConnection(): boolean {
