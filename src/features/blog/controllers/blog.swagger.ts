@@ -1,6 +1,8 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -29,6 +31,42 @@ export const ApiBlog: ApiOperator<keyof BlogController> = {
         ...apiOperationOptions,
       }),
       ApiBearerAuth('access-token'),
+      ApiConsumes('multipart/form-data'),
+      ApiBody({
+        description:
+          'Mime-Type은 image/png, image/jpeg 타입만 허용됨.<br>' +
+          '파일 크기는 10MB 까지만 허용됨.',
+        schema: {
+          type: 'object',
+          required: ['name', 'description', 'dDayStartDate'],
+          properties: {
+            backgroundImageFile: {
+              type: 'string',
+              format: 'binary',
+              nullable: true,
+            },
+            name: {
+              description: '블로그 이름',
+              type: 'string',
+              minLength: 1,
+              maxLength: 30,
+            },
+            description: {
+              description: '블로그 설명',
+              type: 'string',
+              minLength: 1,
+              maxLength: 255,
+            },
+            dDayStartDate: {
+              description:
+                '블로그 시작일. 시간 제외 날짜 값까지만 허용. ex)2025-02-06',
+              type: 'string',
+              format: 'date',
+              maxLength: 10,
+            },
+          },
+        },
+      }),
       ApiCreatedResponse({
         description: '정상적으로 블로그 생성됨.',
         type: IdResponseDto,

@@ -17,6 +17,7 @@ import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-u
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
+import { FormDataRequest } from 'nestjs-form-data';
 
 @ApiTags('Blog')
 @ApiInternalServerErrorBuilder()
@@ -31,14 +32,24 @@ export class BlogController {
   @ApiBlog.Create({
     summary: '블로그 생성 API',
   })
+  @FormDataRequest()
   @Post(routesV1.blog.create)
   async create(
     @User('sub') userId: AggregateID,
     @Body() requestBodyDto: CreateBlogRequestBodyDto,
   ): Promise<IdResponseDto> {
+    const { backgroundImageFile, ...rest } = requestBodyDto;
+
     const command = new CreateBlogCommand({
       userId,
-      ...requestBodyDto,
+      ...rest,
+      backgroundImageFile: backgroundImageFile
+        ? {
+            buffer: backgroundImageFile.buffer,
+            mimeType: backgroundImageFile.mimeType,
+            capacity: backgroundImageFile.size,
+          }
+        : null,
     });
 
     const result = await this.commandBus.execute<

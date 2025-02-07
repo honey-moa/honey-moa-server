@@ -1,3 +1,4 @@
+import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { FindOneBlogByUserIdQuery } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
@@ -55,6 +56,11 @@ export class FindOneBlogByUserIdQueryHandler
     return {
       id: blog.id,
       name: blog.name,
+      description: blog.description,
+      dDayStartDate: blog.dDayStartDate,
+      backgroundImageUrl: blog.backgroundImagePath
+        ? BlogEntity.BLOG_ATTACHMENT_URL + blog.backgroundImagePath
+        : null,
       connectionId: blog.connectionId,
       createdBy: blog.createdBy,
       members: [
