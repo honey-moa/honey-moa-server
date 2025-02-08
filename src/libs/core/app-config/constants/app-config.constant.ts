@@ -39,6 +39,15 @@ const AWS = {
   AWS_S3_BUCKET_URL: 'AWS_S3_BUCKET_URL',
 } as const;
 
+const USER = {
+  USER_ATTACHMENT_URL: 'USER_ATTACHMENT_URL',
+  USER_DEFAULT_PROFILE_IMAGE_PATH: 'USER_DEFAULT_PROFILE_IMAGE_PATH',
+} as const;
+
+const BLOG = {
+  BLOG_ATTACHMENT_URL: 'BLOG_ATTACHMENT_URL',
+} as const;
+
 /**
  * 각 주제에 맞게 묶어서 export 하지 않는 변수로 생성하고
  * ENV_KEY 객체에 spread
@@ -50,4 +59,6 @@ export const ENV_KEY = {
   ...EMAIL,
   ...DATABASE,
   ...AWS,
+  ...USER,
+  ...BLOG,
 } as const;

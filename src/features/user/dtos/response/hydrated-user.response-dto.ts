@@ -6,6 +6,7 @@ import {
 
 export interface CreateHydratedUserProps extends CreateBaseResponseDtoProps {
   nickname: string;
+  profileImageUrl: string;
 }
 
 export class HydratedUserResponseDto
@@ -20,9 +21,16 @@ export class HydratedUserResponseDto
   })
   readonly nickname: string;
 
+  @ApiProperty({
+    description: '유저 프로필 이미지 url',
+    format: 'uri',
+  })
+  readonly profileImageUrl: string;
+
   constructor(props: CreateHydratedUserProps) {
     super(props);
 
     this.nickname = props.nickname;
+    this.profileImageUrl = props.profileImageUrl;
   }
 }

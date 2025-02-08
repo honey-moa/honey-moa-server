@@ -15,6 +15,7 @@ export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   loginType: UserLoginTypeUnion;
   mbti: UserMbtiUnion | null;
   isEmailVerified: boolean;
+  profileImageUrl: string;
 }
 
 export class UserResponseDto
@@ -59,15 +60,29 @@ export class UserResponseDto
   })
   readonly isEmailVerified: boolean;
 
+  @ApiProperty({
+    description: '유저 프로필 이미지 url',
+    format: 'uri',
+  })
+  readonly profileImageUrl: string;
+
   constructor(create: CreateUserResponseDtoProps) {
     super(create);
 
-    const { nickname, email, loginType, mbti, isEmailVerified } = create;
+    const {
+      nickname,
+      email,
+      loginType,
+      mbti,
+      isEmailVerified,
+      profileImageUrl,
+    } = create;
 
     this.nickname = nickname;
     this.email = email;
     this.loginType = loginType;
     this.mbti = mbti;
     this.isEmailVerified = isEmailVerified;
+    this.profileImageUrl = profileImageUrl;
   }
 }

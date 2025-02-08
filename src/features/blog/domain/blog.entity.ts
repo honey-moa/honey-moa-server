@@ -14,6 +14,17 @@ import { UserEntity } from '@features/user/domain/user.entity';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
+  static readonly BLOG_ATTACHMENT_URL = process.env.BLOG_ATTACHMENT_URL;
+
+  private static readonly BLOG_ATTACHMENT_PATH_PREFIX = 'blog/';
+  static readonly BLOG_BACKGROUND_IMAGE_PATH_PREFIX =
+    BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + 'background-image/';
+
+  static readonly BLOG_BACKGROUND_IMAGE_MIME_TYPE: readonly string[] = [
+    'image/png',
+    'image/jpeg',
+  ];
+
   static create(create: CreateBlogProps): BlogEntity {
     const id = getTsid().toBigInt();
 
@@ -49,6 +60,12 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
 
   get members(): HydratedUserEntityProps[] | null {
     return this.props.members || null;
+  }
+
+  get backgroundImageUrl(): string | null {
+    return this.props.backgroundImagePath
+      ? BlogEntity.BLOG_ATTACHMENT_URL + this.props.backgroundImagePath
+      : null;
   }
 
   hydrateMember(user: UserEntity) {

@@ -14,6 +14,9 @@ export const blogSchema = baseSchema.extend({
   createdBy: z.bigint(),
   connectionId: z.bigint(),
   name: z.string().max(30),
+  description: z.string().max(255),
+  backgroundImagePath: z.nullable(z.string().max(255)),
+  dDayStartDate: z.string().max(20),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -34,6 +37,9 @@ export class BlogMapper
         connectionId: blog.connectionId,
         createdBy: blog.createdBy,
         name: blog.name,
+        description: blog.description,
+        backgroundImagePath: blog.backgroundImagePath,
+        dDayStartDate: blog.dDayStartDate,
         deletedAt: blog.deletedAt,
       },
       createdAt: blog.createdAt,
@@ -44,8 +50,10 @@ export class BlogMapper
   }
 
   toPersistence(entity: BlogEntity): BlogModel {
+    const props = entity.getProps();
+
     return blogSchema.parse({
-      ...entity.getProps(),
+      ...props,
     });
   }
 
@@ -55,10 +63,13 @@ export class BlogMapper
     const createdDtoProps: CreateBlogResponseDtoProps = {
       id: props.id,
       name: props.name,
+      description: props.description,
+      dDayStartDate: props.dDayStartDate,
+      backgroundImageUrl: entity.backgroundImageUrl,
       connectionId: props.connectionId,
       createdBy: props.createdBy,
-      createdAt: entity.createdAt,
-      updatedAt: entity.updatedAt,
+      createdAt: props.createdAt,
+      updatedAt: props.updatedAt,
     };
 
     if (props.members) {

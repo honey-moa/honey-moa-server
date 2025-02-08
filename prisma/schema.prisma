@@ -13,17 +13,18 @@ datasource db {
 }
 
 model User {
-  id              BigInt        @id(map: "pk_users")
-  nickname        String        @db.VarChar(20)
-  email           String        @db.VarChar(255)
-  password        String        @db.VarChar(255)
-  loginType       LoginTypeEnum @map("login_type")
-  role            UserRoleEnum  @default(USER)
-  isEmailVerified Boolean       @default(false) @map("is_email_verified") @db.Boolean
-  mbti            MbtiEnum?
-  createdAt       DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt       DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
-  deletedAt       DateTime?     @map("deleted_at") @db.Timestamptz(6)
+  id               BigInt        @id(map: "pk_users")
+  nickname         String        @db.VarChar(20)
+  email            String        @db.VarChar(255)
+  password         String        @db.VarChar(255)
+  loginType        LoginTypeEnum @map("login_type")
+  role             UserRoleEnum  @default(USER)
+  isEmailVerified  Boolean       @default(false) @map("is_email_verified") @db.Boolean
+  profileImagePath String        @map("profile_image_path") @db.VarChar(255)
+  mbti             MbtiEnum?
+  createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?     @map("deleted_at") @db.Timestamptz(6)
 
   userVerifyTokens     UserVerifyToken[]
   requestedConnections UserConnection[]  @relation("RequestedConnection")
@@ -71,13 +72,16 @@ model UserConnection {
 }
 
 model Blog {
-  id           BigInt    @id(map: "pk_blogs")
-  createdBy    BigInt    @map("created_by") @db.BigInt()
-  connectionId BigInt    @unique(map: "uq_blogs_connection_id") @map("connection_id") @db.BigInt()
-  name         String    @db.VarChar(30)
-  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt    DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
-  deletedAt    DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                  BigInt    @id(map: "pk_blogs")
+  createdBy           BigInt    @map("created_by") @db.BigInt()
+  connectionId        BigInt    @unique(map: "uq_blogs_connection_id") @map("connection_id") @db.BigInt()
+  name                String    @db.VarChar(30)
+  description         String    @db.VarChar(255)
+  dDayStartDate       String    @map("d_day_start_date") @db.VarChar(20)
+  backgroundImagePath String?   @map("background_image_path") @db.VarChar(255)
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt           DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   connection UserConnection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   blogPosts  BlogPost[]

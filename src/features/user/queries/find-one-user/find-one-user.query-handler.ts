@@ -6,6 +6,7 @@ import { isNil } from '@libs/utils/util';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
+import { UserEntity } from '@features/user/domain/user.entity';
 
 @QueryHandler(FindOneUserQuery)
 export class FindOneUserQueryHandler
@@ -32,6 +33,9 @@ export class FindOneUserQueryHandler
       });
     }
 
-    return user;
+    return {
+      ...user,
+      profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${user.profileImagePath}`,
+    };
   }
 }

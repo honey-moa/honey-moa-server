@@ -46,6 +46,11 @@ import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.
         [ENV_KEY.AWS_S3_REGION]: Joi.string().required(),
         [ENV_KEY.AWS_S3_BUCKET]: Joi.string().required(),
         [ENV_KEY.AWS_S3_BUCKET_URL]: Joi.string().required(),
+
+        [ENV_KEY.USER_ATTACHMENT_URL]: Joi.string().required(),
+        [ENV_KEY.USER_DEFAULT_PROFILE_IMAGE_PATH]: Joi.string().required(),
+
+        [ENV_KEY.BLOG_ATTACHMENT_URL]: Joi.string().required(),
       }),
     }),
   ],
