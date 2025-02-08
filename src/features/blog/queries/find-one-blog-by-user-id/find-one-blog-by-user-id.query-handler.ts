@@ -47,6 +47,8 @@ export class FindOneBlogByUserIdQueryHandler
       },
     });
 
+    console.log(blog);
+
     if (isNil(blog)) {
       throw new HttpNotFoundException({
         code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
@@ -59,7 +61,7 @@ export class FindOneBlogByUserIdQueryHandler
       description: blog.description,
       dDayStartDate: blog.dDayStartDate,
       backgroundImageUrl: blog.backgroundImagePath
-        ? BlogEntity.BLOG_ATTACHMENT_URL + blog.backgroundImagePath
+        ? `${BlogEntity.BLOG_ATTACHMENT_URL}/${blog.backgroundImagePath}`
         : null,
       connectionId: blog.connectionId,
       createdBy: blog.createdBy,
