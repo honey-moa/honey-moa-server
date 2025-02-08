@@ -28,6 +28,7 @@ export const userSchema = baseSchema.extend({
   loginType: z.nativeEnum(UserLoginType),
   role: z.nativeEnum(UserRole),
   isEmailVerified: z.boolean(),
+  profileImagePath: z.string().min(1).max(255),
   mbti: z.nativeEnum(UserMbti).nullable(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
@@ -64,6 +65,7 @@ export class UserMapper
         role: record.role,
         mbti: record.mbti,
         isEmailVerified: record.isEmailVerified,
+        profileImagePath: record.profileImagePath,
         deletedAt: record.deletedAt,
         email: record.email,
         password: record.password,
@@ -115,6 +117,9 @@ export class UserMapper
   toResponseDto(entity: UserEntity): UserResponseDto {
     const props = entity.getProps();
 
-    return new UserResponseDto(props);
+    return new UserResponseDto({
+      ...props,
+      profileImageUrl: entity.profileImageUrl,
+    });
   }
 }

@@ -10,6 +10,9 @@ export interface CreateBlogResponseDtoProps extends CreateBaseResponseDtoProps {
   createdBy: AggregateID;
   connectionId: AggregateID;
   name: string;
+  description: string;
+  dDayStartDate: string;
+  backgroundImageUrl: string | null;
   members?: HydratedUserResponseDto[];
 }
 
@@ -24,6 +27,26 @@ export class BlogResponseDto
     maxLength: 30,
   })
   readonly name: string;
+
+  @ApiProperty({
+    description: '블로그 설명',
+    minLength: 1,
+    maxLength: 255,
+  })
+  readonly description: string;
+
+  @ApiProperty({
+    description: 'D-day 시작일 (날짜까지만)',
+    format: 'date',
+  })
+  readonly dDayStartDate: string;
+
+  @ApiProperty({
+    description: '블로그 배경 이미지 url',
+    format: 'uri',
+    nullable: true,
+  })
+  readonly backgroundImageUrl: string | null;
 
   @ApiProperty({
     format: 'int64',

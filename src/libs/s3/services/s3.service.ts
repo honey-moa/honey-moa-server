@@ -78,7 +78,7 @@ export class S3Service implements S3ServicePort {
           };
     } = {};
 
-    const deleteKeys: string[] = [];
+    // const deleteKeys: string[] = [];
 
     await Promise.all(
       /**
@@ -106,7 +106,7 @@ export class S3Service implements S3ServicePort {
             )}/${newPath}`,
           };
 
-          deleteKeys.push(source);
+          // deleteKeys.push(source);
         } catch (err) {
           if (err instanceof S3ServiceException) {
             if (
@@ -123,7 +123,7 @@ export class S3Service implements S3ServicePort {
       }),
     );
 
-    await this.deleteFilesFromS3(deleteKeys);
+    // await this.deleteFilesFromS3(deleteKeys);
 
     return sourcePathInfosObject;
   }

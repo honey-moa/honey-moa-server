@@ -30,6 +30,14 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 
 export class UserEntity extends AggregateRoot<UserProps> {
+  static readonly USER_ATTACHMENT_URL = process.env.USER_ATTACHMENT_URL;
+  private static readonly USER_DEFAULT_PROFILE_IMAGE_PATH =
+    process.env.USER_DEFAULT_PROFILE_IMAGE_PATH;
+
+  private static readonly USER_ATTACHMENT_PATH_PREFIX = 'user/';
+  static readonly USER_PROFILE_ATTACHMENT_PATH_PREFIX =
+    UserEntity.USER_ATTACHMENT_PATH_PREFIX + 'profile-image/';
+
   static async create(create: CreateUserProps): Promise<UserEntity> {
     const id = getTsid().toBigInt();
 
@@ -38,6 +46,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
       role: UserRole.USER,
       isEmailVerified: false,
       deletedAt: null,
+      profileImagePath: `${UserEntity.USER_ATTACHMENT_URL}/${UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH}`,
     };
 
     const user = new UserEntity({ id, props });
@@ -107,9 +116,14 @@ export class UserEntity extends AggregateRoot<UserProps> {
     return {
       id: this.id,
       nickname: this.props.nickname,
+      profileImageUrl: this.profileImageUrl,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
+  }
+
+  get profileImageUrl(): string {
+    return `${UserEntity.USER_ATTACHMENT_URL}/${this.props.profileImagePath}`;
   }
 
   createRequestedUserConnection(

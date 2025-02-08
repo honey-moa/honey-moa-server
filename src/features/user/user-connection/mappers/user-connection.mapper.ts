@@ -101,6 +101,7 @@ export class UserConnectionMapper
       createDtoProps.requested = new HydratedUserResponseDto({
         id: requestedUser.id,
         nickname: requestedUser.nickname,
+        profileImageUrl: requestedUser.profileImageUrl,
         createdAt: requestedUser.createdAt,
         updatedAt: requestedUser.updatedAt,
       });
@@ -110,6 +111,7 @@ export class UserConnectionMapper
       createDtoProps.requester = new HydratedUserResponseDto({
         id: requesterUser.id,
         nickname: requesterUser.nickname,
+        profileImageUrl: requesterUser.profileImageUrl,
         createdAt: requesterUser.createdAt,
         updatedAt: requesterUser.updatedAt,
       });
