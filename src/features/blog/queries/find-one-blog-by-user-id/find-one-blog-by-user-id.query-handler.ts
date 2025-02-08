@@ -47,8 +47,6 @@ export class FindOneBlogByUserIdQueryHandler
       },
     });
 
-    console.log(blog);
-
     if (isNil(blog)) {
       throw new HttpNotFoundException({
         code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
