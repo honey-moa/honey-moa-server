@@ -43,6 +43,7 @@ export class BlogResponseDto
 
   @ApiProperty({
     description: '블로그 배경 이미지 url',
+    type: 'string',
     format: 'uri',
     nullable: true,
   })
@@ -69,9 +70,20 @@ export class BlogResponseDto
   constructor(create: CreateBlogResponseDtoProps) {
     super(create);
 
-    const { name, createdBy, connectionId, members } = create;
+    const {
+      name,
+      createdBy,
+      connectionId,
+      members,
+      description,
+      dDayStartDate,
+      backgroundImageUrl,
+    } = create;
 
     this.name = name;
+    this.description = description;
+    this.dDayStartDate = dDayStartDate;
+    this.backgroundImageUrl = backgroundImageUrl;
     this.createdBy = createdBy;
     this.connectionId = connectionId;
     this.members = members;

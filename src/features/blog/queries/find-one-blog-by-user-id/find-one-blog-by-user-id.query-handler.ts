@@ -59,7 +59,7 @@ export class FindOneBlogByUserIdQueryHandler
       description: blog.description,
       dDayStartDate: blog.dDayStartDate,
       backgroundImageUrl: blog.backgroundImagePath
-        ? BlogEntity.BLOG_ATTACHMENT_URL + blog.backgroundImagePath
+        ? `${BlogEntity.BLOG_ATTACHMENT_URL}/${blog.backgroundImagePath}`
         : null,
       connectionId: blog.connectionId,
       createdBy: blog.createdBy,
