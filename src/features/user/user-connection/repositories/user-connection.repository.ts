@@ -7,6 +7,7 @@ import { UserConnectionEntity } from '@features/user/user-connection/domain/user
 import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserConnectionRepository implements UserConnectionRepositoryPort {
@@ -14,6 +15,7 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
+    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: UserConnectionMapper,
   ) {}
 
@@ -40,9 +42,12 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
   async delete(entity: UserConnectionEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.userConnection.delete({
+    const result = await this.txHost.tx.userConnection.update({
       where: { id: entity.id },
+      data: { deletedAt: new Date() },
     });
+
+    await entity.publishEvents(this.eventEmitter);
 
     return result.id;
   }

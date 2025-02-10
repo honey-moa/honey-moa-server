@@ -21,6 +21,7 @@ import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connect
 import { UserConnectionRepository } from '@features/user/user-connection/repositories/user-connection.repository';
 import { FindUserConnectionsQueryHandler } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query-handler';
 import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
+import { DisconnectUserConnectionCommandHandler } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command-handler';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -32,6 +33,7 @@ const commandHandlers: Provider[] = [
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
   UpdateUserConnectionCommandHandler,
+  DisconnectUserConnectionCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [

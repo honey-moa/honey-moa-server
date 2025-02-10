@@ -30,6 +30,7 @@ export const routesV1 = {
     create: `${userRoot}/me/${userConnectionRoot}`,
     findConnections: `${userRoot}/me/${userConnectionRoot}`,
     update: `${userRoot}/me/${userConnectionRoot}/:id`,
+    disconnect: `${userRoot}/me/${userConnectionRoot}/:id`,
   },
 
   blog: {

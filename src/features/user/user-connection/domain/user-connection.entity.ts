@@ -1,5 +1,5 @@
 import { getTsid } from 'tsid-ts';
-import { AggregateID, Entity } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -13,8 +13,10 @@ import {
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { UserEntity } from '@features/user/domain/user.entity';
+import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import { UserConnectionDisconnectDomainEvent } from '@features/user/user-connection/domain/events/user-connection-disconnect.domain-event';
 
-export class UserConnectionEntity extends Entity<UserConnectionProps> {
+export class UserConnectionEntity extends AggregateRoot<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
     const id = getTsid().toBigInt();
 
@@ -102,6 +104,10 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
     }
 
     this.changeStatus(UserConnectionStatus.DISCONNECTED);
+
+    this.addEvent(
+      new UserConnectionDisconnectDomainEvent({ aggregateId: this.id }),
+    );
   }
 
   isPartOfConnection(userId: AggregateID): boolean {
