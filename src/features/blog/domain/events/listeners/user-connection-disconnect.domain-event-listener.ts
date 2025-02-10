@@ -28,6 +28,8 @@ export class UserConnectionDisconnectDomainEventListener {
       });
     }
 
+    blog.delete();
+
     await this.blogRepository.delete(blog);
   }
 }
