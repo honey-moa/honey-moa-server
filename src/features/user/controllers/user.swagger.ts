@@ -1,6 +1,8 @@
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiExtraModels,
   ApiNoContentResponse,
   ApiOkResponse,
@@ -21,6 +23,7 @@ import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
+import { UserMbti } from '@features/user/types/user.constant';
 
 export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
   FindUsers: (
@@ -278,6 +281,85 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
         {
           code: USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
           description: '인증 이메일 재전송 불가',
+        },
+      ]),
+    );
+  },
+
+  PatchUpdate: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiConsumes('multipart/form-data'),
+      ApiBody({
+        description:
+          'Mime-Type은 image/png, image/jpeg 타입만 허용됨.<br>' +
+          '파일 크기는 10MB 까지만 허용됨.',
+        schema: {
+          type: 'object',
+          properties: {
+            profileImageFile: {
+              type: 'string',
+              format: 'binary',
+            },
+            nickname: {
+              description: '유저 닉네임',
+              type: 'string',
+              minLength: 1,
+              maxLength: 20,
+            },
+            mbti: {
+              description: '유저 MBTI',
+              type: 'string',
+              enum: Object.values(UserMbti),
+            },
+          },
+        },
+      }),
+      ApiNoContentResponse({
+        description: '정상적으로 유저 정보 수정됨.',
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'Request parameter가 유효하지 않음',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'nickname',
+                value: 'qwdqwdqwasdasdasdasdasdasdasdasdasdadas',
+                reason:
+                  'nickname must be shorter than or equal to 20 characters',
+              },
+              {
+                property: 'mbti',
+                value: 'mbti',
+                reason:
+                  'mbti must be one of the following values: ENFP, ENFJ, INFP, INFJ, INTJ, ISTJ, ISFJ, ISFP, ESTP, ESTJ, ESFP, ESFJ, INTP, INFJ, INTJ, ISTJ, ISFJ, ISFP, ESTP, ESTJ, ESFP, ESFJ',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
+          description: '수정할 필드가 없음',
+        },
+      ]),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '유저를 찾을 수 없습니다.',
         },
       ]),
     );

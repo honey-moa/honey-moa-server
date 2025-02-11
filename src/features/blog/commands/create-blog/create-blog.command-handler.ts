@@ -96,7 +96,7 @@ export class CreateBlogCommandHandler
           mimeType,
           uploadType: AttachmentUploadType.FILE,
           location: new Location({
-            path: BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
+            path,
             url,
           }),
         });

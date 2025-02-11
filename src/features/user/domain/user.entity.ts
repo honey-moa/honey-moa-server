@@ -28,6 +28,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
+import { UserMbtiUnion } from '@features/user/types/user.type';
 
 export class UserEntity extends AggregateRoot<UserProps> {
   static readonly USER_ATTACHMENT_URL = process.env.USER_ATTACHMENT_URL;
@@ -35,8 +36,13 @@ export class UserEntity extends AggregateRoot<UserProps> {
     process.env.USER_DEFAULT_PROFILE_IMAGE_PATH;
 
   private static readonly USER_ATTACHMENT_PATH_PREFIX = 'user/';
-  static readonly USER_PROFILE_ATTACHMENT_PATH_PREFIX =
+  static readonly USER_PROFILE_IMAGE_PATH_PREFIX =
     UserEntity.USER_ATTACHMENT_PATH_PREFIX + 'profile-image/';
+
+  static readonly USER_PROFILE_IMAGE_MIME_TYPE: readonly string[] = [
+    'image/png',
+    'image/jpeg',
+  ];
 
   static async create(create: CreateUserProps): Promise<UserEntity> {
     const id = getTsid().toBigInt();
@@ -236,6 +242,34 @@ export class UserEntity extends AggregateRoot<UserProps> {
       this.requesterConnections?.some((connection) => connection.isPending()) ||
       false
     );
+  }
+
+  editNickname(nickname: string) {
+    if (!Guard.lengthIsBetween(nickname, 1, 20)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'nickname must be between 1 and 20 characters',
+      });
+    }
+
+    this.props.nickname = nickname;
+  }
+
+  editMbti(mbti: UserMbtiUnion) {
+    this.props.mbti = mbti;
+  }
+
+  editProfileImagePath(profileImagePath: string) {
+    if (
+      !profileImagePath.startsWith(UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX)
+    ) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: `profileImagePath must start with ${UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX}`,
+      });
+    }
+
+    this.props.profileImagePath = profileImagePath;
   }
 
   get requestedPendingConnections(): UserConnectionEntity[] | null {

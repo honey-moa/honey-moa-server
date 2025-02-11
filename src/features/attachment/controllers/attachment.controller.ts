@@ -25,8 +25,8 @@ export class AttachmentController {
     @Body() requestDto: CreateAttachmentRequestBodyDto,
   ): Promise<string[]> {
     const command = new CreateAttachmentsCommand({
+      userId,
       files: requestDto.files.map((file) => ({
-        userId,
         mimeType: file.mimeType,
         capacity: file.size,
         buffer: file.buffer,
