@@ -9,7 +9,7 @@ import { CreateBlogPostCommandHandler } from '@features/blog-post/commands/creat
 import { DeleteBlogPostCommandHandler } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command-handler';
 import { PatchUpdateBlogPostCommandHandler } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command-handler';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
-import { BlogDeletedDomainEventListener } from '@features/blog-post/domain/events/listeners/blog-deleted.domain-event-listener';
+import { BlogPostBlogDeletedDomainEventListener } from '@features/blog-post/domain/events/listeners/blog-post-blog-deleted.domain-event-listener';
 import { BlogPostMapper } from '@features/blog-post/mappers/blog-post.mapper';
 import { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
 import { BlogPostRepository } from '@features/blog-post/repositories/blog-post.repository';
@@ -48,7 +48,9 @@ const repositories: Provider[] = [
   },
 ];
 
-const domainEventListeners: Provider[] = [BlogDeletedDomainEventListener];
+const domainEventListeners: Provider[] = [
+  BlogPostBlogDeletedDomainEventListener,
+];
 
 @Module({
   imports: [BlogModule, TagModule, UserModule, AttachmentModule, S3Module],

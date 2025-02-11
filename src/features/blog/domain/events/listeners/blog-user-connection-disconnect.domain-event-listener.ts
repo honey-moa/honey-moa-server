@@ -8,7 +8,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
-export class UserConnectionDisconnectDomainEventListener {
+export class BlogUserConnectionDisconnectDomainEventListener {
   constructor(
     @Inject(BLOG_REPOSITORY_DI_TOKEN)
     private readonly blogRepository: BlogRepositoryPort,

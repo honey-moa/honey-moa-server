@@ -6,7 +6,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
-export class BlogDeletedDomainEventListener {
+export class BlogPostBlogDeletedDomainEventListener {
   constructor(
     @Inject(BLOG_POST_REPOSITORY_DI_TOKEN)
     private readonly blogPostRepository: BlogPostRepositoryPort,
