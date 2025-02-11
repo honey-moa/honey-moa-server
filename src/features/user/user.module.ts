@@ -21,14 +21,11 @@ import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connect
 import { UserConnectionRepository } from '@features/user/user-connection/repositories/user-connection.repository';
 import { FindUserConnectionsQueryHandler } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query-handler';
 import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
-<<<<<<< HEAD
 import { DisconnectUserConnectionCommandHandler } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command-handler';
-=======
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { PatchUpdateUserCommandHandler } from '@features/user/commands/patch-update-user/patch-update-user.command-handler';
 import { S3Module } from '@libs/s3/s3.module';
 import { AttachmentModule } from '@features/attachment/attachment.module';
->>>>>>> ee7140e8a5808e77b0e573a4423458a5fc733d5a
 
 const controllers = [UserController, UserConnectionController];
 
@@ -40,11 +37,8 @@ const commandHandlers: Provider[] = [
   UpdateUserPasswordCommandHandler,
   CreateUserConnectionCommandHandler,
   UpdateUserConnectionCommandHandler,
-<<<<<<< HEAD
   DisconnectUserConnectionCommandHandler,
-=======
   PatchUpdateUserCommandHandler,
->>>>>>> ee7140e8a5808e77b0e573a4423458a5fc733d5a
 ];
 
 const queryHandlers: Provider[] = [
