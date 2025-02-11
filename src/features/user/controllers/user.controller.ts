@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Put,
   Query,
@@ -36,6 +37,9 @@ import { SetPagination } from '@libs/interceptors/pagination/decorators/paginati
 import { HandlerReturnType, Paginated } from '@libs/types/type';
 import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
 import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
+import { FormDataRequest } from 'nestjs-form-data';
+import { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
+import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -150,6 +154,33 @@ export class UserController {
       userId: BigInt(id),
       token,
       ...requestBodyDto,
+    });
+
+    await this.commandBus.execute(command);
+  }
+
+  @ApiUser.PatchUpdate({
+    summary: '유저 정보 PatchUpdate API',
+  })
+  @FormDataRequest()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch(routesV1.user.patchUpdate)
+  async patchUpdate(
+    @User('sub') userId: AggregateID,
+    @Body() requestBodyDto: PatchUpdateUserRequestBodyDto,
+  ): Promise<void> {
+    const { profileImageFile } = requestBodyDto;
+
+    const command = new PatchUpdateUserCommand({
+      userId,
+      ...requestBodyDto,
+      profileImageFile: profileImageFile
+        ? {
+            mimeType: profileImageFile.mimeType,
+            capacity: profileImageFile.size,
+            buffer: profileImageFile.buffer,
+          }
+        : undefined,
     });
 
     await this.commandBus.execute(command);
