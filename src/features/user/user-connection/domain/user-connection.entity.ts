@@ -14,7 +14,7 @@ import { UserConnectionStatus } from '@features/user/user-connection/types/user.
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { UserConnectionDisconnectDomainEvent } from '@features/user/user-connection/domain/events/user-connection-disconnect.domain-event';
+import { UserConnectionDisconnectedDomainEvent } from '@features/user/user-connection/domain/events/user-connection-disconnected.domain-event';
 
 export class UserConnectionEntity extends AggregateRoot<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {
@@ -106,7 +106,7 @@ export class UserConnectionEntity extends AggregateRoot<UserConnectionProps> {
     this.changeStatus(UserConnectionStatus.DISCONNECTED);
 
     this.addEvent(
-      new UserConnectionDisconnectDomainEvent({ aggregateId: this.id }),
+      new UserConnectionDisconnectedDomainEvent({ aggregateId: this.id }),
     );
   }
 
