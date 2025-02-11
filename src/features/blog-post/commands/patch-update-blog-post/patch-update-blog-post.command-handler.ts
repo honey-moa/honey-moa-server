@@ -117,19 +117,19 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.switchToPrivate();
     }
 
-    if (title) {
+    if (!isNil(title)) {
       blogPost.editTitle(title);
     }
 
-    if (date) {
+    if (!isNil(date)) {
       blogPost.editDate(date);
     }
 
-    if (location) {
+    if (!isNil(location)) {
       blogPost.editLocation(location);
     }
 
-    if (contents) {
+    if (!isNil(contents)) {
       const attachmentIds = blogPost.blogPostAttachments.map(
         (blogPostAttachment) => blogPostAttachment.attachmentId,
       );
@@ -175,7 +175,7 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.editContents(contents);
     }
 
-    if (tagNames) {
+    if (!isNil(tagNames)) {
       await this.blogPostTagRepository.bulkDeleteByBlogPostId(blogPostId);
 
       if (tagNames.length) {
