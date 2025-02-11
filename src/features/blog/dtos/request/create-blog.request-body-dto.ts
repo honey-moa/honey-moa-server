@@ -40,11 +40,12 @@ export class CreateBlogRequestBodyDto {
   @ApiProperty({
     description: '블로그 배경 이미지 파일',
     nullable: true,
+    default: null,
   })
   @IsFile()
   @HasMimeType([...BlogEntity.BLOG_BACKGROUND_IMAGE_MIME_TYPE])
   @MaxFileSize(AttachmentEntity.ATTACHMENT_CAPACITY_MAX)
   @IsNullable()
   @Transform(({ value }) => (value ? value : null))
-  backgroundImageFile: MemoryStoredFile | null;
+  backgroundImageFile: MemoryStoredFile | null = null;
 }
