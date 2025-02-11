@@ -52,7 +52,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
       role: UserRole.USER,
       isEmailVerified: false,
       deletedAt: null,
-      profileImagePath: `${UserEntity.USER_ATTACHMENT_URL}/${UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH}`,
+      profileImagePath: String(UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH),
     };
 
     const user = new UserEntity({ id, props });
