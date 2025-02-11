@@ -238,6 +238,10 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
           },
         },
         {
+          code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
+          description: 'update하는 필드가 하나도 없음',
+        },
+        {
           code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
           description: '그 외 기타 등등 많음',
           additionalErrors: {

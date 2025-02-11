@@ -25,7 +25,7 @@ export class CreateAttachmentsCommandHandler
 
   @Transactional()
   async execute(command: CreateAttachmentsCommand): Promise<string[]> {
-    const { files } = command;
+    const { files, userId } = command;
 
     const uploadedFiles = await Promise.all(
       files.map(async (file) => {
@@ -42,7 +42,7 @@ export class CreateAttachmentsCommandHandler
 
         return {
           id,
-          userId: file.userId,
+          userId,
           path,
           url,
           mimeType: file.mimeType,

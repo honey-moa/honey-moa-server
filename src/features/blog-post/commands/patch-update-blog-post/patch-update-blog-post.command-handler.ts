@@ -20,6 +20,7 @@ import { UserConnectionRepositoryPort } from '@features/user/user-connection/rep
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
@@ -70,6 +71,12 @@ export class PatchUpdateBlogPostCommandHandler
       fileUrls,
     } = command;
 
+    if ([title, contents, date, location, tagNames, fileUrls].every(isNil)) {
+      throw new HttpBadRequestException({
+        code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
+      });
+    }
+
     const blog = await this.blogRepository.findOneById(blogId);
 
     if (isNil(blog)) {
@@ -117,19 +124,19 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.switchToPrivate();
     }
 
-    if (title) {
+    if (!isNil(title)) {
       blogPost.editTitle(title);
     }
 
-    if (date) {
+    if (!isNil(date)) {
       blogPost.editDate(date);
     }
 
-    if (location) {
+    if (!isNil(location)) {
       blogPost.editLocation(location);
     }
 
-    if (contents) {
+    if (!isNil(contents)) {
       const attachmentIds = blogPost.blogPostAttachments.map(
         (blogPostAttachment) => blogPostAttachment.attachmentId,
       );
@@ -175,7 +182,7 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.editContents(contents);
     }
 
-    if (tagNames) {
+    if (!isNil(tagNames)) {
       await this.blogPostTagRepository.bulkDeleteByBlogPostId(blogPostId);
 
       if (tagNames.length) {
