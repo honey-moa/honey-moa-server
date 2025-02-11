@@ -61,6 +61,11 @@ const customValidationPipe = new CustomValidationPipe({
 
 @WebSocketGateway({
   namespace: 'chats',
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
 })
 export class ChatMessageGateway
   implements OnGatewayConnection, OnGatewayDisconnect
