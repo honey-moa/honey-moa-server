@@ -59,6 +59,8 @@ export class PatchUpdateUserCommandHandler
     }
 
     if (!isNil(profileImageFile)) {
+      await this.deleteProfileImage(user);
+
       /**
        * @todo 현재 파일에 관련한 중복 로직이 많음.
        * 또한 현재 Attachment를 생성하는 방식은 CreateAttachmentHandler
@@ -105,8 +107,32 @@ export class PatchUpdateUserCommandHandler
           stack: error.stack,
         });
       }
+    } else if (profileImageFile === null) {
+      await this.deleteProfileImage(user);
     }
 
     await this.userRepository.update(user);
+  }
+
+  private async deleteProfileImage(user: UserEntity): Promise<void> {
+    const profileImageUrl = user.profileImageUrl;
+
+    if (!isNil(profileImageUrl)) {
+      const existingAttachment = (
+        await this.attachmentRepository.findByUrls([profileImageUrl])
+      )[0];
+
+      if (isNil(existingAttachment)) {
+        return;
+      }
+
+      await this.s3Service.deleteFilesFromS3([existingAttachment.path]);
+
+      existingAttachment.delete();
+
+      await this.attachmentRepository.delete(existingAttachment);
+
+      user.editProfileImagePath(null);
+    }
   }
 }

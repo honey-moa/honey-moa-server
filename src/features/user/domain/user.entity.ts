@@ -261,8 +261,9 @@ export class UserEntity extends AggregateRoot<UserProps> {
     this.props.mbti = mbti;
   }
 
-  editProfileImagePath(profileImagePath: string) {
+  editProfileImagePath(profileImagePath: string | null) {
     if (
+      !isNil(profileImagePath) &&
       !profileImagePath.startsWith(UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX)
     ) {
       throw new HttpInternalServerErrorException({

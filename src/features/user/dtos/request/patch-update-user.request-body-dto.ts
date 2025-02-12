@@ -30,7 +30,9 @@ export class PatchUpdateUserRequestBodyDto {
   mbti?: UserMbtiUnion;
 
   @ApiPropertyOptional({
-    description: '유저 프로필 이미지 파일',
+    description:
+      '유저 프로필 이미지 파일. empty string을 보낼 경우 null로 판단해 프로필 이미지를 아예 삭제함.',
+    nullable: true,
   })
   @IsFile()
   @HasMimeType([...UserEntity.USER_PROFILE_IMAGE_MIME_TYPE])
