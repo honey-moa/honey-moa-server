@@ -12,6 +12,7 @@ import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
+import { isNil } from '@libs/utils/util';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
   static readonly BLOG_ATTACHMENT_URL = process.env.BLOG_ATTACHMENT_URL;
@@ -62,9 +63,13 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return this.props.members || null;
   }
 
+  get backgroundImagePath(): string | null {
+    return this.props.backgroundImagePath;
+  }
+
   get backgroundImageUrl(): string | null {
-    return this.props.backgroundImagePath
-      ? BlogEntity.BLOG_ATTACHMENT_URL + this.props.backgroundImagePath
+    return this.backgroundImagePath
+      ? `${BlogEntity.BLOG_ATTACHMENT_URL}/${this.backgroundImagePath}`
       : null;
   }
 
@@ -90,8 +95,9 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     this.props.description = description;
   }
 
-  editBackgroundImagePath(backgroundImagePath: string) {
+  editBackgroundImagePath(backgroundImagePath: string | null) {
     if (
+      !isNil(backgroundImagePath) &&
       !backgroundImagePath.startsWith(
         BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
       )

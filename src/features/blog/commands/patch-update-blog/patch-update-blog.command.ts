@@ -9,7 +9,7 @@ export class PatchUpdateBlogCommand extends Command implements ICommand {
     buffer: Buffer;
     capacity: number;
     mimeType: string;
-  };
+  } | null;
   readonly name?: string;
   readonly description?: string;
   readonly dDayStartDate?: string;

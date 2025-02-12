@@ -119,7 +119,9 @@ export class BlogController {
             capacity: backgroundImageFile.size,
             buffer: backgroundImageFile.buffer,
           }
-        : undefined,
+        : backgroundImageFile === null
+          ? null
+          : undefined,
     });
 
     await this.commandBus.execute(command);

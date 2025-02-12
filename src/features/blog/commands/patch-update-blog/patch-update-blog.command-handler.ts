@@ -94,6 +94,8 @@ export class PatchUpdateBlogCommandHandler
     }
 
     if (!isNil(backgroundImageFile)) {
+      await this.deleteBackgroundImage(blog);
+
       /**
        * @todo 현재 파일에 관련한 중복 로직이 많음.
        * 또한 현재 Attachment를 생성하는 방식은 CreateAttachmentHandler
@@ -140,8 +142,32 @@ export class PatchUpdateBlogCommandHandler
           stack: error.stack,
         });
       }
+    } else if (backgroundImageFile === null) {
+      await this.deleteBackgroundImage(blog);
     }
 
     await this.blogRepository.update(blog);
+  }
+
+  private async deleteBackgroundImage(blog: BlogEntity): Promise<void> {
+    const backgroundImageUrl = blog.backgroundImageUrl;
+
+    if (!isNil(backgroundImageUrl)) {
+      const existingAttachment = (
+        await this.attachmentRepository.findByUrls([backgroundImageUrl])
+      )[0];
+
+      if (isNil(existingAttachment)) {
+        return;
+      }
+
+      await this.s3Service.deleteFilesFromS3([existingAttachment.path]);
+
+      existingAttachment.delete();
+
+      await this.attachmentRepository.delete(existingAttachment);
+
+      blog.editBackgroundImagePath(null);
+    }
   }
 }

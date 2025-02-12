@@ -175,7 +175,6 @@ export const ApiBlog: ApiOperator<keyof BlogController> = {
       }),
       ApiBearerAuth('access-token'),
       ApiConsumes('multipart/form-data'),
-      ApiConsumes('multipart/form-data'),
       ApiBody({
         description:
           'Mime-Type은 image/png, image/jpeg 타입만 허용됨.<br>' +
@@ -186,6 +185,9 @@ export const ApiBlog: ApiOperator<keyof BlogController> = {
             backgroundImageFile: {
               type: 'string',
               format: 'binary',
+              nullable: true,
+              description:
+                '블로그 배경 이미지 파일. empty string을 보낼 경우 null로 판단해 배경 사진을 아예 삭제함.',
             },
             name: {
               description: '블로그 이름',
