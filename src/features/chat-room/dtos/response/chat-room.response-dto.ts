@@ -19,12 +19,14 @@ export class ChatRoomResponseDto
   @ApiProperty({
     format: 'int64',
     description: '채팅방 생성 유저 ID',
+    type: 'string',
   })
   readonly createdBy: AggregateID;
 
   @ApiProperty({
     format: 'int64',
     description: '유저 커넥션 ID',
+    type: 'string',
   })
   readonly connectionId: AggregateID;
 

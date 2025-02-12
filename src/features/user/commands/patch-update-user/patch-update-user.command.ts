@@ -11,7 +11,7 @@ export class PatchUpdateUserCommand extends Command implements ICommand {
     mimeType: string;
     capacity: number;
     buffer: Buffer;
-  };
+  } | null;
 
   constructor(props: CommandProps<PatchUpdateUserCommand>) {
     super(props);
