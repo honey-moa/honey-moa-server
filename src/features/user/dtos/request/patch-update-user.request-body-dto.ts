@@ -2,7 +2,9 @@ import { AttachmentEntity } from '@features/attachment/domain/attachment.entity'
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserMbti } from '@features/user/types/user.constant';
 import { UserMbtiUnion } from '@features/user/types/user.type';
+import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 import { IsEnum, IsOptional, Length } from 'class-validator';
 import {
   HasMimeType,
@@ -34,5 +36,7 @@ export class PatchUpdateUserRequestBodyDto {
   @HasMimeType([...UserEntity.USER_PROFILE_IMAGE_MIME_TYPE])
   @MaxFileSize(AttachmentEntity.ATTACHMENT_CAPACITY_MAX)
   @IsOptional()
-  profileImageFile?: MemoryStoredFile;
+  @IsNullable()
+  @Transform(({ value }) => (value === '' ? null : value))
+  profileImageFile?: MemoryStoredFile | null;
 }

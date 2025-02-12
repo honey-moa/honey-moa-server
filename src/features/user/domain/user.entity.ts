@@ -128,8 +128,10 @@ export class UserEntity extends AggregateRoot<UserProps> {
     };
   }
 
-  get profileImageUrl(): string {
-    return `${UserEntity.USER_ATTACHMENT_URL}/${this.props.profileImagePath}`;
+  get profileImageUrl(): string | null {
+    return this.props.profileImagePath
+      ? `${UserEntity.USER_ATTACHMENT_URL}/${this.props.profileImagePath}`
+      : null;
   }
 
   createRequestedUserConnection(

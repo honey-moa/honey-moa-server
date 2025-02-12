@@ -180,7 +180,9 @@ export class UserController {
             capacity: profileImageFile.size,
             buffer: profileImageFile.buffer,
           }
-        : undefined,
+        : profileImageFile === null
+          ? null
+          : undefined,
     });
 
     await this.commandBus.execute(command);
