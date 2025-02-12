@@ -14,6 +14,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { isNil } from '@libs/utils/util';
+import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { getTsid } from 'tsid-ts';
@@ -31,6 +32,7 @@ export class PatchUpdateUserCommandHandler
     private readonly attachmentRepository: AttachmentRepositoryPort,
   ) {}
 
+  @Transactional()
   async execute(command: PatchUpdateUserCommand): Promise<void> {
     const { userId, nickname, mbti, profileImageFile } = command;
 
