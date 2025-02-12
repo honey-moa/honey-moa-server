@@ -34,8 +34,9 @@ export class UserConnectionResponseDto
   @ApiProperty({
     description: '요청자 아이디',
     format: 'int64',
+    type: 'string',
   })
-  requesterId: string;
+  requesterId: AggregateID;
 
   @ApiPropertyOptional({
     description: '요청 수신자 정보',
@@ -46,8 +47,9 @@ export class UserConnectionResponseDto
   @ApiProperty({
     description: '요청 수신자 아이디',
     format: 'int64',
+    type: 'string',
   })
-  requestedId: string;
+  requestedId: AggregateID;
 
   @ApiProperty({
     description: '요청 상태',
@@ -61,9 +63,9 @@ export class UserConnectionResponseDto
     const { requester, requesterId, requested, requestedId, status } = props;
 
     this.requester = requester;
-    this.requesterId = requesterId.toString();
+    this.requesterId = requesterId;
     this.requested = requested;
-    this.requestedId = requestedId.toString();
+    this.requestedId = requestedId;
     this.status = status;
   }
 }
