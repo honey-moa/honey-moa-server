@@ -88,7 +88,7 @@ export class PatchUpdateUserCommandHandler
           mimeType,
           uploadType: AttachmentUploadType.FILE,
           location: new Location({
-            path: UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX,
+            path,
             url,
           }),
         });
