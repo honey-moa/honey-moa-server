@@ -75,6 +75,7 @@ export class CreateBlogPostRequestBodyDto {
     default: [],
     uniqueItems: true,
   })
+  @Length(1, 20, { each: true })
   @ArrayUnique()
   fileUrls: string[] = [];
 }
