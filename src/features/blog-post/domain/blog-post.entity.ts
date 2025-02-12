@@ -18,6 +18,11 @@ import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/bl
 import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
+  static BLOG_POST_TITLE_LENGTH = {
+    MIN: 1,
+    MAX: 20,
+  } as const;
+
   static create(create: CreateBlogPostProps): BlogPostEntity {
     const id = getTsid().toBigInt();
 
