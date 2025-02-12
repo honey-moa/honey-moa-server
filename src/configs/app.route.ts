@@ -37,6 +37,7 @@ export const routesV1 = {
     root: blogRoot,
     create: `${blogRoot}`,
     findOneByUserId: `${userRoot}/:id/blog`,
+    patchUpdate: `${blogRoot}/:id`,
   },
 
   blogPost: {

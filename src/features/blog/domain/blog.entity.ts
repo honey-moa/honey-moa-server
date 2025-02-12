@@ -68,6 +68,56 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       : null;
   }
 
+  editName(name: string) {
+    if (!Guard.lengthIsBetween(name, 1, 30)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'name must be between 1 and 30 characters',
+      });
+    }
+
+    this.props.name = name;
+  }
+
+  editDescription(description: string) {
+    if (!Guard.lengthIsBetween(description, 1, 255)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'description must be between 1 and 255 characters',
+      });
+    }
+
+    this.props.description = description;
+  }
+
+  editBackgroundImagePath(backgroundImagePath: string) {
+    if (
+      !backgroundImagePath.startsWith(
+        BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
+      )
+    ) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx:
+          'backgroundImagePath must start with ' +
+          BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
+      });
+    }
+
+    this.props.backgroundImagePath = backgroundImagePath;
+  }
+
+  editDDayStartDate(dDayStartDate: string) {
+    if (!Guard.lengthIsBetween(dDayStartDate, 1, 20)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: 'dDayStartDate must be between 1 and 20 characters',
+      });
+    }
+
+    this.props.dDayStartDate = dDayStartDate;
+  }
+
   hydrateMember(user: UserEntity) {
     (this.props.members = this.props.members ?? []).push(user.hydrateProps);
   }
