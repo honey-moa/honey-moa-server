@@ -305,6 +305,9 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
             profileImageFile: {
               type: 'string',
               format: 'binary',
+              nullable: true,
+              description:
+                '유저 프로필 이미지 파일. empty string을 보낼 경우 null로 판단해 프로필 이미지를 아예 삭제함.',
             },
             nickname: {
               description: '유저 닉네임',

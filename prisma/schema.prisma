@@ -20,7 +20,7 @@ model User {
   loginType        LoginTypeEnum @map("login_type")
   role             UserRoleEnum  @default(USER)
   isEmailVerified  Boolean       @default(false) @map("is_email_verified") @db.Boolean
-  profileImagePath String        @map("profile_image_path") @db.VarChar(255)
+  profileImagePath String?       @map("profile_image_path") @db.VarChar(255)
   mbti             MbtiEnum?
   createdAt        DateTime      @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt        DateTime      @default(now()) @map("updated_at") @db.Timestamptz(6)

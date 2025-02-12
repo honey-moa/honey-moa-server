@@ -12,6 +12,7 @@ import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { isNil } from '@libs/utils/util';
+import { Transactional } from '@nestjs-cls/transactional';
 
 @CommandHandler(SendVerificationEmailCommand)
 export class SendVerificationEmailCommandHandler
@@ -24,6 +25,7 @@ export class SendVerificationEmailCommandHandler
     private readonly emailService: EmailServicePort,
   ) {}
 
+  @Transactional()
   async execute(command: SendVerificationEmailCommand): Promise<void> {
     const { userId } = command;
 

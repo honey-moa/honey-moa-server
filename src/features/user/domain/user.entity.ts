@@ -52,7 +52,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
       role: UserRole.USER,
       isEmailVerified: false,
       deletedAt: null,
-      profileImagePath: `${UserEntity.USER_ATTACHMENT_URL}/${UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH}`,
+      profileImagePath: String(UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH),
     };
 
     const user = new UserEntity({ id, props });
@@ -128,8 +128,10 @@ export class UserEntity extends AggregateRoot<UserProps> {
     };
   }
 
-  get profileImageUrl(): string {
-    return `${UserEntity.USER_ATTACHMENT_URL}/${this.props.profileImagePath}`;
+  get profileImageUrl(): string | null {
+    return this.props.profileImagePath
+      ? `${UserEntity.USER_ATTACHMENT_URL}/${this.props.profileImagePath}`
+      : null;
   }
 
   createRequestedUserConnection(
@@ -259,8 +261,9 @@ export class UserEntity extends AggregateRoot<UserProps> {
     this.props.mbti = mbti;
   }
 
-  editProfileImagePath(profileImagePath: string) {
+  editProfileImagePath(profileImagePath: string | null) {
     if (
+      !isNil(profileImagePath) &&
       !profileImagePath.startsWith(UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX)
     ) {
       throw new HttpInternalServerErrorException({

@@ -3,14 +3,19 @@ import { Location } from '@features/attachment/domain/value-objects/location.val
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
-import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
-import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
+import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blog/patch-update-blog.command';
+import { BlogEntity } from '@features/blog/domain/blog.entity';
+import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
+import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
+import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { isNil } from '@libs/utils/util';
@@ -19,13 +24,15 @@ import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { getTsid } from 'tsid-ts';
 
-@CommandHandler(PatchUpdateUserCommand)
-export class PatchUpdateUserCommandHandler
-  implements ICommandHandler<PatchUpdateUserCommand, void>
+@CommandHandler(PatchUpdateBlogCommand)
+export class PatchUpdateBlogCommandHandler
+  implements ICommandHandler<PatchUpdateBlogCommand, void>
 {
   constructor(
-    @Inject(USER_REPOSITORY_DI_TOKEN)
-    private readonly userRepository: UserRepositoryPort,
+    @Inject(BLOG_REPOSITORY_DI_TOKEN)
+    private readonly blogRepository: BlogRepositoryPort,
+    @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
+    private readonly userConnectionRepository: UserConnectionRepositoryPort,
     @Inject(S3_SERVICE_DI_TOKEN)
     private readonly s3Service: S3ServicePort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
@@ -33,33 +40,63 @@ export class PatchUpdateUserCommandHandler
   ) {}
 
   @Transactional()
-  async execute(command: PatchUpdateUserCommand): Promise<void> {
-    const { userId, nickname, mbti, profileImageFile } = command;
+  async execute(command: PatchUpdateBlogCommand): Promise<void> {
+    const {
+      userId,
+      blogId,
+      backgroundImageFile,
+      name,
+      description,
+      dDayStartDate,
+    } = command;
 
-    if ([nickname, mbti, profileImageFile].every(isNil)) {
+    if ([backgroundImageFile, name, description, dDayStartDate].every(isNil)) {
       throw new HttpBadRequestException({
         code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
       });
     }
 
-    const user = await this.userRepository.findOneById(userId);
+    const blog = await this.blogRepository.findOneById(blogId);
 
-    if (isNil(user)) {
+    if (isNil(blog)) {
       throw new HttpNotFoundException({
         code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
       });
     }
 
-    if (!isNil(nickname)) {
-      user.editNickname(nickname);
+    const userConnection =
+      await this.userConnectionRepository.findOneByIdAndStatus(
+        blog.connectionId,
+        UserConnectionStatus.ACCEPTED,
+      );
+
+    if (isNil(userConnection)) {
+      throw new HttpInternalServerErrorException({
+        code: COMMON_ERROR_CODE.SERVER_ERROR,
+        ctx: '블로그가 존재하는데 유저 커넥션이 존재하지 않는 것은 에러',
+      });
     }
 
-    if (!isNil(mbti)) {
-      user.editMbti(mbti);
+    if (!userConnection.isPartOfConnection(userId)) {
+      throw new HttpForbiddenException({
+        code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+      });
     }
 
-    if (!isNil(profileImageFile)) {
-      await this.deleteProfileImage(user);
+    if (!isNil(description)) {
+      blog.editDescription(description);
+    }
+
+    if (!isNil(dDayStartDate)) {
+      blog.editDDayStartDate(dDayStartDate);
+    }
+
+    if (!isNil(name)) {
+      blog.editName(name);
+    }
+
+    if (!isNil(backgroundImageFile)) {
+      await this.deleteBackgroundImage(blog);
 
       /**
        * @todo 현재 파일에 관련한 중복 로직이 많음.
@@ -69,10 +106,10 @@ export class PatchUpdateUserCommandHandler
        * Attachment의 LifeCycle에 관한 책임을 갖고 있는 중간 다리 역할인 AttachmentService가 필요해 보임.
        * 추후에 수정 필요.
        */
-      const { mimeType, capacity, buffer } = profileImageFile;
+      const { mimeType, capacity, buffer } = backgroundImageFile;
 
       const id = getTsid().toBigInt();
-      const path = UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX + id;
+      const path = BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX + id;
 
       const url = await this.s3Service.uploadFileToS3(
         {
@@ -97,7 +134,7 @@ export class PatchUpdateUserCommandHandler
 
         await this.attachmentRepository.create(attachment);
 
-        user.editProfileImagePath(path);
+        blog.editBackgroundImagePath(path);
       } catch (error: any) {
         await this.s3Service.deleteFilesFromS3([path]);
 
@@ -107,19 +144,19 @@ export class PatchUpdateUserCommandHandler
           stack: error.stack,
         });
       }
-    } else if (profileImageFile === null) {
-      await this.deleteProfileImage(user);
+    } else if (backgroundImageFile === null) {
+      await this.deleteBackgroundImage(blog);
     }
 
-    await this.userRepository.update(user);
+    await this.blogRepository.update(blog);
   }
 
-  private async deleteProfileImage(user: UserEntity): Promise<void> {
-    const profileImageUrl = user.profileImageUrl;
+  private async deleteBackgroundImage(blog: BlogEntity): Promise<void> {
+    const backgroundImageUrl = blog.backgroundImageUrl;
 
-    if (!isNil(profileImageUrl)) {
+    if (!isNil(backgroundImageUrl)) {
       const existingAttachment = (
-        await this.attachmentRepository.findByUrls([profileImageUrl])
+        await this.attachmentRepository.findByUrls([backgroundImageUrl])
       )[0];
 
       if (isNil(existingAttachment)) {
@@ -132,7 +169,7 @@ export class PatchUpdateUserCommandHandler
 
       await this.attachmentRepository.delete(existingAttachment);
 
-      user.editProfileImagePath(null);
+      blog.editBackgroundImagePath(null);
     }
   }
 }

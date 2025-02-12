@@ -18,14 +18,16 @@ export class ChatMessageResponseDto
   implements Omit<CreateBaseResponseDtoProps, keyof CreateBaseResponseDtoProps>
 {
   @ApiProperty({
-    example: 668734709767935546n,
+    example: '668734709767935546',
     description: '채팅방 ID',
+    type: 'string',
   })
   readonly roomId: AggregateID;
 
   @ApiProperty({
-    example: 668734709767935546n,
+    example: '668734709767935546',
     description: '메시지를 보낸 유저 ID',
+    type: 'string',
   })
   readonly senderId: AggregateID;
 

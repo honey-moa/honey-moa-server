@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateBlogCommand } from '@features/blog/commands/create-blog/create-blog.command';
@@ -18,6 +27,8 @@ import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
 import { FormDataRequest } from 'nestjs-form-data';
+import { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
+import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blog/patch-update-blog.command';
 
 @ApiTags('Blog')
 @ApiInternalServerErrorBuilder()
@@ -83,5 +94,36 @@ export class BlogController {
         (member) => new HydratedUserResponseDto(member),
       ),
     });
+  }
+
+  @ApiBlog.PatchUpdate({
+    summary: '블로그 정보 PatchUpdate API',
+  })
+  @FormDataRequest()
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch(routesV1.blog.patchUpdate)
+  async patchUpdate(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) blogId: string,
+    @Body() requestBodyDto: PatchUpdateBlogRequestBodyDto,
+  ): Promise<void> {
+    const { backgroundImageFile, ...rest } = requestBodyDto;
+
+    const command = new PatchUpdateBlogCommand({
+      userId,
+      blogId: BigInt(blogId),
+      ...rest,
+      backgroundImageFile: backgroundImageFile
+        ? {
+            mimeType: backgroundImageFile.mimeType,
+            capacity: backgroundImageFile.size,
+            buffer: backgroundImageFile.buffer,
+          }
+        : backgroundImageFile === null
+          ? null
+          : undefined,
+    });
+
+    await this.commandBus.execute(command);
   }
 }
