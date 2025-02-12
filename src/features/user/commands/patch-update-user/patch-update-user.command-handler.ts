@@ -36,8 +36,6 @@ export class PatchUpdateUserCommandHandler
   async execute(command: PatchUpdateUserCommand): Promise<void> {
     const { userId, nickname, mbti, profileImageFile } = command;
 
-    console.log(command);
-
     if ([nickname, mbti, profileImageFile].every(isNil)) {
       throw new HttpBadRequestException({
         code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
