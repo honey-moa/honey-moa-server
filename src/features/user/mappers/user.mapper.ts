@@ -28,7 +28,7 @@ export const userSchema = baseSchema.extend({
   loginType: z.nativeEnum(UserLoginType),
   role: z.nativeEnum(UserRole),
   isEmailVerified: z.boolean(),
-  profileImagePath: z.string().min(1).max(255),
+  profileImagePath: z.string().min(1).max(255).nullable(),
   mbti: z.nativeEnum(UserMbti).nullable(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),

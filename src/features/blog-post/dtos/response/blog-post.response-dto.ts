@@ -27,12 +27,14 @@ export class BlogPostResponseDto
   @ApiProperty({
     format: 'int64',
     description: '블로그 생성 유저 ID',
+    type: 'string',
   })
   readonly userId: AggregateID;
 
   @ApiProperty({
     format: 'int64',
     description: '블로그 ID',
+    type: 'string',
   })
   readonly blogId: AggregateID;
 

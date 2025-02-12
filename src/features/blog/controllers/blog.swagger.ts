@@ -4,6 +4,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
@@ -154,6 +155,95 @@ export const ApiBlog: ApiOperator<keyof BlogController> = {
             ],
             errorType: CustomValidationError,
           },
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '블로그가 존재하지 않음.',
+        },
+      ]),
+    );
+  },
+
+  PatchUpdate: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiConsumes('multipart/form-data'),
+      ApiBody({
+        description:
+          'Mime-Type은 image/png, image/jpeg 타입만 허용됨.<br>' +
+          '파일 크기는 10MB 까지만 허용됨.',
+        schema: {
+          type: 'object',
+          properties: {
+            backgroundImageFile: {
+              type: 'string',
+              format: 'binary',
+              nullable: true,
+              description:
+                '블로그 배경 이미지 파일. empty string을 보낼 경우 null로 판단해 배경 사진을 아예 삭제함.',
+            },
+            name: {
+              description: '블로그 이름',
+              type: 'string',
+              minLength: 1,
+              maxLength: 30,
+            },
+            description: {
+              description: '블로그 설명',
+              type: 'string',
+              minLength: 1,
+              maxLength: 255,
+            },
+            dDayStartDate: {
+              description:
+                '블로그 시작일. 시간 제외 날짜 값까지만 허용. ex)2025-02-06',
+              type: 'string',
+              format: 'date',
+              maxLength: 10,
+            },
+          },
+        },
+      }),
+      ApiNoContentResponse({
+        description: '정상적으로 블로그 수정됨.',
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'name의 길이가 1 이상 30 이하가 아님. 외 기타 등등',
+          additionalErrors: {
+            errors: [
+              {
+                property: 'name',
+                value: 'qwdqwdqwasdasdasdasdasdasdasdasdasdadas',
+                reason: 'name must be shorter than or equal to 30 characters',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
+          description: '수정할 필드가 하나도 없음.',
+        },
+      ]),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해서 발생하는 에러.',
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+          description: '유저가 커넥션의 속하지 않음.',
         },
       ]),
       HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [

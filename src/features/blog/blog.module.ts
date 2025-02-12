@@ -1,5 +1,6 @@
 import { AttachmentModule } from '@features/attachment/attachment.module';
 import { CreateBlogCommandHandler } from '@features/blog/commands/create-blog/create-blog.command-handler';
+import { PatchUpdateBlogCommandHandler } from '@features/blog/commands/patch-update-blog/patch-update-blog.command-handler';
 import { BlogController } from '@features/blog/controllers/blog.controller';
 import { BlogUserConnectionDisconnectDomainEventListener } from '@features/blog/domain/events/listeners/blog-user-connection-disconnect.domain-event-listener';
 import { BlogMapper } from '@features/blog/mappers/blog.mapper';
@@ -15,7 +16,10 @@ const controllers = [BlogController];
 
 const mappers: Provider[] = [BlogMapper];
 
-const commandHandlers: Provider[] = [CreateBlogCommandHandler];
+const commandHandlers: Provider[] = [
+  CreateBlogCommandHandler,
+  PatchUpdateBlogCommandHandler,
+];
 
 const queryHandlers: Provider[] = [FindOneBlogByUserIdQueryHandler];
 
