@@ -52,6 +52,7 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       name: this.props.name,
+      members: this.members ? this.members : undefined,
     };
   }
 

@@ -24,4 +24,5 @@ export interface CreateBlogProps {
 
 export interface HydratedBlogEntityProps extends BaseEntityProps {
   name: string;
+  members?: HydratedUserEntityProps[];
 }
