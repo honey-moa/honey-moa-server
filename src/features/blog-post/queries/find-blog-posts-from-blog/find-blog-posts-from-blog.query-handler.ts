@@ -107,13 +107,6 @@ export class FindBlogPostsFromBlogQueryHandler
       }),
 
       this.txHost.tx.blogPost.count({
-        ...(cursor?.id && {
-          cursor: {
-            id: cursor?.id,
-            ...(cursor?.createdAt && { createdAt: cursor?.createdAt }),
-            ...(cursor?.updatedAt && { updatedAt: cursor?.updatedAt }),
-          },
-        }),
         where,
       }),
     ]);
