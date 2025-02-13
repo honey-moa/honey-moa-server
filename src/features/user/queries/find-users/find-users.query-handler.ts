@@ -22,20 +22,30 @@ export class FindUsersQueryHandler
     const { cursor, email, nickname, isEmailVerified, orderBy, skip, take } =
       query;
 
+    const whereProps = {
+      email: {
+        contains: email,
+      },
+      nickname: {
+        contains: nickname,
+      },
+      isEmailVerified,
+    };
+
+    const cursorProps = {
+      ...(cursor?.id && {
+        cursor: {
+          id: cursor?.id,
+          ...(cursor?.createdAt && { createdAt: cursor?.createdAt }),
+          ...(cursor?.updatedAt && { updatedAt: cursor?.updatedAt }),
+        },
+      }),
+    };
+
     const [users, count] = await Promise.all([
       this.txHost.tx.user.findMany({
-        ...(cursor?.id && {
-          cursor: {
-            id: cursor?.id,
-            ...(cursor?.createdAt && { createdAt: cursor?.createdAt }),
-            ...(cursor?.updatedAt && { updatedAt: cursor?.updatedAt }),
-          },
-        }),
-        where: {
-          email: { contains: email },
-          nickname: { contains: nickname },
-          isEmailVerified,
-        },
+        where: whereProps,
+        ...cursorProps,
         orderBy: [
           {
             id: orderBy?.id,
@@ -52,11 +62,8 @@ export class FindUsersQueryHandler
       }),
 
       this.txHost.tx.user.count({
-        where: {
-          email: { contains: email },
-          nickname: { contains: nickname },
-          isEmailVerified,
-        },
+        where: whereProps,
+        ...cursorProps,
       }),
     ]);
 
