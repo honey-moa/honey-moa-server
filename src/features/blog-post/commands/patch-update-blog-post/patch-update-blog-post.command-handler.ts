@@ -18,12 +18,10 @@ import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-por
 import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
-import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
@@ -85,20 +83,7 @@ export class PatchUpdateBlogPostCommandHandler
       });
     }
 
-    const userConnection =
-      await this.userConnectionRepository.findOneByIdAndStatus(
-        blog.connectionId,
-        UserConnectionStatus.ACCEPTED,
-      );
-
-    if (isNil(userConnection)) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: '블로그가 존재하는데 ACCEPTED된 userConnection이 존재하지 않을 수 없음.',
-      });
-    }
-
-    if (!userConnection.isPartOfConnection(userId)) {
+    if (!blog.isMemberOfBlog(userId)) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
       });
