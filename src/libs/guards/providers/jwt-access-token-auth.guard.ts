@@ -33,14 +33,27 @@ export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, payload: any) {
+  handleRequest(err: any, payload: any, info: any, context: ExecutionContext) {
+    const guardType = this.reflector.getAllAndOverride<
+      GuardTypeUnion,
+      typeof GUARD_TYPE_TOKEN
+    >(GUARD_TYPE_TOKEN, [context.getHandler(), context.getClass()]);
+
     if (err || !payload) {
+      if (guardType === GuardType.OPTIONAL) {
+        return null;
+      }
+
       throw new HttpUnauthorizedException({
         code: COMMON_ERROR_CODE.INVALID_TOKEN,
       });
     }
 
     if (payload.tokenType !== TokenType.AccessToken) {
+      if (guardType === GuardType.OPTIONAL) {
+        return null;
+      }
+
       throw new HttpUnauthorizedException({
         code: COMMON_ERROR_CODE.INVALID_TOKEN,
       });

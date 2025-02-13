@@ -2,9 +2,11 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
@@ -18,6 +20,8 @@ import { CustomValidationError } from '@libs/types/custom-validation-errors.type
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
 import { BlogPostResponseDto } from '@features/blog-post/dtos/response/blog-post.response-dto';
+import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
+import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 
 export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
   Create: (
@@ -272,6 +276,89 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
         {
           code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
           description: '해당 blog가 존재하지 않거나 게시글이 존재하지 않음.',
+        },
+      ]),
+    );
+  },
+
+  FindBlogPostsFromBlog: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    const paginationResponseTypes = [
+      CursorPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'blogPosts',
+        BlogPostResponseDto,
+        [
+          { format: 'int64', key: 'id' },
+          { format: 'date-time', key: 'createdAt' },
+          { format: 'date-time', key: 'updatedAt' },
+        ],
+        true,
+      ),
+      OffsetPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'blogPosts',
+        BlogPostResponseDto,
+        true,
+      ),
+    ];
+
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiExtraModels(...paginationResponseTypes),
+      ApiOkResponse({
+        description:
+          '정상적으로 블로그 게시글 조회 됨. cursor 혹은 offset pagination response 타입 중 하나를 리턴함.',
+        schema: {
+          oneOf: paginationResponseTypes.map((type) => ({
+            $ref: getSchemaPath(type),
+          })),
+        },
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'blog의 id가 numeric string이 아님.',
+          additionalErrors: {
+            errors: [
+              {
+                value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                property: 'id',
+                reason: 'param internal the id must be a numeric string',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '필수 key값 혹은 value의 format이 잘못됨.',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_JSON_FORMAT,
+          description: 'JSON format이 잘못됨.',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'datePeriod가 date format이 아님',
+          customMessage: "datePeriod isn't valid date format.",
+        },
+      ]),
+      HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+        {
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+          description:
+            '해당 blog의 커넥션에 속해있지 않은데 private post에 접근하려 함.',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '해당 blog가 존재하지 않음.',
         },
       ]),
     );
