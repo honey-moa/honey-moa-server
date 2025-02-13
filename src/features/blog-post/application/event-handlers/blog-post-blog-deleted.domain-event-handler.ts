@@ -4,6 +4,7 @@ import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-delete
 import { isNil } from '@libs/utils/util';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+import { Transactional, Propagation } from '@nestjs-cls/transactional';
 
 @Injectable()
 export class BlogPostBlogDeletedDomainEventHandler {
@@ -12,7 +13,8 @@ export class BlogPostBlogDeletedDomainEventHandler {
     private readonly blogPostRepository: BlogPostRepositoryPort,
   ) {}
 
-  @OnEvent(BlogDeletedDomainEvent.name)
+  @OnEvent(BlogDeletedDomainEvent.name, { async: true })
+  @Transactional(Propagation.RequiresNew)
   async handle(event: BlogDeletedDomainEvent) {
     const { aggregateId } = event;
 

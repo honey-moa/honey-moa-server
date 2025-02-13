@@ -4,6 +4,7 @@ import { UserConnectionDisconnectedDomainEvent } from '@features/user/user-conne
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
+import { Propagation, Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
@@ -14,7 +15,8 @@ export class BlogUserConnectionDisconnectDomainEventHandler {
     private readonly blogRepository: BlogRepositoryPort,
   ) {}
 
-  @OnEvent(UserConnectionDisconnectedDomainEvent.name)
+  @OnEvent(UserConnectionDisconnectedDomainEvent.name, { async: true })
+  @Transactional(Propagation.RequiresNew)
   async handle(event: UserConnectionDisconnectedDomainEvent) {
     const { aggregateId } = event;
 
