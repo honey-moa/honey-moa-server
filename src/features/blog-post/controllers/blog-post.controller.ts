@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
@@ -28,6 +29,12 @@ import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag
 import { PatchUpdateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/patch-update-blog-post.request-body-dto';
 import { PatchUpdateBlogPostCommand } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command';
 import { DeleteBlogPostCommand } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command';
+import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
+import { GuardType } from '@libs/guards/types/guard.constant';
+import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
+import { FindBlogPostsFromBlogRequestQueryDto } from '@features/blog-post/dtos/request/find-blog-posts-from-blog.request-query-dto';
+import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
+import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -60,6 +67,39 @@ export class BlogPostController {
     >(command);
 
     return new IdResponseDto(result);
+  }
+
+  @ApiBlogPost.FindBlogPostsFromBlog({
+    summary: '블로그에서 블로그 게시글 조회 API(Pagination)',
+  })
+  @SetGuardType(GuardType.OPTIONAL)
+  @SetPagination()
+  @Get(routesV1.blogPost.findBlogPostsFromBlog)
+  async findBlogPostsFromBlog(
+    @User('sub') userId: AggregateID | null,
+    @Param('id', ParsePositiveBigIntPipe) blogId: string,
+    @Query() requestQueryDto: FindBlogPostsFromBlogRequestQueryDto,
+  ) {
+    const query = new FindBlogPostsFromBlogQuery({
+      userId,
+      blogId: BigInt(blogId),
+      ...requestQueryDto,
+    });
+
+    const { blogPosts, count } = await this.queryBus.execute<
+      FindBlogPostsFromBlogQuery,
+      HandlerReturnType<FindBlogPostsFromBlogQueryHandler>
+    >(query);
+
+    return [
+      blogPosts.map((blogPost) => {
+        return new BlogPostResponseDto({
+          ...blogPost,
+          tags: blogPost.tags.map((tag) => new HydratedTagResponseDto(tag)),
+        });
+      }),
+      count,
+    ];
   }
 
   @ApiBlogPost.FindOne({
