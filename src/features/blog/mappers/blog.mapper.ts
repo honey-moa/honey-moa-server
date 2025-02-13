@@ -17,6 +17,7 @@ export const blogSchema = baseSchema.extend({
   description: z.string().max(255),
   backgroundImagePath: z.nullable(z.string().max(255)),
   dDayStartDate: z.string().max(20),
+  memberIds: z.bigint().array(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -40,6 +41,7 @@ export class BlogMapper
         description: blog.description,
         backgroundImagePath: blog.backgroundImagePath,
         dDayStartDate: blog.dDayStartDate,
+        memberIds: blog.memberIds,
         deletedAt: blog.deletedAt,
       },
       createdAt: blog.createdAt,
@@ -68,6 +70,7 @@ export class BlogMapper
       backgroundImageUrl: entity.backgroundImageUrl,
       connectionId: props.connectionId,
       createdBy: props.createdBy,
+      memberIds: props.memberIds,
       createdAt: props.createdAt,
       updatedAt: props.updatedAt,
     };
