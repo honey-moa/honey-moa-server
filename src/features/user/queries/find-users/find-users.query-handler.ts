@@ -63,7 +63,6 @@ export class FindUsersQueryHandler
 
       this.txHost.tx.user.count({
         where: whereProps,
-        ...cursorProps,
       }),
     ]);
 
