@@ -73,7 +73,6 @@ export class FindPublicBlogPostsQueryHandler
       }),
       this.txHost.tx.blogPost.count({
         where: whereProps,
-        ...cursorProps,
       }),
     ]);
 
@@ -87,11 +86,17 @@ export class FindPublicBlogPostsQueryHandler
             members: [
               {
                 ...blogPost.blog.connection.requestedUser,
-                profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blogPost.blog.connection.requestedUser.profileImagePath}`,
+                profileImageUrl: blogPost.blog.connection.requestedUser
+                  .profileImagePath
+                  ? `${UserEntity.USER_ATTACHMENT_URL}/${blogPost.blog.connection.requestedUser.profileImagePath}`
+                  : null,
               },
               {
                 ...blogPost.blog.connection.requesterUser,
-                profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blogPost.blog.connection.requesterUser.profileImagePath}`,
+                profileImageUrl: blogPost.blog.connection.requesterUser
+                  .profileImagePath
+                  ? `${UserEntity.USER_ATTACHMENT_URL}/${blogPost.blog.connection.requesterUser.profileImagePath}`
+                  : null,
               },
             ],
           },

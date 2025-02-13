@@ -12,6 +12,7 @@ import { BlogPostController } from '@features/blog-post/controllers/blog-post.co
 import { BlogPostMapper } from '@features/blog-post/mappers/blog-post.mapper';
 import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
 import { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
+import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
 import { BlogPostRepository } from '@features/blog-post/repositories/blog-post.repository';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogModule } from '@features/blog/blog.module';
@@ -37,6 +38,7 @@ const commandHandlers: Provider[] = [
 const queryHandlers: Provider[] = [
   FindOneBlogPostQueryHandler,
   FindBlogPostsFromBlogQueryHandler,
+  FindPublicBlogPostsQueryHandler,
 ];
 
 const repositories: Provider[] = [
