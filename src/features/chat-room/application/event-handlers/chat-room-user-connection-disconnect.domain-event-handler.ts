@@ -8,7 +8,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
-export class ChatRoomUserConnectionDisconnectDomainEventListener {
+export class ChatRoomUserConnectionDisconnectDomainEventHandler {
   constructor(
     @Inject(CHAT_ROOM_REPOSITORY_DI_TOKEN)
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
