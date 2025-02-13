@@ -1,11 +1,13 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   BaseResponseDto,
   CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
+import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 
 export interface CreateHydratedBlogProps extends CreateBaseResponseDtoProps {
   name: string;
+  members?: HydratedUserResponseDto[];
 }
 
 export class HydratedBlogResponseDto
@@ -20,9 +22,16 @@ export class HydratedBlogResponseDto
   })
   readonly name: string;
 
+  @ApiPropertyOptional({
+    description: '블로그에 속해 있는 유저들 정보',
+    type: [HydratedUserResponseDto],
+  })
+  readonly members?: HydratedUserResponseDto[];
+
   constructor(props: CreateHydratedBlogProps) {
     super(props);
 
     this.name = props.name;
+    this.members = props.members;
   }
 }
