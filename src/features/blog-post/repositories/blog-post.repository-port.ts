@@ -10,4 +10,5 @@ export interface BlogPostInclude {
 export interface BlogPostRepositoryPort
   extends RepositoryPort<BlogPostEntity, BlogPostInclude> {
   findAllByBlogId(blogId: AggregateID): Promise<BlogPostEntity[] | undefined>;
+  bulkDelete(entities: BlogPostEntity[]): Promise<void>;
 }

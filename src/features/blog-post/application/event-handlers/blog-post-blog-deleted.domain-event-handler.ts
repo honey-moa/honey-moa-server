@@ -23,9 +23,8 @@ export class BlogPostBlogDeletedDomainEventHandler {
 
     if (isNil(blogPosts) || blogPosts.length === 0) return;
 
-    for (const blogPost of blogPosts) {
-      blogPost.delete();
-      await this.blogPostRepository.delete(blogPost);
-    }
+    blogPosts.forEach((blogPost) => blogPost.delete());
+
+    await this.blogPostRepository.bulkDelete(blogPosts);
   }
 }
