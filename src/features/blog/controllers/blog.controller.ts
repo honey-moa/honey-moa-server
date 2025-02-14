@@ -90,6 +90,7 @@ export class BlogController {
 
     return new BlogResponseDto({
       ...result,
+      memberIds: result.memberIds,
       members: result.members.map(
         (member) => new HydratedUserResponseDto(member),
       ),

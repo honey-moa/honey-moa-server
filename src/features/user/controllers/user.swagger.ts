@@ -57,7 +57,7 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
       ApiExtraModels(...paginationResponseTypes),
       ApiOkResponse({
         description:
-          '정상적으로 유저 상세 조회 됨. cursor 혹은 offset pagination response 타입 중 하나를 리턴함.',
+          '정상적으로 유저 조회 됨. cursor 혹은 offset pagination response 타입 중 하나를 리턴함.',
         schema: {
           oneOf: paginationResponseTypes.map((type) => ({
             $ref: getSchemaPath(type),

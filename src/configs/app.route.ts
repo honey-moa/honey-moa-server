@@ -47,6 +47,7 @@ export const routesV1 = {
      */
     root: `${blogRoot}/:id/${blogPostRoot}`,
     create: `${blogRoot}/:id/${blogPostRoot}`,
+    findBlogPostsFromBlog: `${blogRoot}/:id/${blogPostRoot}`,
     patchUpdate: `${blogRoot}/:id/${blogPostRoot}/:blogPostId`,
     delete: `${blogRoot}/:id/${blogPostRoot}/:blogPostId`,
 
@@ -55,6 +56,8 @@ export const routesV1 = {
      * 따로 만든 이유는 대표적으로 게시글 단일 조회의 경우 블로그가 아닌 다른 경로(커뮤니티 등)를 통할 수도 있음
      */
     findOne: `${blogPostRoot}/:id`,
+    // 커뮤니티에서 공개된 게시글 조회할 때 사용
+    findPublicBlogPosts: `${blogPostRoot}`,
   },
 
   chatRoom: {

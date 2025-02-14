@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
@@ -28,6 +29,17 @@ import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag
 import { PatchUpdateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/patch-update-blog-post.request-body-dto';
 import { PatchUpdateBlogPostCommand } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command';
 import { DeleteBlogPostCommand } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command';
+import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
+import { GuardType } from '@libs/guards/types/guard.constant';
+import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
+import { FindBlogPostsFromBlogRequestQueryDto } from '@features/blog-post/dtos/request/find-blog-posts-from-blog.request-query-dto';
+import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
+import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
+import { FindPublicBlogPostsRequestQueryDto } from '@features/blog-post/dtos/request/find-public-blog-posts.request-query-dto';
+import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query';
+import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
+import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
+import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -62,6 +74,39 @@ export class BlogPostController {
     return new IdResponseDto(result);
   }
 
+  @ApiBlogPost.FindBlogPostsFromBlog({
+    summary: '블로그에서 블로그 게시글 조회 API(Pagination)',
+  })
+  @SetGuardType(GuardType.OPTIONAL)
+  @SetPagination()
+  @Get(routesV1.blogPost.findBlogPostsFromBlog)
+  async findBlogPostsFromBlog(
+    @User('sub') userId: AggregateID | null,
+    @Param('id', ParsePositiveBigIntPipe) blogId: string,
+    @Query() requestQueryDto: FindBlogPostsFromBlogRequestQueryDto,
+  ) {
+    const query = new FindBlogPostsFromBlogQuery({
+      userId,
+      blogId: BigInt(blogId),
+      ...requestQueryDto,
+    });
+
+    const { blogPosts, count } = await this.queryBus.execute<
+      FindBlogPostsFromBlogQuery,
+      HandlerReturnType<FindBlogPostsFromBlogQueryHandler>
+    >(query);
+
+    return [
+      blogPosts.map((blogPost) => {
+        return new BlogPostResponseDto({
+          ...blogPost,
+          tags: blogPost.tags.map((tag) => new HydratedTagResponseDto(tag)),
+        });
+      }),
+      count,
+    ];
+  }
+
   @ApiBlogPost.FindOne({
     summary: '블로그 게시글 단일 조회 API',
     description:
@@ -87,6 +132,39 @@ export class BlogPostController {
       ...result,
       tags: result.tags.map((tag) => new HydratedTagResponseDto(tag)),
     });
+  }
+
+  @ApiBlogPost.FindPublicBlogPosts({
+    summary: '공개된 게시글 Pagination 조회 API',
+  })
+  @SetPagination()
+  @SetGuardType(GuardType.PUBLIC)
+  @Get(routesV1.blogPost.findPublicBlogPosts)
+  async findPublicBlogPosts(
+    @Query() requestQueryDto: FindPublicBlogPostsRequestQueryDto,
+  ) {
+    const query = new FindPublicBlogPostsQuery(requestQueryDto);
+
+    const { blogPosts, count } = await this.queryBus.execute<
+      FindPublicBlogPostsQuery,
+      HandlerReturnType<FindPublicBlogPostsQueryHandler>
+    >(query);
+
+    return [
+      blogPosts.map((blogPost) => {
+        return new BlogPostResponseDto({
+          ...blogPost,
+          tags: blogPost.tags.map((tag) => new HydratedTagResponseDto(tag)),
+          blog: new HydratedBlogResponseDto({
+            ...blogPost.blog,
+            members: blogPost.blog.members.map(
+              (member) => new HydratedUserResponseDto(member),
+            ),
+          }),
+        });
+      }),
+      count,
+    ];
   }
 
   @ApiBlogPost.PatchUpdate({

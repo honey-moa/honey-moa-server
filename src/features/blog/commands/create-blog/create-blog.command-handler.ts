@@ -122,6 +122,10 @@ export class CreateBlogCommandHandler
       description,
       dDayStartDate,
       backgroundImagePath,
+      memberIds: [
+        acceptedConnection.requesterId,
+        acceptedConnection.requestedId,
+      ],
     });
 
     await this.blogRepository.create(blog);

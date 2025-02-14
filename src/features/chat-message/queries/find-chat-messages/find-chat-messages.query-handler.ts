@@ -89,7 +89,6 @@ export class FindChatMessagesQueryHandler
         where: {
           roomId,
         },
-        cursor: cursor ? { id: cursor.id } : undefined,
       }),
     ]);
 
