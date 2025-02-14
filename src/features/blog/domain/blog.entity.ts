@@ -60,6 +60,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return this.props.connectionId;
   }
 
+  get memberIds(): AggregateID[] {
+    return this.props.memberIds;
+  }
+
   get members(): HydratedUserEntityProps[] | null {
     return this.props.members || null;
   }
@@ -72,6 +76,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return this.backgroundImagePath
       ? `${BlogEntity.BLOG_ATTACHMENT_URL}/${this.backgroundImagePath}`
       : null;
+  }
+
+  isMember(userId: AggregateID): boolean {
+    return this.memberIds.includes(userId);
   }
 
   editName(name: string) {

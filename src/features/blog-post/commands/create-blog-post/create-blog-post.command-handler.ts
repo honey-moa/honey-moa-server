@@ -1,9 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
@@ -12,11 +10,7 @@ import { BlogPostTagRepositoryPort } from '@features/blog-post/blog-post-tag/rep
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-tag/tokens/di.token';
-import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
-import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { Transactional } from '@nestjs-cls/transactional';
 import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
 import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
@@ -30,6 +24,8 @@ import { AttachmentEntity } from '@features/attachment/domain/attachment.entity'
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
 import { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
+import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 
 @CommandHandler(CreateBlogPostCommand)
 export class CreateBlogPostCommandHandler
@@ -42,8 +38,6 @@ export class CreateBlogPostCommandHandler
     private readonly blogPostTagRepository: BlogPostTagRepositoryPort,
     @Inject(BLOG_POST_REPOSITORY_DI_TOKEN)
     private readonly blogPostRepository: BlogPostRepositoryPort,
-    @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
-    private readonly userConnectionRepository: UserConnectionRepositoryPort,
     @Inject(TAG_REPOSITORY_DI_TOKEN)
     private readonly tagRepository: TagRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
@@ -75,20 +69,7 @@ export class CreateBlogPostCommandHandler
       });
     }
 
-    const userConnection =
-      await this.userConnectionRepository.findOneByIdAndStatus(
-        blog.connectionId,
-        UserConnectionStatus.ACCEPTED,
-      );
-
-    if (isNil(userConnection)) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: 'blog가 존재하는 데 user connection이 존재하지 않을 수 없음.',
-      });
-    }
-
-    if (!userConnection.isPartOfConnection(userId)) {
+    if (!blog.isMember(userId)) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
       });

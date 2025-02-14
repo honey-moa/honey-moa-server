@@ -63,6 +63,7 @@ export class FindOneBlogByUserIdQueryHandler
         : null,
       connectionId: blog.connectionId,
       createdBy: blog.createdBy,
+      memberIds: blog.memberIds,
       members: [
         {
           ...blog.connection.requesterUser,
