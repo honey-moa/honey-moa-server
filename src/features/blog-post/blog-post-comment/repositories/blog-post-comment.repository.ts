@@ -22,14 +22,16 @@ export class BlogPostCommentRepository
     id: AggregateID,
   ): Promise<BlogPostCommentEntity | undefined> {
     const record = await this.txHost.tx.blogPostComment.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
     });
 
     return record ? this.mapper.toEntity(record) : undefined;
   }
 
   async findAll(): Promise<BlogPostCommentEntity[]> {
-    const record = await this.txHost.tx.blogPostComment.findMany();
+    const record = await this.txHost.tx.blogPostComment.findMany({
+      where: { deletedAt: null },
+    });
 
     return record.map(this.mapper.toEntity);
   }
@@ -63,23 +65,5 @@ export class BlogPostCommentRepository
     });
 
     return this.mapper.toEntity(updatedRecord);
-  }
-
-  async bulkCreate(entities: BlogPostCommentEntity[]): Promise<void> {
-    if (!entities.length) {
-      return;
-    }
-
-    const records = entities.map((entity) => this.mapper.toPersistence(entity));
-
-    await this.txHost.tx.blogPostComment.createMany({
-      data: records,
-    });
-  }
-
-  async bulkDeleteByBlogPostId(blogPostId: AggregateID): Promise<void> {
-    await this.txHost.tx.blogPostComment.deleteMany({
-      where: { blogPostId },
-    });
   }
 }
