@@ -76,6 +76,9 @@ export class BlogPostController {
 
   @ApiBlogPost.FindBlogPostsFromBlog({
     summary: '블로그에서 블로그 게시글 조회 API(Pagination)',
+    description:
+      '토큰을 보내도 되고 안보내도 됨.<br>' +
+      'private한 게시글 조회의 경우 토큰 값이 없거나 커넥션에 속하지 않으면 에러 처리',
   })
   @SetGuardType(GuardType.OPTIONAL)
   @SetPagination()
