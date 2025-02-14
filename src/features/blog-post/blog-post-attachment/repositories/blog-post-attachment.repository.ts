@@ -1,7 +1,6 @@
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
@@ -16,7 +15,6 @@ export class BlogPostAttachmentRepository
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
-    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: BlogPostAttachmentMapper,
   ) {}
 
@@ -43,8 +41,6 @@ export class BlogPostAttachmentRepository
       where: { id: entity.id },
     });
 
-    await entity.publishEvents(this.eventEmitter);
-
     return result.id;
   }
 
@@ -56,8 +52,6 @@ export class BlogPostAttachmentRepository
     await this.txHost.tx.blogPostAttachment.create({
       data: record,
     });
-
-    await entity.publishEvents(this.eventEmitter);
   }
 
   async update(
