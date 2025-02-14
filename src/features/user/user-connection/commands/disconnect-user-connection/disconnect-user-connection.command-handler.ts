@@ -45,6 +45,12 @@ export class DisconnectUserConnectionCommandHandler
       });
     }
 
+    if (!userConnection.isPartOfConnection(userId)) {
+      throw new HttpNotFoundException({
+        code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+      });
+    }
+
     userConnection.disconnectConnection();
 
     await this.userConnectionRepository.delete(userConnection);
