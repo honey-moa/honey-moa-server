@@ -63,6 +63,7 @@ export const routesV1 = {
   blogPostComment: {
     root: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
     create: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
+    findBlogPostComments: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
   },
 
   chatRoom: {

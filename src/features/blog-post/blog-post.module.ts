@@ -5,6 +5,7 @@ import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/bl
 import { CreateBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/create-blog-post-comment/create-blog-post-comment.command-handler';
 import { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
 import { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
+import { FindBlogPostCommentsQueryHandler } from '@features/blog-post/blog-post-comment/queries/find-blog-post-comments/find-blog-post-comments.query-handler';
 import { BlogPostCommentRepository } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository';
 import { BLOG_POST_COMMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-comment/tokens/di.token';
 import { BlogPostTagMapper } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
@@ -46,6 +47,7 @@ const queryHandlers: Provider[] = [
   FindOneBlogPostQueryHandler,
   FindBlogPostsFromBlogQueryHandler,
   FindPublicBlogPostsQueryHandler,
+  FindBlogPostCommentsQueryHandler,
 ];
 
 const repositories: Provider[] = [
