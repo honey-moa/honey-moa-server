@@ -35,6 +35,11 @@ import { SetPagination } from '@libs/interceptors/pagination/decorators/paginati
 import { FindBlogPostsFromBlogRequestQueryDto } from '@features/blog-post/dtos/request/find-blog-posts-from-blog.request-query-dto';
 import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
 import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
+import { FindPublicBlogPostsRequestQueryDto } from '@features/blog-post/dtos/request/find-public-blog-posts.request-query-dto';
+import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query';
+import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
+import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
+import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -127,6 +132,39 @@ export class BlogPostController {
       ...result,
       tags: result.tags.map((tag) => new HydratedTagResponseDto(tag)),
     });
+  }
+
+  @ApiBlogPost.FindPublicBlogPosts({
+    summary: '공개된 게시글 Pagination 조회 API',
+  })
+  @SetPagination()
+  @SetGuardType(GuardType.PUBLIC)
+  @Get(routesV1.blogPost.findPublicBlogPosts)
+  async findPublicBlogPosts(
+    @Query() requestQueryDto: FindPublicBlogPostsRequestQueryDto,
+  ) {
+    const query = new FindPublicBlogPostsQuery(requestQueryDto);
+
+    const { blogPosts, count } = await this.queryBus.execute<
+      FindPublicBlogPostsQuery,
+      HandlerReturnType<FindPublicBlogPostsQueryHandler>
+    >(query);
+
+    return [
+      blogPosts.map((blogPost) => {
+        return new BlogPostResponseDto({
+          ...blogPost,
+          tags: blogPost.tags.map((tag) => new HydratedTagResponseDto(tag)),
+          blog: new HydratedBlogResponseDto({
+            ...blogPost.blog,
+            members: blogPost.blog.members.map(
+              (member) => new HydratedUserResponseDto(member),
+            ),
+          }),
+        });
+      }),
+      count,
+    ];
   }
 
   @ApiBlogPost.PatchUpdate({

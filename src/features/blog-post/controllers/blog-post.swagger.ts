@@ -416,6 +416,76 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
     );
   },
 
+  FindPublicBlogPosts: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    const paginationResponseTypes = [
+      CursorPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'blogPosts',
+        BlogPostResponseDto,
+        [
+          { format: 'int64', key: 'id' },
+          { format: 'date-time', key: 'createdAt' },
+          { format: 'date-time', key: 'updatedAt' },
+        ],
+        true,
+      ),
+      OffsetPaginationResponseDto.swaggerBuilder(
+        HttpStatus.OK,
+        'blogPosts',
+        BlogPostResponseDto,
+        true,
+      ),
+    ];
+
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiExtraModels(...paginationResponseTypes),
+      ApiOkResponse({
+        description:
+          '정상적으로 블로그 게시글 목록 조회 됨.<br>' +
+          'cursor 혹은 offset pagination response 타입 중 하나를 리턴함.',
+        schema: {
+          oneOf: paginationResponseTypes.map((type) => ({
+            $ref: getSchemaPath(type),
+          })),
+        },
+      }),
+      HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'title이 1 이상 255 이하가 아님.',
+          additionalErrors: {
+            errors: [
+              {
+                value: '',
+                property: 'title',
+                reason:
+                  'title must be longer than or equal to 1 and shorter than or equal to 255 characters',
+              },
+            ],
+            errorType: CustomValidationError,
+          },
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '필수 key값 혹은 value의 format이 잘못됨.',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_JSON_FORMAT,
+          description: 'JSON format이 잘못됨.',
+        },
+        {
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: '그 외 기타 등등 많음',
+        },
+      ]),
+    );
+  },
+
   Delete: (
     apiOperationOptions: ApiOperationOptionsWithSummary,
   ): MethodDecorator => {

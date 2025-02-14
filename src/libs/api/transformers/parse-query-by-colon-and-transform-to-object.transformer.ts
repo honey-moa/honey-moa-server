@@ -4,7 +4,7 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { SingleProperty } from '@libs/types/type';
 import { Transform } from 'class-transformer';
-import { isJSON, isEnum } from 'class-validator';
+import { isJSON, isEnum, IsOptional, IsObject } from 'class-validator';
 
 type AllowType = 'string' | 'number' | 'boolean' | 'bigint' | 'date';
 
@@ -35,6 +35,8 @@ export function ParseQueryByColonAndTransformToObject(
   } = {},
 ): PropertyDecorator {
   return applyDecorators(
+    IsOptional(),
+    IsObject(),
     ApiPropertyOptional({
       type: 'string',
       description:

@@ -13,6 +13,8 @@ export interface CreateBlogResponseDtoProps extends CreateBaseResponseDtoProps {
   description: string;
   dDayStartDate: string;
   backgroundImageUrl: string | null;
+  memberIds: AggregateID[];
+
   members?: HydratedUserResponseDto[];
 }
 
@@ -63,6 +65,14 @@ export class BlogResponseDto
   })
   readonly connectionId: AggregateID;
 
+  @ApiProperty({
+    format: 'int64',
+    description: '블로그에 속해 있는 유저 IDs',
+    type: 'string',
+    isArray: true,
+  })
+  readonly memberIds: AggregateID[];
+
   @ApiPropertyOptional({
     description: '블로그에 속해 있는 유저들 정보',
     type: [HydratedUserResponseDto],
@@ -76,6 +86,7 @@ export class BlogResponseDto
       name,
       createdBy,
       connectionId,
+      memberIds,
       members,
       description,
       dDayStartDate,
@@ -88,6 +99,7 @@ export class BlogResponseDto
     this.backgroundImageUrl = backgroundImageUrl;
     this.createdBy = createdBy;
     this.connectionId = connectionId;
+    this.memberIds = memberIds;
     this.members = members;
   }
 }

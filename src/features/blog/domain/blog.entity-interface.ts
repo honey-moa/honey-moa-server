@@ -8,6 +8,7 @@ export interface BlogProps {
   description: string;
   backgroundImagePath: string | null;
   dDayStartDate: string;
+  memberIds: AggregateID[];
   deletedAt: Date | null;
 
   members?: HydratedUserEntityProps[];
@@ -20,8 +21,10 @@ export interface CreateBlogProps {
   description: string;
   backgroundImagePath: string | null;
   dDayStartDate: string;
+  memberIds: AggregateID[];
 }
 
 export interface HydratedBlogEntityProps extends BaseEntityProps {
   name: string;
+  members?: HydratedUserEntityProps[];
 }

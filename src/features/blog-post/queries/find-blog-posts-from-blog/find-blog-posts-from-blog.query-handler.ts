@@ -1,5 +1,4 @@
 import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
-import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -39,12 +38,6 @@ export class FindBlogPostsFromBlogQueryHandler
       where: {
         id: blogId,
         deletedAt: null,
-        connection: {
-          status: UserConnectionStatus.ACCEPTED,
-        },
-      },
-      include: {
-        connection: true,
       },
     });
 
@@ -56,8 +49,7 @@ export class FindBlogPostsFromBlogQueryHandler
 
     if (
       showPrivatePosts &&
-      blog.connection.requestedId !== userId &&
-      blog.connection.requesterId !== userId
+      (isNil(userId) || !blog.memberIds.includes(userId))
     ) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,

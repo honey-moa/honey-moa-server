@@ -52,11 +52,16 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       name: this.props.name,
+      members: this.members ? this.members : undefined,
     };
   }
 
   get connectionId(): AggregateID {
     return this.props.connectionId;
+  }
+
+  get memberIds(): AggregateID[] {
+    return this.props.memberIds;
   }
 
   get members(): HydratedUserEntityProps[] | null {
@@ -71,6 +76,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return this.backgroundImagePath
       ? `${BlogEntity.BLOG_ATTACHMENT_URL}/${this.backgroundImagePath}`
       : null;
+  }
+
+  isMember(userId: AggregateID): boolean {
+    return this.memberIds.includes(userId);
   }
 
   editName(name: string) {

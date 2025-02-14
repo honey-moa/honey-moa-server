@@ -75,6 +75,7 @@ model Blog {
   id                  BigInt    @id(map: "pk_blogs")
   createdBy           BigInt    @map("created_by") @db.BigInt()
   connectionId        BigInt    @unique(map: "uq_blogs_connection_id") @map("connection_id") @db.BigInt()
+  memberIds           BigInt[]  @map("member_ids") @db.BigInt()
   name                String    @db.VarChar(30)
   description         String    @db.VarChar(255)
   dDayStartDate       String    @map("d_day_start_date") @db.VarChar(20)
