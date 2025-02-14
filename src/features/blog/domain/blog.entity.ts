@@ -78,7 +78,7 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       : null;
   }
 
-  isMemberOfBlog(userId: AggregateID): boolean {
+  isMember(userId: AggregateID): boolean {
     return this.memberIds.includes(userId);
   }
 

@@ -63,7 +63,7 @@ export class PatchUpdateBlogCommandHandler
       });
     }
 
-    if (!blog.isMemberOfBlog(userId)) {
+    if (!blog.isMember(userId)) {
       throw new HttpForbiddenException({
         code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
       });
