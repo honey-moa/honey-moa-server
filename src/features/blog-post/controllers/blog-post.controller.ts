@@ -40,6 +40,7 @@ import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-publi
 import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
 import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -182,7 +183,7 @@ export class BlogPostController {
     @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) blogId: string,
     @Param('blogPostId', ParsePositiveBigIntPipe) blogPostId: string,
-    @Body() requestBodyDto: PatchUpdateBlogPostRequestBodyDto,
+    @Body(NotEmptyObjectPipe) requestBodyDto: PatchUpdateBlogPostRequestBodyDto,
   ) {
     const command = new PatchUpdateBlogPostCommand({
       ...requestBodyDto,

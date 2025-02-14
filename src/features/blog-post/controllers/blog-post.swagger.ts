@@ -242,8 +242,8 @@ export const ApiBlogPost: ApiOperator<keyof BlogPostController> = {
           },
         },
         {
-          code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
-          description: 'update하는 필드가 하나도 없음',
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'Body에 적어도 하나의 키벨류는 존재해야 함.',
         },
         {
           code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,

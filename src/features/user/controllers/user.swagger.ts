@@ -349,8 +349,8 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
           },
         },
         {
-          code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
-          description: '수정할 필드가 없음',
+          code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+          description: 'Body에 적어도 하나의 키벨류는 존재해야 함.',
         },
       ]),
       HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [

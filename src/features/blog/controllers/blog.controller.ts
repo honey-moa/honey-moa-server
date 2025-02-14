@@ -29,6 +29,7 @@ import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe
 import { FormDataRequest } from 'nestjs-form-data';
 import { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
 import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blog/patch-update-blog.command';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 
 @ApiTags('Blog')
 @ApiInternalServerErrorBuilder()
@@ -106,7 +107,7 @@ export class BlogController {
   async patchUpdate(
     @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) blogId: string,
-    @Body() requestBodyDto: PatchUpdateBlogRequestBodyDto,
+    @Body(NotEmptyObjectPipe) requestBodyDto: PatchUpdateBlogRequestBodyDto,
   ): Promise<void> {
     const { backgroundImageFile, ...rest } = requestBodyDto;
 
