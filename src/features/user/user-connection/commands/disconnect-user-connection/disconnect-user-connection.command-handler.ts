@@ -25,10 +25,7 @@ export class DisconnectUserConnectionCommandHandler
   async execute(command: DisconnectUserConnectionCommand): Promise<void> {
     const { userId, userConnectionId } = command;
 
-    const user = await this.userRepository.findOneById(userId, {
-      requestedConnections: true,
-      requesterConnections: true,
-    });
+    const user = await this.userRepository.findOneById(userId);
 
     if (isNil(user)) {
       throw new HttpNotFoundException({
