@@ -1,0 +1,85 @@
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
+import { BlogPostCommentRepositoryPort } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository-port';
+import { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
+
+@Injectable()
+export class BlogPostCommentRepository
+  implements BlogPostCommentRepositoryPort
+{
+  constructor(
+    private readonly txHost: TransactionHost<
+      TransactionalAdapterPrisma<PrismaService>
+    >,
+    private readonly mapper: BlogPostCommentMapper,
+  ) {}
+
+  async findOneById(
+    id: AggregateID,
+  ): Promise<BlogPostCommentEntity | undefined> {
+    const record = await this.txHost.tx.blogPostComment.findUnique({
+      where: { id },
+    });
+
+    return record ? this.mapper.toEntity(record) : undefined;
+  }
+
+  async findAll(): Promise<BlogPostCommentEntity[]> {
+    const record = await this.txHost.tx.blogPostComment.findMany();
+
+    return record.map(this.mapper.toEntity);
+  }
+
+  async delete(entity: BlogPostCommentEntity): Promise<AggregateID> {
+    entity.validate();
+
+    const result = await this.txHost.tx.blogPostComment.delete({
+      where: { id: entity.id },
+    });
+
+    return result.id;
+  }
+
+  async create(entity: BlogPostCommentEntity): Promise<void> {
+    entity.validate();
+
+    const record = this.mapper.toPersistence(entity);
+
+    await this.txHost.tx.blogPostComment.create({
+      data: record,
+    });
+  }
+
+  async update(entity: BlogPostCommentEntity): Promise<BlogPostCommentEntity> {
+    const record = this.mapper.toPersistence(entity);
+
+    const updatedRecord = await this.txHost.tx.blogPostComment.update({
+      where: { id: record.id },
+      data: record,
+    });
+
+    return this.mapper.toEntity(updatedRecord);
+  }
+
+  async bulkCreate(entities: BlogPostCommentEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
+    const records = entities.map((entity) => this.mapper.toPersistence(entity));
+
+    await this.txHost.tx.blogPostComment.createMany({
+      data: records,
+    });
+  }
+
+  async bulkDeleteByBlogPostId(blogPostId: AggregateID): Promise<void> {
+    await this.txHost.tx.blogPostComment.deleteMany({
+      where: { blogPostId },
+    });
+  }
+}
