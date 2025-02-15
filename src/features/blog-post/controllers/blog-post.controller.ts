@@ -40,6 +40,7 @@ import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-publi
 import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
 import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -76,6 +77,9 @@ export class BlogPostController {
 
   @ApiBlogPost.FindBlogPostsFromBlog({
     summary: '블로그에서 블로그 게시글 조회 API(Pagination)',
+    description:
+      '토큰을 보내도 되고 안보내도 됨.<br>' +
+      'private한 게시글 조회의 경우 토큰 값이 없거나 커넥션에 속하지 않으면 에러 처리',
   })
   @SetGuardType(GuardType.OPTIONAL)
   @SetPagination()
@@ -179,7 +183,7 @@ export class BlogPostController {
     @User('sub') userId: AggregateID,
     @Param('id', ParsePositiveBigIntPipe) blogId: string,
     @Param('blogPostId', ParsePositiveBigIntPipe) blogPostId: string,
-    @Body() requestBodyDto: PatchUpdateBlogPostRequestBodyDto,
+    @Body(NotEmptyObjectPipe) requestBodyDto: PatchUpdateBlogPostRequestBodyDto,
   ) {
     const command = new PatchUpdateBlogPostCommand({
       ...requestBodyDto,

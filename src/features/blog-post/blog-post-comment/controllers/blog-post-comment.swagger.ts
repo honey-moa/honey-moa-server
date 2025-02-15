@@ -2,7 +2,9 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiOkResponse,
   ApiOperation,
+  getSchemaPath,
 } from '@nestjs/swagger';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
@@ -16,7 +18,9 @@ import { CustomValidationError } from '@libs/types/custom-validation-errors.type
 import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
 import { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-
+import { BlogPostCommentResponseDto } from '@features/blog-post/blog-post-comment/dtos/response/blog-post-comment.response-dto';
+import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
+import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
 export const ApiBlogPostComment: ApiOperator<keyof BlogPostCommentController> =
   {
     Create: (
@@ -78,6 +82,77 @@ export const ApiBlogPostComment: ApiOperator<keyof BlogPostCommentController> =
             code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
             description:
               '게시글이 private한 게시글일 경우 커넥션에 속해 있지 않으면 에러 발생.',
+          },
+        ]),
+        HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+          {
+            code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+            description: '게시글이 존재하지 않음.',
+          },
+        ]),
+      );
+    },
+
+    FindBlogPostComments: (
+      apiOperationOptions: ApiOperationOptionsWithSummary,
+    ): MethodDecorator => {
+      const paginationResponseTypes = [
+        CursorPaginationResponseDto.swaggerBuilder(
+          HttpStatus.OK,
+          'blogPostComments',
+          BlogPostCommentResponseDto,
+          [{ format: 'int64', key: 'id' }],
+          true,
+        ),
+        OffsetPaginationResponseDto.swaggerBuilder(
+          HttpStatus.OK,
+          'blogPostComments',
+          BlogPostCommentResponseDto,
+          true,
+        ),
+      ];
+
+      return applyDecorators(
+        ApiOperation({ ...apiOperationOptions }),
+        ApiBearerAuth('access-token'),
+        ApiOkResponse({
+          description:
+            '정상적으로 블로그 포스트 댓글 조회됨. cursor 혹은 pagination response 타입 중 하나를 리턴함.',
+          schema: {
+            oneOf: paginationResponseTypes.map((type) => ({
+              $ref: getSchemaPath(type),
+            })),
+          },
+        }),
+        HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'blogPost의 id가 numeric string이 아님.',
+            additionalErrors: {
+              errors: [
+                {
+                  value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                  property: 'id',
+                  reason: 'param internal the id must be a numeric string',
+                },
+              ],
+              errorType: CustomValidationError,
+            },
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: '필수 key값 혹은 value의 format이 잘못됨.',
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_JSON_FORMAT,
+            description: 'JSON format이 잘못됨.',
+          },
+        ]),
+        HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+          {
+            code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
+            description:
+              'private한 게시글 댓글 조회의 경우 커넥션에 속해 있지 않으면 에러 발생.',
           },
         ]),
         HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
