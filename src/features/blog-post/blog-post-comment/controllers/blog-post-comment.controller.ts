@@ -1,4 +1,15 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { routesV1 } from '@config/app.route';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
@@ -19,6 +30,10 @@ import { HandlerReturnType } from '@libs/types/type';
 import { FindBlogPostCommentsQueryHandler } from '@features/blog-post/blog-post-comment/queries/find-blog-post-comments/find-blog-post-comments.query-handler';
 import { BlogPostCommentResponseDto } from '@features/blog-post/blog-post-comment/dtos/response/blog-post-comment.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
+import { PatchUpdateBlogPostCommentRequestBodyDto } from '@features/blog-post/blog-post-comment/dtos/request/patch-update-blog-post-comment.request-body-dto';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
+import { PatchUpdateBlogPostCommentCommand } from '@features/blog-post/blog-post-comment/commands/patch-update-blog-post-comment/patch-update-blog-post-comment.command';
+import { DeleteBlogPostCommentCommand } from '@features/blog-post/blog-post-comment/commands/delete-blog-post-comment/delete-blog-post-comment.command';
 
 @ApiTags('BlogPostComment')
 @ApiInternalServerErrorBuilder()
@@ -90,5 +105,51 @@ export class BlogPostCommentController {
       }),
       count,
     ];
+  }
+
+  @ApiBlogPostComment.PatchUpdate({
+    summary: '블로그 게시글 댓글 PatchUpdate API',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Patch(routesV1.blogPostComment.patchUpdate)
+  async patchUpdate(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) blogPostId: string,
+    @Param('blogPostCommentId', ParsePositiveBigIntPipe)
+    blogPostCommentId: string,
+    @Body(NotEmptyObjectPipe)
+    requestBodyDto: PatchUpdateBlogPostCommentRequestBodyDto,
+  ) {
+    const command = new PatchUpdateBlogPostCommentCommand({
+      userId,
+      blogPostId: BigInt(blogPostId),
+      blogPostCommentId: BigInt(blogPostCommentId),
+      ...requestBodyDto,
+    });
+
+    await this.commandBus.execute<
+      PatchUpdateBlogPostCommentCommand,
+      AggregateID
+    >(command);
+  }
+
+  @ApiBlogPostComment.Delete({
+    summary: '블로그 게시글 댓글 삭제 API',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(routesV1.blogPostComment.delete)
+  async delete(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) blogPostId: string,
+    @Param('blogPostCommentId', ParsePositiveBigIntPipe)
+    blogPostCommentId: string,
+  ) {
+    const command = new DeleteBlogPostCommentCommand({
+      userId,
+      blogPostId: BigInt(blogPostId),
+      blogPostCommentId: BigInt(blogPostCommentId),
+    });
+
+    await this.commandBus.execute(command);
   }
 }
