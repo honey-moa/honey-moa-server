@@ -1,4 +1,5 @@
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
 import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
 import { HydratedTagEntityProps } from '@features/tag/domain/tag.entity-interface';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
@@ -16,6 +17,7 @@ export interface BlogPostProps {
 
   blogPostTags?: BlogPostTagEntity[];
   blogPostAttachments?: BlogPostAttachmentEntity[];
+  blogPostComments?: BlogPostCommentEntity[];
 
   tags?: HydratedTagEntityProps[];
   user?: HydratedUserEntityProps;
