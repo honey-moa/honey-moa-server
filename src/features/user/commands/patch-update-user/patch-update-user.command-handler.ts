@@ -7,7 +7,6 @@ import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-use
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -35,12 +34,6 @@ export class PatchUpdateUserCommandHandler
   @Transactional()
   async execute(command: PatchUpdateUserCommand): Promise<void> {
     const { userId, nickname, mbti, profileImageFile } = command;
-
-    if ([nickname, mbti, profileImageFile].every(isNil)) {
-      throw new HttpBadRequestException({
-        code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
-      });
-    }
 
     const user = await this.userRepository.findOneById(userId);
 

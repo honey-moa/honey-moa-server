@@ -58,7 +58,7 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
           loggingObject.request.body = { ...request.body, buffer: undefined };
         }
 
-        this.logger.log(loggingObject);
+        this.logger.log(JSON.stringify(loggingObject, null, 2));
 
         return data;
       }),

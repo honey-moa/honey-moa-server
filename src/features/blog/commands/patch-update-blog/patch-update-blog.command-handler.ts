@@ -9,7 +9,6 @@ import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
@@ -48,12 +47,6 @@ export class PatchUpdateBlogCommandHandler
       description,
       dDayStartDate,
     } = command;
-
-    if ([backgroundImageFile, name, description, dDayStartDate].every(isNil)) {
-      throw new HttpBadRequestException({
-        code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
-      });
-    }
 
     const blog = await this.blogRepository.findOneById(blogId);
 
