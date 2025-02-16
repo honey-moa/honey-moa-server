@@ -12,6 +12,7 @@ import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
+import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
 import { isNil } from '@libs/utils/util';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
@@ -135,6 +136,10 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
 
   hydrateMember(user: UserEntity) {
     (this.props.members = this.props.members ?? []).push(user.hydrateProps);
+  }
+
+  delete(): void {
+    this.addEvent(new BlogDeletedDomainEvent({ aggregateId: this.id }));
   }
 
   public validate(): void {

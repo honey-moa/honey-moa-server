@@ -2,6 +2,7 @@ import { AttachmentModule } from '@features/attachment/attachment.module';
 import { CreateBlogCommandHandler } from '@features/blog/commands/create-blog/create-blog.command-handler';
 import { PatchUpdateBlogCommandHandler } from '@features/blog/commands/patch-update-blog/patch-update-blog.command-handler';
 import { BlogController } from '@features/blog/controllers/blog.controller';
+import { BlogUserConnectionDisconnectDomainEventHandler } from '@features/blog/application/event-handlers/blog-user-connection-disconnect.domain-event-handler';
 import { BlogMapper } from '@features/blog/mappers/blog.mapper';
 import { FindOneBlogByUserIdQueryHandler } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query-handler';
 import { BlogRepository } from '@features/blog/repositories/blog.repository';
@@ -22,6 +23,10 @@ const commandHandlers: Provider[] = [
 
 const queryHandlers: Provider[] = [FindOneBlogByUserIdQueryHandler];
 
+const eventHandlers: Provider[] = [
+  BlogUserConnectionDisconnectDomainEventHandler,
+];
+
 const repositories: Provider[] = [
   { provide: BLOG_REPOSITORY_DI_TOKEN, useClass: BlogRepository },
 ];
@@ -34,6 +39,7 @@ const repositories: Provider[] = [
     ...commandHandlers,
     ...repositories,
     ...queryHandlers,
+    ...eventHandlers,
   ],
   exports: [...repositories, ...mappers],
 })

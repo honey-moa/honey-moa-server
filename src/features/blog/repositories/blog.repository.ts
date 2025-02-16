@@ -39,8 +39,11 @@ export class BlogRepository implements BlogRepositoryPort {
   async delete(entity: BlogEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.blog.delete({
+    const result = await this.txHost.tx.blog.update({
       where: { id: entity.id },
+      data: {
+        deletedAt: new Date(),
+      },
     });
 
     await entity.publishEvents(this.eventEmitter);

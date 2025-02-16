@@ -42,8 +42,9 @@ export class ChatRoomRepository implements ChatRoomRepositoryPort {
   async delete(entity: ChatRoomEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.chatRoom.delete({
+    const result = await this.txHost.tx.chatRoom.update({
       where: { id: entity.id },
+      data: { deletedAt: new Date() },
     });
 
     await entity.publishEvents(this.eventEmitter);
