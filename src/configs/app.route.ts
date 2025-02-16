@@ -64,6 +64,8 @@ export const routesV1 = {
     root: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
     create: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
     findBlogPostComments: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
+    patchUpdate: `${blogPostRoot}/:id/${blogPostCommentRoot}/:blogPostCommentId`,
+    delete: `${blogPostRoot}/:id/${blogPostCommentRoot}/:blogPostCommentId`,
   },
 
   chatRoom: {
