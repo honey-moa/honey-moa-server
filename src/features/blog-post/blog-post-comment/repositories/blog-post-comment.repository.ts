@@ -39,8 +39,9 @@ export class BlogPostCommentRepository
   async delete(entity: BlogPostCommentEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.blogPostComment.delete({
+    const result = await this.txHost.tx.blogPostComment.update({
       where: { id: entity.id },
+      data: { deletedAt: new Date() },
     });
 
     return result.id;

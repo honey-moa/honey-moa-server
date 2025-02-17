@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
   getSchemaPath,
@@ -159,6 +160,124 @@ export const ApiBlogPostComment: ApiOperator<keyof BlogPostCommentController> =
           {
             code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
             description: '게시글이 존재하지 않음.',
+          },
+        ]),
+      );
+    },
+
+    PatchUpdate: (
+      apiOperationOptions: ApiOperationOptionsWithSummary,
+    ): MethodDecorator => {
+      return applyDecorators(
+        ApiOperation({ ...apiOperationOptions }),
+        ApiBearerAuth('access-token'),
+        ApiNoContentResponse({
+          description: '정상적으로 블로그 포스트 댓글 수정됨.',
+        }),
+        HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'blogPost의 id가 numeric string이 아님.',
+            additionalErrors: {
+              errors: [
+                {
+                  value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                  property: 'id',
+                  reason: 'param internal the id must be a numeric string',
+                },
+              ],
+              errorType: CustomValidationError,
+            },
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'blogPostComment의 id가 numeric string이 아님.',
+            additionalErrors: {
+              errors: [
+                {
+                  value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                  property: 'blogPostCommentId',
+                  reason:
+                    'param internal the blogPostCommentId must be a numeric string',
+                },
+              ],
+              errorType: CustomValidationError,
+            },
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'content가 1이상 225이하의 문자열이어야 함.',
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'Body에 적어도 하나의 키벨류는 존재해야 함.',
+          },
+        ]),
+        HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+          {
+            code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+            description: '블로그 포스트 댓글 수정 권한이 없음.',
+          },
+        ]),
+        HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+          {
+            code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+            description: '블로그 포스트 혹은 댓글이 존재하지 않음.',
+          },
+        ]),
+      );
+    },
+
+    Delete: (
+      apiOperationOptions: ApiOperationOptionsWithSummary,
+    ): MethodDecorator => {
+      return applyDecorators(
+        ApiOperation({ ...apiOperationOptions }),
+        ApiBearerAuth('access-token'),
+        ApiNoContentResponse({
+          description: '정상적으로 블로그 포스트 댓글 삭제됨.',
+        }),
+        HttpBadRequestException.swaggerBuilder(HttpStatus.BAD_REQUEST, [
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'blogPost의 id가 numeric string이 아님.',
+            additionalErrors: {
+              errors: [
+                {
+                  value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                  property: 'id',
+                  reason: 'param internal the id must be a numeric string',
+                },
+              ],
+              errorType: CustomValidationError,
+            },
+          },
+          {
+            code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
+            description: 'blogPostComment의 id가 numeric string이 아님.',
+            additionalErrors: {
+              errors: [
+                {
+                  value: '6741371996205169262ㅁㄴㅇㅁㄴㅇ',
+                  property: 'blogPostCommentId',
+                  reason:
+                    'param internal the blogPostCommentId must be a numeric string',
+                },
+              ],
+              errorType: CustomValidationError,
+            },
+          },
+        ]),
+        HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
+          {
+            code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+            description: '블로그 포스트 댓글 삭제 권한이 없음.',
+          },
+        ]),
+        HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+          {
+            code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+            description: '블로그 포스트 혹은 댓글이 존재하지 않음.',
           },
         ]),
       );

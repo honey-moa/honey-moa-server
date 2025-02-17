@@ -7,7 +7,8 @@ import {
   BlogPostCommentProps,
   CreateBlogPostCommentProps,
 } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
-import { Entity } from '@libs/ddd/entity.base';
+import { AggregateID, Entity } from '@libs/ddd/entity.base';
+import { isNil } from '@libs/utils/util';
 
 export class BlogPostCommentEntity extends Entity<BlogPostCommentProps> {
   static readonly BLOG_POST_COMMENT_CONTENT_LENGTH = {
@@ -33,6 +34,18 @@ export class BlogPostCommentEntity extends Entity<BlogPostCommentProps> {
     });
 
     return blogPostComment;
+  }
+
+  update(props: Partial<Pick<BlogPostCommentProps, 'content'>>) {
+    if (!isNil(props.content)) {
+      this.props.content = props.content;
+    }
+
+    this.validate();
+  }
+
+  get userId(): AggregateID {
+    return this.props.userId;
   }
 
   public validate(): void {
