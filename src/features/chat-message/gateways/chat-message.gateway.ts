@@ -158,6 +158,8 @@ export class ChatMessageGateway
 
     await this.commandBus.execute<CreateChatMessageCommand, void>(command);
 
-    socket.to(String(roomId)).emit('receive_message', { message, blogPostUrl });
+    socket
+      .to(String(roomId))
+      .emit('receive_message', { senderId: userId, message, blogPostUrl });
   }
 }
