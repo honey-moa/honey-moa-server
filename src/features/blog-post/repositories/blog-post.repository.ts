@@ -38,6 +38,26 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
       : undefined;
   }
 
+  async findOneByIdAndCommentIdWithComment(
+    id: AggregateID,
+    blogPostCommentId: AggregateID,
+  ): Promise<BlogPostEntity | undefined> {
+    const record = await this.txHost.tx.blogPost.findUnique({
+      where: { id, deletedAt: null },
+      include: {
+        blogPostComments: {
+          where: {
+            id: blogPostCommentId,
+          },
+        },
+      },
+    });
+
+    return record
+      ? this.mapper.toEntity(record as BlogPostWithEntitiesModel)
+      : undefined;
+  }
+
   async findAll(): Promise<BlogPostEntity[]> {
     const record = await this.txHost.tx.blogPost.findMany({
       where: {

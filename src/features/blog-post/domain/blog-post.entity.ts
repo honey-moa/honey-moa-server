@@ -16,6 +16,12 @@ import { AttachmentEntity } from '@features/attachment/domain/attachment.entity'
 import { isNil } from '@libs/utils/util';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
+import {
+  BlogPostCommentProps,
+  CreateBlogPostCommentProps,
+} from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static BLOG_POST_TITLE_LENGTH = {
@@ -114,6 +120,57 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     return blogPostAttachment;
   }
 
+  createBlogPostComment(
+    props: Omit<CreateBlogPostCommentProps, 'blogPostId'>,
+  ): BlogPostCommentEntity {
+    const blogPostComment = BlogPostCommentEntity.create({
+      blogPostId: this.id,
+      ...props,
+    });
+
+    this.props.blogPostComments = [
+      ...(this.props.blogPostComments || []),
+      blogPostComment,
+    ];
+
+    return blogPostComment;
+  }
+
+  updateBlogPostComment(
+    blogPostCommentId: AggregateID,
+    updateBlogPostCommentProps: Partial<Pick<BlogPostCommentProps, 'content'>>,
+  ) {
+    if (isNil(this.props.blogPostComments)) {
+      return;
+    }
+
+    const blogPostComment = this.props.blogPostComments.find(
+      (blogPostComment) => blogPostComment.id === blogPostCommentId,
+    );
+
+    if (isNil(blogPostComment)) {
+      return;
+    }
+
+    blogPostComment.update(updateBlogPostCommentProps);
+  }
+
+  deleteBlogPostComment(blogPostComment: BlogPostCommentEntity): void {
+    if (isNil(this.props.blogPostComments)) {
+      return;
+    }
+
+    const index = this.props.blogPostComments.findIndex(
+      (comment) => comment.id === blogPostComment.id,
+    );
+
+    if (index === -1) {
+      return;
+    }
+
+    this.props.blogPostComments.splice(index, 1);
+  }
+
   deleteBlogPostAttachment(blogPostAttachment: BlogPostAttachmentEntity): void {
     if (isNil(this.props.blogPostAttachments)) {
       return;
@@ -144,6 +201,18 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
   get blogPostAttachments(): BlogPostAttachmentEntity[] {
     return this.props.blogPostAttachments || [];
+  }
+
+  get blogPostComments(): BlogPostCommentEntity[] {
+    return this.props.blogPostComments || [];
+  }
+
+  get blogId(): AggregateID {
+    return this.props.blogId;
+  }
+
+  get isPublic(): boolean {
+    return this.props.isPublic;
   }
 
   public validate(): void {

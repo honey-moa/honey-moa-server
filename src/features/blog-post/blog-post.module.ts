@@ -2,6 +2,14 @@ import { AttachmentModule } from '@features/attachment/attachment.module';
 import { BlogPostAttachmentMapper } from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
 import { BlogPostAttachmentRepository } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
+import { CreateBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/create-blog-post-comment/create-blog-post-comment.command-handler';
+import { DeleteBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/delete-blog-post-comment/delete-blog-post-comment.command-handler';
+import { PatchUpdateBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/patch-update-blog-post-comment/patch-update-blog-post-comment.command-handler';
+import { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
+import { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
+import { FindBlogPostCommentsQueryHandler } from '@features/blog-post/blog-post-comment/queries/find-blog-post-comments/find-blog-post-comments.query-handler';
+import { BlogPostCommentRepository } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository';
+import { BLOG_POST_COMMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-comment/tokens/di.token';
 import { BlogPostTagMapper } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
 import { BlogPostTagRepository } from '@features/blog-post/blog-post-tag/repositories/blog-post-tag.repository';
 import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-tag/tokens/di.token';
@@ -22,24 +30,29 @@ import { UserModule } from '@features/user/user.module';
 import { S3Module } from '@libs/s3/s3.module';
 import { Module, Provider } from '@nestjs/common';
 
-const controllers = [BlogPostController];
+const controllers = [BlogPostController, BlogPostCommentController];
 
 const mappers: Provider[] = [
   BlogPostMapper,
   BlogPostTagMapper,
   BlogPostAttachmentMapper,
+  BlogPostCommentMapper,
 ];
 
 const commandHandlers: Provider[] = [
   CreateBlogPostCommandHandler,
   PatchUpdateBlogPostCommandHandler,
   DeleteBlogPostCommandHandler,
+  CreateBlogPostCommentCommandHandler,
+  PatchUpdateBlogPostCommentCommandHandler,
+  DeleteBlogPostCommentCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [
   FindOneBlogPostQueryHandler,
   FindBlogPostsFromBlogQueryHandler,
   FindPublicBlogPostsQueryHandler,
+  FindBlogPostCommentsQueryHandler,
 ];
 
 const eventHandlers: Provider[] = [BlogPostBlogDeletedDomainEventHandler];
@@ -53,6 +66,10 @@ const repositories: Provider[] = [
   {
     provide: BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN,
     useClass: BlogPostAttachmentRepository,
+  },
+  {
+    provide: BLOG_POST_COMMENT_REPOSITORY_DI_TOKEN,
+    useClass: BlogPostCommentRepository,
   },
 ];
 

@@ -19,7 +19,6 @@ import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -68,12 +67,6 @@ export class PatchUpdateBlogPostCommandHandler
       tagNames,
       fileUrls,
     } = command;
-
-    if ([title, contents, date, location, tagNames, fileUrls].every(isNil)) {
-      throw new HttpBadRequestException({
-        code: COMMON_ERROR_CODE.MISSING_UPDATE_FIELD,
-      });
-    }
 
     const blog = await this.blogRepository.findOneById(blogId);
 

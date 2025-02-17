@@ -3,14 +3,13 @@ import { getTsid } from 'tsid-ts';
 import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import {
   BlogPostAttachmentProps,
   CreateBlogPostAttachmentProps,
 } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity-interface';
-import { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID, Entity } from '@libs/ddd/entity.base';
 
-export class BlogPostAttachmentEntity extends AggregateRoot<BlogPostAttachmentProps> {
+export class BlogPostAttachmentEntity extends Entity<BlogPostAttachmentProps> {
   static readonly BLOG_POST_ATTACHMENT_PATH_PREFIX: string = 'blog-post/';
 
   static create(

@@ -40,6 +40,7 @@ import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/fi
 import { FormDataRequest } from 'nestjs-form-data';
 import { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
 import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -167,7 +168,7 @@ export class UserController {
   @Patch(routesV1.user.patchUpdate)
   async patchUpdate(
     @User('sub') userId: AggregateID,
-    @Body() requestBodyDto: PatchUpdateUserRequestBodyDto,
+    @Body(NotEmptyObjectPipe) requestBodyDto: PatchUpdateUserRequestBodyDto,
   ): Promise<void> {
     const { profileImageFile } = requestBodyDto;
 

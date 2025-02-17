@@ -3,6 +3,7 @@ const userRoot = 'users';
 const authRoot = 'auth';
 const blogRoot = 'blogs';
 const blogPostRoot = 'blog-posts';
+const blogPostCommentRoot = 'blog-post-comments';
 const chatRoomRoot = 'chat-rooms';
 const chatMessageRoot = 'messages';
 const userConnectionRoot = 'connections';
@@ -58,6 +59,14 @@ export const routesV1 = {
     findOne: `${blogPostRoot}/:id`,
     // 커뮤니티에서 공개된 게시글 조회할 때 사용
     findPublicBlogPosts: `${blogPostRoot}`,
+  },
+
+  blogPostComment: {
+    root: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
+    create: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
+    findBlogPostComments: `${blogPostRoot}/:id/${blogPostCommentRoot}`,
+    patchUpdate: `${blogPostRoot}/:id/${blogPostCommentRoot}/:blogPostCommentId`,
+    delete: `${blogPostRoot}/:id/${blogPostCommentRoot}/:blogPostCommentId`,
   },
 
   chatRoom: {

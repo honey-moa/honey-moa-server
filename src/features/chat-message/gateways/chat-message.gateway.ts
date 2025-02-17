@@ -84,21 +84,22 @@ export class ChatMessageGateway
   server: Server;
 
   async handleConnection(socket: SocketWithUserDto) {
-    const authHeader = socket.handshake.headers.authorization;
+    const authProperty =
+      socket.handshake.auth?.token || socket.handshake.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authProperty || !authProperty.startsWith('Bearer ')) {
       this.logger.error(`Connection rejected: missing token ${socket.id}`);
       socket.disconnect();
       return;
     }
 
-    const token = authHeader.split(' ')[1];
+    const token = authProperty.split(' ')[1];
 
     try {
       const payload = await this.appJwtService.verifyToken(token);
 
       socket.user = { sub: payload.sub };
-      console.log(
+      this.logger.debug(
         `Connection accepted: ${socket.id}, userId: ${socket.user.sub}`,
       );
     } catch (error) {
@@ -110,7 +111,7 @@ export class ChatMessageGateway
   }
 
   async handleDisconnect(socket: SocketWithUserDto) {
-    console.log(`Disconnected: ${socket.id}`);
+    this.logger.debug(`Disconnected: ${socket.id}`);
   }
 
   @UsePipes(customValidationPipe)
