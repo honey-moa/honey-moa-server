@@ -3,6 +3,10 @@ import {
   blogPostAttachmentSchema,
 } from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
 import {
+  BlogPostCommentMapper,
+  blogPostCommentSchema,
+} from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
+import {
   BlogPostTagMapper,
   blogPostTagSchema,
 } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
@@ -37,6 +41,7 @@ export const blogPostSchema = baseSchema.extend({
 export const blogPostWithEntitiesSchema = blogPostSchema.extend({
   blogPostTags: z.array(blogPostTagSchema).optional(),
   blogPostAttachments: z.array(blogPostAttachmentSchema).optional(),
+  blogPostComments: z.array(blogPostCommentSchema).optional(),
 });
 
 export type BlogPostModel = z.TypeOf<typeof blogPostSchema>;
@@ -52,6 +57,7 @@ export class BlogPostMapper
   constructor(
     private readonly blogPostTagMapper: BlogPostTagMapper,
     private readonly blogPostAttachmentMapper: BlogPostAttachmentMapper,
+    private readonly blogPostCommentMapper: BlogPostCommentMapper,
   ) {}
 
   toEntity(record: BlogPostWithEntitiesModel): BlogPostEntity {
@@ -80,6 +86,12 @@ export class BlogPostMapper
     if (!isNil(record.blogPostAttachments)) {
       blogPostProps.props.blogPostAttachments = record.blogPostAttachments.map(
         (attachment) => this.blogPostAttachmentMapper.toEntity(attachment),
+      );
+    }
+
+    if (!isNil(record.blogPostComments)) {
+      blogPostProps.props.blogPostComments = record.blogPostComments.map(
+        (comment) => this.blogPostCommentMapper.toEntity(comment),
       );
     }
 

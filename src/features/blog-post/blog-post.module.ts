@@ -3,6 +3,8 @@ import { BlogPostAttachmentMapper } from '@features/blog-post/blog-post-attachme
 import { BlogPostAttachmentRepository } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
 import { CreateBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/create-blog-post-comment/create-blog-post-comment.command-handler';
+import { DeleteBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/delete-blog-post-comment/delete-blog-post-comment.command-handler';
+import { PatchUpdateBlogPostCommentCommandHandler } from '@features/blog-post/blog-post-comment/commands/patch-update-blog-post-comment/patch-update-blog-post-comment.command-handler';
 import { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
 import { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
 import { FindBlogPostCommentsQueryHandler } from '@features/blog-post/blog-post-comment/queries/find-blog-post-comments/find-blog-post-comments.query-handler';
@@ -41,6 +43,8 @@ const commandHandlers: Provider[] = [
   PatchUpdateBlogPostCommandHandler,
   DeleteBlogPostCommandHandler,
   CreateBlogPostCommentCommandHandler,
+  PatchUpdateBlogPostCommentCommandHandler,
+  DeleteBlogPostCommentCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [
