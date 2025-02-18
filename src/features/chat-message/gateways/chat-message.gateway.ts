@@ -14,6 +14,7 @@ import {
   UseFilters,
   UsePipes,
   ValidationPipeOptions,
+  Logger,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
@@ -29,7 +30,6 @@ import {
 import { ValidationError } from 'class-validator';
 import { Server } from 'socket.io';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
 
@@ -88,7 +88,9 @@ export class ChatMessageGateway
       socket.handshake.auth?.token || socket.handshake.headers.authorization;
 
     if (!authProperty || !authProperty.startsWith('Bearer ')) {
-      this.logger.error(`Connection rejected: missing token ${socket.id}`);
+      this.logger.error(
+        `[Socket] Connection rejected: missing token ${socket.id}`,
+      );
       socket.disconnect();
       return;
     }
@@ -99,19 +101,19 @@ export class ChatMessageGateway
       const payload = await this.appJwtService.verifyToken(token);
 
       socket.user = { sub: payload.sub };
-      this.logger.debug(
-        `Connection accepted: ${socket.id}, userId: ${socket.user.sub}`,
+      this.logger.log(
+        `[Socket] Connection accepted: ${socket.id}, userId: ${socket.user.sub}`,
       );
     } catch (error) {
       this.logger.error(
-        `Token verification failed for socket ${socket.id}: ${error}`,
+        `[Socket] Token verification failed for socket ${socket.id}: ${error}`,
       );
       socket.disconnect();
     }
   }
 
   async handleDisconnect(socket: SocketWithUserDto) {
-    this.logger.debug(`Disconnected: ${socket.id}`);
+    this.logger.log(`[Socket] Disconnected: ${socket.id}`);
   }
 
   @UsePipes(customValidationPipe)
