@@ -254,6 +254,14 @@ export class UserEntity extends AggregateRoot<UserProps> {
     );
   }
 
+  setUserConnection(connection: UserConnectionEntity): void {
+    if (connection.requesterId === this.id) {
+      this.props.requesterConnections = [connection];
+    } else if (connection.requestedId === this.id) {
+      this.props.requestedConnections = [connection];
+    }
+  }
+
   editNickname(nickname: string) {
     if (!Guard.lengthIsBetween(nickname, 1, 20)) {
       throw new HttpInternalServerErrorException({

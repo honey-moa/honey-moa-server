@@ -37,6 +37,6 @@ export interface UserRepositoryPort
 
   updateUserConnection(
     entity: UserEntity,
-    connectionId: AggregateID,
+    userConnection: UserConnectionEntity,
   ): Promise<void>;
 }

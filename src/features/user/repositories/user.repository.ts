@@ -203,17 +203,9 @@ export class UserRepository implements UserRepositoryPort {
 
   async updateUserConnection(
     entity: UserEntity,
-    connectionId: AggregateID,
+    userConnection: UserConnectionEntity,
   ): Promise<void> {
-    const { requesterConnections = [], requestedConnections = [] } =
-      entity.getProps();
-    const connection =
-      requesterConnections.find((conn) => conn.id === connectionId) ||
-      requestedConnections.find((conn) => conn.id === connectionId);
-
-    if (!connection) return;
-
-    const record = this.userConnectionMapper.toPersistence(connection);
+    const record = this.userConnectionMapper.toPersistence(userConnection);
 
     await this.txHost.tx.userConnection.update({
       where: { id: record.id },
