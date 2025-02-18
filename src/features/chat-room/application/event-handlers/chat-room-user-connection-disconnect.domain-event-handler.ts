@@ -14,10 +14,10 @@ export class ChatRoomUserConnectionDisconnectDomainEventHandler {
 
   @OnEvent(UserConnectionDisconnectedDomainEvent.name)
   async handle(event: UserConnectionDisconnectedDomainEvent) {
-    const { aggregateId } = event;
+    const { connectionId } = event;
 
     const chatRoom =
-      await this.chatRoomRepository.findOneByConnectionId(aggregateId);
+      await this.chatRoomRepository.findOneByConnectionId(connectionId);
 
     if (isNil(chatRoom)) return;
 

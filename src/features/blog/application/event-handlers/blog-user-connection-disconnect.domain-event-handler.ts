@@ -16,9 +16,9 @@ export class BlogUserConnectionDisconnectDomainEventHandler {
   @OnEvent(UserConnectionDisconnectedDomainEvent.name, { async: true })
   @Transactional(Propagation.RequiresNew)
   async handle(event: UserConnectionDisconnectedDomainEvent) {
-    const { aggregateId } = event;
+    const { connectionId } = event;
 
-    const blog = await this.blogRepository.findOneByConnectionId(aggregateId);
+    const blog = await this.blogRepository.findOneByConnectionId(connectionId);
 
     if (isNil(blog)) return;
 

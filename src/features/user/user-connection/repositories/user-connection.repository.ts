@@ -47,8 +47,6 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
       data: { deletedAt: new Date() },
     });
 
-    await entity.publishEvents(this.eventEmitter);
-
     return result.id;
   }
 

@@ -201,12 +201,25 @@ export class UserRepository implements UserRepositoryPort {
     });
   }
 
-  async updateUserConnection(entity: UserConnectionEntity): Promise<void> {
-    const record = this.userConnectionMapper.toPersistence(entity);
+  async updateUserConnection(
+    entity: UserEntity,
+    connectionId: AggregateID,
+  ): Promise<void> {
+    const { requesterConnections = [], requestedConnections = [] } =
+      entity.getProps();
+    const connection =
+      requesterConnections.find((conn) => conn.id === connectionId) ||
+      requestedConnections.find((conn) => conn.id === connectionId);
+
+    if (!connection) return;
+
+    const record = this.userConnectionMapper.toPersistence(connection);
 
     await this.txHost.tx.userConnection.update({
       where: { id: record.id },
       data: record,
     });
+
+    await entity.publishEvents(this.eventEmitter);
   }
 }
