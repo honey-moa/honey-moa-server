@@ -268,7 +268,7 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
       ]),
       HttpConflictException.swaggerBuilder(HttpStatus.CONFLICT, [
         {
-          code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_DISCONNECT_CONNECTED_CONNECTION,
+          code: USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED,
           description: 'connected 상태의 커넥션만 해제할 수 있음.',
         },
       ]),

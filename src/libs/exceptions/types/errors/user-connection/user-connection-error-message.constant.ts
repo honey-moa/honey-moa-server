@@ -30,6 +30,4 @@ export const USER_CONNECTION_ERROR_MESSAGE: ErrorMessage<
     "You aren't part of a connection",
   [USER_CONNECTION_ERROR_CODE.ALREADY_HAVE_PENDING_CONNECTION_WITH_USER]:
     'You already have a pending connection with the user',
-  [USER_CONNECTION_ERROR_CODE.CAN_ONLY_DISCONNECT_CONNECTED_CONNECTION]:
-    'You can only disconnect a connected connection',
 } as const;
