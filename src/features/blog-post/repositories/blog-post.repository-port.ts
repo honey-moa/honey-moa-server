@@ -10,7 +10,7 @@ export interface BlogPostInclude {
 
 export interface BlogPostRepositoryPort
   extends RepositoryPort<BlogPostEntity, BlogPostInclude> {
-  findAllByBlogId(blogId: AggregateID): Promise<BlogPostEntity[] | undefined>;
+  findAllByBlogId(blogId: AggregateID): Promise<BlogPostEntity[]>;
   bulkDelete(entities: BlogPostEntity[]): Promise<void>;
   findOneByIdAndCommentIdWithComment(
     id: AggregateID,

@@ -125,9 +125,7 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
     return this.mapper.toEntity(updatedRecord as BlogPostWithEntitiesModel);
   }
 
-  async findAllByBlogId(
-    blogId: AggregateID,
-  ): Promise<BlogPostEntity[] | undefined> {
+  async findAllByBlogId(blogId: AggregateID): Promise<BlogPostEntity[]> {
     const record = await this.txHost.tx.blogPost.findMany({
       where: {
         blogId,
