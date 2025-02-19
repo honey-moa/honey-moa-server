@@ -256,7 +256,7 @@ export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
       ]),
       HttpForbiddenException.swaggerBuilder(HttpStatus.FORBIDDEN, [
         {
-          code: COMMON_ERROR_CODE.PERMISSION_DENIED,
+          code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
           description: '유저가 커넥션 요청자 혹은 피요청자가 아님.',
         },
       ]),
