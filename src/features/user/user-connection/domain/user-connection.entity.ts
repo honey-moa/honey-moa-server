@@ -94,7 +94,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
   }
 
   disconnectConnection(): void {
-    if (this.props.status !== UserConnectionStatus.ACCEPTED) {
+    if (!this.isConnected()) {
       throw new HttpConflictException({
         code: USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED,
       });
