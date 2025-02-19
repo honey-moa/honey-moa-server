@@ -4,7 +4,6 @@ import { Guard } from '@libs/guard';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
-import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import {
   UserConnectionProps,
@@ -66,7 +65,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   acceptConnectionRequest(userId: AggregateID): void {
     if (this.requestedId !== userId) {
-      throw new HttpForbiddenException({
+      throw new HttpConflictException({
         code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_ACCEPT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
       });
     }
@@ -76,7 +75,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   rejectConnectionRequest(userId: AggregateID): void {
     if (this.requestedId !== userId) {
-      throw new HttpForbiddenException({
+      throw new HttpConflictException({
         code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_REJECT_CONNECTION_REQUEST_THAT_COME_TO_YOU,
       });
     }
@@ -86,7 +85,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   cancelConnectionRequest(userId: AggregateID): void {
     if (this.requesterId !== userId) {
-      throw new HttpForbiddenException({
+      throw new HttpConflictException({
         code: USER_CONNECTION_ERROR_CODE.CAN_ONLY_CANCEL_CONNECTION_REQUEST_THAT_YOU_SENT,
       });
     }
@@ -96,7 +95,7 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   disconnectConnection(): void {
     if (this.props.status !== UserConnectionStatus.ACCEPTED) {
-      throw new HttpForbiddenException({
+      throw new HttpConflictException({
         code: USER_CONNECTION_ERROR_CODE.CANNOT_DISCONNECT_CONNECTION_REQUEST_NOT_ACCEPTED,
       });
     }
