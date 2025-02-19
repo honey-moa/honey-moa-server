@@ -7,7 +7,6 @@ import { UserConnectionEntity } from '@features/user/user-connection/domain/user
 import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserConnectionRepository implements UserConnectionRepositoryPort {
@@ -15,7 +14,6 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
     private readonly txHost: TransactionHost<
       TransactionalAdapterPrisma<PrismaService>
     >,
-    private readonly eventEmitter: EventEmitter2,
     private readonly mapper: UserConnectionMapper,
   ) {}
 
