@@ -1,6 +1,5 @@
 import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -9,7 +8,6 @@ import { isNil } from '@libs/utils/util';
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import dayjs from 'dayjs';
 
 @QueryHandler(FindBlogPostsFromBlogQuery)
 export class FindBlogPostsFromBlogQueryHandler
@@ -63,7 +61,9 @@ export class FindBlogPostsFromBlogQueryHandler
       ...(!showPrivatePosts && {
         isPublic: true,
       }),
-      ...this.getWhereFromDatePeriod(datePeriod),
+      date: {
+        startsWith: datePeriod,
+      },
     };
 
     const [blogPosts, count] = await Promise.all([
@@ -112,51 +112,5 @@ export class FindBlogPostsFromBlogQueryHandler
       }),
       count,
     };
-  }
-
-  private getWhereFromDatePeriod(datePeriod?: string) {
-    if (isNil(datePeriod)) {
-      return {};
-    }
-
-    const timestamp = Date.parse(datePeriod);
-
-    if (Number.isNaN(timestamp)) {
-      throw new HttpBadRequestException({
-        code: COMMON_ERROR_CODE.INVALID_REQUEST_PARAMETER,
-        customMessage: "datePeriod isn't valid date format.",
-      });
-    }
-
-    const date = dayjs(datePeriod);
-
-    if (datePeriod.length === 4) {
-      return {
-        createdAt: {
-          gte: date.startOf('year').toDate(),
-          lte: date.endOf('year').toDate(),
-        },
-      };
-    }
-
-    if (datePeriod.length === 7) {
-      return {
-        createdAt: {
-          gte: date.startOf('month').toDate(),
-          lte: date.endOf('month').toDate(),
-        },
-      };
-    }
-
-    if (datePeriod.length === 10) {
-      return {
-        createdAt: {
-          gte: date.startOf('day').toDate(),
-          lte: date.endOf('day').toDate(),
-        },
-      };
-    }
-
-    return {};
   }
 }
