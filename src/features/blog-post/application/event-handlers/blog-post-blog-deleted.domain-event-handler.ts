@@ -13,7 +13,7 @@ export class BlogPostBlogDeletedDomainEventHandler {
     private readonly blogPostRepository: BlogPostRepositoryPort,
   ) {}
 
-  @OnEvent(BlogDeletedDomainEvent.name)
+  @OnEvent(BlogDeletedDomainEvent.name, { async: false })
   @Transactional()
   async handle(event: BlogDeletedDomainEvent) {
     const { aggregateId } = event;
