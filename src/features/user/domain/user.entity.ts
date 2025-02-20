@@ -256,9 +256,29 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
   setUserConnection(connection: UserConnectionEntity): void {
     if (connection.requesterId === this.id) {
-      this.props.requesterConnections = [connection];
+      if (!this.props.requesterConnections) {
+        this.props.requesterConnections = [];
+      }
+      const index = this.props.requesterConnections.findIndex(
+        (conn) => conn.id === connection.id,
+      );
+      if (index !== -1) {
+        this.props.requesterConnections[index] = connection;
+      } else {
+        this.props.requesterConnections.push(connection);
+      }
     } else if (connection.requestedId === this.id) {
-      this.props.requestedConnections = [connection];
+      if (!this.props.requestedConnections) {
+        this.props.requestedConnections = [];
+      }
+      const index = this.props.requestedConnections.findIndex(
+        (conn) => conn.id === connection.id,
+      );
+      if (index !== -1) {
+        this.props.requestedConnections[index] = connection;
+      } else {
+        this.props.requestedConnections.push(connection);
+      }
     }
   }
 
