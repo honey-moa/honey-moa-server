@@ -26,7 +26,12 @@ import { AggregateID } from '@libs/ddd/entity.base';
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static BLOG_POST_TITLE_LENGTH = {
     MIN: 1,
-    MAX: 20,
+    MAX: 255,
+  } as const;
+
+  static BLOG_POST_SUMMARY_LENGTH = {
+    MIN: 1,
+    MAX: 255,
   } as const;
 
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -213,6 +218,18 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
   get isPublic(): boolean {
     return this.props.isPublic;
+  }
+
+  get thumbnailImageUrl(): string | null {
+    if (isNil(this.props.thumbnailImagePath)) {
+      return null;
+    }
+
+    return `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${this.props.thumbnailImagePath}`;
+  }
+
+  get thumbnailImagePath(): string | null {
+    return this.props.thumbnailImagePath;
   }
 
   public validate(): void {

@@ -10,6 +10,8 @@ import {
 import { AggregateID, Entity } from '@libs/ddd/entity.base';
 
 export class BlogPostAttachmentEntity extends Entity<BlogPostAttachmentProps> {
+  static readonly BLOG_POST_ATTACHMENT_URL =
+    process.env.BLOG_POST_ATTACHMENT_URL;
   static readonly BLOG_POST_ATTACHMENT_PATH_PREFIX: string = 'blog-post/';
 
   static create(

@@ -1,9 +1,12 @@
+import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
+import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   ArrayNotEmpty,
   ArrayUnique,
   IsBoolean,
   IsDateString,
+  IsUrl,
   Length,
 } from 'class-validator';
 
@@ -75,7 +78,27 @@ export class CreateBlogPostRequestBodyDto {
     default: [],
     uniqueItems: true,
   })
-  @Length(1, 20, { each: true })
+  @IsUrl({}, { each: true })
   @ArrayUnique()
   fileUrls: string[] = [];
+
+  @ApiProperty({
+    description: '게시글 요약',
+    minLength: BlogPostEntity.BLOG_POST_SUMMARY_LENGTH.MIN,
+    maxLength: BlogPostEntity.BLOG_POST_SUMMARY_LENGTH.MAX,
+  })
+  @Length(
+    BlogPostEntity.BLOG_POST_SUMMARY_LENGTH.MIN,
+    BlogPostEntity.BLOG_POST_SUMMARY_LENGTH.MAX,
+  )
+  summary: string;
+
+  @ApiProperty({
+    description: '게시글 썸네일 이미지 URL',
+    format: 'uri',
+    nullable: true,
+  })
+  @IsUrl()
+  @IsNullable()
+  thumbnailImageUrl: string | null;
 }

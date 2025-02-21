@@ -1,3 +1,4 @@
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { FindOneBlogPostQuery } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -68,6 +69,8 @@ export class FindOneBlogPostQueryHandler
       date: blogPost.date,
       location: blogPost.location,
       isPublic: blogPost.isPublic,
+      summary: blogPost.summary,
+      thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
       createdAt: blogPost.createdAt,
       updatedAt: blogPost.updatedAt,
       tags: blogPost.blogPostTags.map((blogPostTag) => {
