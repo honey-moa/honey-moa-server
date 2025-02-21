@@ -96,6 +96,7 @@ export class CreateBlogPostRequestBodyDto {
   @ApiProperty({
     description: '게시글 썸네일 이미지 URL',
     format: 'uri',
+    type: 'string',
     nullable: true,
   })
   @IsUrl()

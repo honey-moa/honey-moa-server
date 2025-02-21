@@ -180,7 +180,7 @@ export class CreateBlogPostCommandHandler
         jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
       });
 
-      blogPost.editContents(JSON.parse(jsonContents));
+      blogPost.update({ contents: JSON.parse(jsonContents) });
     }
 
     if (notExistingAttachments.length) {

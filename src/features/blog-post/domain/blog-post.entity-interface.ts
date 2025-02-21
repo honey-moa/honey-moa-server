@@ -36,3 +36,11 @@ export interface CreateBlogPostProps {
   thumbnailImagePath: string | null;
   isPublic?: boolean;
 }
+
+export interface UpdateBlogPostProps
+  extends Partial<
+    Omit<
+      CreateBlogPostProps,
+      'userId' | 'blogId' | 'isPublic' | 'thumbnailImagePath'
+    >
+  > {}
