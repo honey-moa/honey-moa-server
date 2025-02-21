@@ -150,17 +150,19 @@ model Tag {
 // 따라서 현재는 역정규화하고 비정형 스키마를 사용하는 것으로 결정함.
 // Validation 또한 Request Body에서만 하는 것으로 결정함.
 model BlogPost {
-  id        BigInt    @id(map: "pk_blog_posts")
-  blogId    BigInt    @map("blog_id") @db.BigInt()
-  userId    BigInt    @map("user_id") @db.BigInt()
-  title     String    @db.VarChar(255)
-  contents  Json
-  date      String    @db.VarChar(20)
-  location  String    @db.VarChar(100)
-  isPublic  Boolean   @default(false) @map("is_public") @db.Boolean
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
-  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+  id                 BigInt    @id(map: "pk_blog_posts")
+  blogId             BigInt    @map("blog_id") @db.BigInt()
+  userId             BigInt    @map("user_id") @db.BigInt()
+  title              String    @db.VarChar(255)
+  contents           Json
+  date               String    @db.VarChar(20)
+  location           String    @db.VarChar(100)
+  isPublic           Boolean   @default(false) @map("is_public") @db.Boolean
+  summary            String    @db.VarChar(255)
+  thumbnailImagePath String?   @map("thumbnail_image_path") @db.VarChar(255)
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt          DateTime  @default(now()) @map("updated_at") @db.Timestamptz(6)
+  deletedAt          DateTime? @map("deleted_at") @db.Timestamptz(6)
 
   blog                Blog                 @relation(fields: [blogId], references: [id], onDelete: Cascade)
   blogPostTags        BlogPostTag[]

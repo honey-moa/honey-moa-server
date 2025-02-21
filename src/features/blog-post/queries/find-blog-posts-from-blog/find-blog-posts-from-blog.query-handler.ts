@@ -1,3 +1,4 @@
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -107,6 +108,7 @@ export class FindBlogPostsFromBlogQueryHandler
       blogPosts: blogPosts.map((blogPost) => {
         return {
           ...blogPost,
+          thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
           tags: blogPost.blogPostTags.map((blogPostTag) => blogPostTag.tag),
         };
       }),

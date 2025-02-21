@@ -13,6 +13,8 @@ export class PatchUpdateBlogPostCommand extends Command implements ICommand {
   readonly isPublic?: boolean;
   readonly tagNames?: string[];
   readonly fileUrls?: string[];
+  readonly summary?: string;
+  readonly thumbnailImageUrl?: string | null;
 
   constructor(props: CommandProps<PatchUpdateBlogPostCommand>) {
     super(props);
@@ -27,5 +29,7 @@ export class PatchUpdateBlogPostCommand extends Command implements ICommand {
     this.isPublic = props.isPublic;
     this.tagNames = props.tagNames;
     this.fileUrls = props.fileUrls;
+    this.summary = props.summary;
+    this.thumbnailImageUrl = props.thumbnailImageUrl;
   }
 }

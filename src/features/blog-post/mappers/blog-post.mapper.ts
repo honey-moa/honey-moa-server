@@ -32,6 +32,8 @@ export const blogPostSchema = baseSchema.extend({
   date: z.string().max(20),
   location: z.string().max(100),
   isPublic: z.boolean(),
+  summary: z.string().max(255),
+  thumbnailImagePath: z.string().max(255).nullable(),
   deletedAt: z.preprocess(
     (val: any) => (val === null ? null : new Date(val)),
     z.nullable(z.date()),
@@ -71,6 +73,8 @@ export class BlogPostMapper
         contents: record.contents,
         date: record.date,
         location: record.location,
+        summary: record.summary,
+        thumbnailImagePath: record.thumbnailImagePath,
         deletedAt: record.deletedAt,
       },
       createdAt: record.createdAt,
@@ -113,6 +117,7 @@ export class BlogPostMapper
 
     const createDtoProps: CreateBlogPostResponseDtoProps = {
       ...props,
+      thumbnailImageUrl: entity.thumbnailImageUrl,
     };
 
     if (!isNil(tags)) {
