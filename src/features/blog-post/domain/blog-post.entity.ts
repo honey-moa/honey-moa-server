@@ -6,6 +6,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import {
   BlogPostProps,
   CreateBlogPostProps,
+  UpdateBlogPostProps,
 } from '@features/blog-post/domain/blog-post.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { TagEntity } from '@features/tag/domain/tag.entity';
@@ -26,7 +27,12 @@ import { AggregateID } from '@libs/ddd/entity.base';
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static BLOG_POST_TITLE_LENGTH = {
     MIN: 1,
-    MAX: 20,
+    MAX: 255,
+  } as const;
+
+  static BLOG_POST_SUMMARY_LENGTH = {
+    MIN: 1,
+    MAX: 255,
   } as const;
 
   static create(create: CreateBlogPostProps): BlogPostEntity {
@@ -57,20 +63,32 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     return blogPost;
   }
 
-  editContents(contents: Array<Record<string, any>>): void {
-    this.props.contents = contents;
+  update(update: Partial<UpdateBlogPostProps>): void {
+    if (!isNil(update.title)) {
+      this.props.title = update.title;
+    }
+
+    if (!isNil(update.contents)) {
+      this.props.contents = update.contents;
+    }
+
+    if (!isNil(update.date)) {
+      this.props.date = update.date;
+    }
+
+    if (!isNil(update.location)) {
+      this.props.location = update.location;
+    }
+
+    if (!isNil(update.summary)) {
+      this.props.summary = update.summary;
+    }
+
+    this.validate();
   }
 
-  editTitle(title: string): void {
-    this.props.title = title;
-  }
-
-  editDate(date: string): void {
-    this.props.date = date;
-  }
-
-  editLocation(location: string): void {
-    this.props.location = location;
+  editThumbnailImagePath(thumbnailImagePath: string | null): void {
+    this.props.thumbnailImagePath = thumbnailImagePath;
   }
 
   private changeIsPublic(isPublic: boolean): void {
@@ -213,6 +231,18 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
   get isPublic(): boolean {
     return this.props.isPublic;
+  }
+
+  get thumbnailImageUrl(): string | null {
+    if (isNil(this.props.thumbnailImagePath)) {
+      return null;
+    }
+
+    return `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${this.props.thumbnailImagePath}`;
+  }
+
+  get thumbnailImagePath(): string | null {
+    return this.props.thumbnailImagePath;
   }
 
   public validate(): void {

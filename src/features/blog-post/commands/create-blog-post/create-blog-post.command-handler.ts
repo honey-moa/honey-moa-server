@@ -59,6 +59,8 @@ export class CreateBlogPostCommandHandler
       location,
       tagNames,
       fileUrls,
+      summary,
+      thumbnailImageUrl,
     } = command;
 
     const blog = await this.blogRepository.findOneById(blogId);
@@ -75,6 +77,35 @@ export class CreateBlogPostCommandHandler
       });
     }
 
+    let thumbnailImagePath: string | null = null;
+
+    if (!isNil(thumbnailImageUrl)) {
+      const existingAttachment = (
+        await this.attachmentRepository.findByUrls([thumbnailImageUrl])
+      )[0];
+
+      if (!isNil(existingAttachment)) {
+        const result = await this.s3Service.moveFiles(
+          [existingAttachment.path],
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+          AttachmentEntity.ATTACHMENT_PATH_PREFIX,
+        );
+
+        const pathInfo = result[existingAttachment.path];
+
+        if (pathInfo.isExiting) {
+          thumbnailImagePath = pathInfo.movedPath;
+
+          existingAttachment.changeLocation({
+            path: pathInfo.movedPath,
+            url: pathInfo.movedUrl,
+          });
+
+          await this.attachmentRepository.update(existingAttachment);
+        }
+      }
+    }
+
     const blogPost = BlogPostEntity.create({
       blogId,
       userId,
@@ -82,6 +113,8 @@ export class CreateBlogPostCommandHandler
       contents,
       date,
       location,
+      summary,
+      thumbnailImagePath,
     });
 
     const tags = await this.tagRepository.findByNames(tagNames);
@@ -147,7 +180,7 @@ export class CreateBlogPostCommandHandler
         jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
       });
 
-      blogPost.editContents(JSON.parse(jsonContents));
+      blogPost.update({ contents: JSON.parse(jsonContents) });
     }
 
     if (notExistingAttachments.length) {

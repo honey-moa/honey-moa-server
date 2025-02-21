@@ -9,6 +9,8 @@ import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog
 import { BlogPostTagRepositoryPort } from '@features/blog-post/blog-post-tag/repositories/blog-post-tag.repository-port';
 import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-tag/tokens/di.token';
 import { PatchUpdateBlogPostCommand } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command';
+import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
+import { UpdateBlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
 import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
@@ -66,6 +68,8 @@ export class PatchUpdateBlogPostCommandHandler
       isPublic,
       tagNames,
       fileUrls,
+      summary,
+      thumbnailImageUrl,
     } = command;
 
     const blog = await this.blogRepository.findOneById(blogId);
@@ -102,17 +106,12 @@ export class PatchUpdateBlogPostCommandHandler
       blogPost.switchToPrivate();
     }
 
-    if (!isNil(title)) {
-      blogPost.editTitle(title);
-    }
-
-    if (!isNil(date)) {
-      blogPost.editDate(date);
-    }
-
-    if (!isNil(location)) {
-      blogPost.editLocation(location);
-    }
+    const updateProps: UpdateBlogPostProps = {
+      title,
+      date,
+      location,
+      summary,
+    };
 
     if (!isNil(contents)) {
       const attachmentIds = blogPost.blogPostAttachments.map(
@@ -157,7 +156,7 @@ export class PatchUpdateBlogPostCommandHandler
         blogPost.deleteBlogPostAttachment(blogPostAttachment),
       );
 
-      blogPost.editContents(contents);
+      updateProps.contents = contents;
     }
 
     if (!isNil(tagNames)) {
@@ -238,7 +237,7 @@ export class PatchUpdateBlogPostCommandHandler
             );
           });
 
-          blogPost.editContents(JSON.parse(jsonContents));
+          updateProps.contents = JSON.parse(jsonContents);
         }
       }
 
@@ -255,10 +254,65 @@ export class PatchUpdateBlogPostCommandHandler
       );
     }
 
+    blogPost.update(updateProps);
+
+    if (thumbnailImageUrl !== undefined) {
+      await this.deleteThumbnailImage(blogPost);
+
+      if (thumbnailImageUrl !== null) {
+        const existingAttachment = (
+          await this.attachmentRepository.findByUrls([thumbnailImageUrl])
+        )[0];
+
+        if (!isNil(existingAttachment)) {
+          const result = await this.s3Service.moveFiles(
+            [existingAttachment.path],
+            BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+            AttachmentEntity.ATTACHMENT_PATH_PREFIX,
+          );
+
+          const pathInfo = result[existingAttachment.path];
+
+          if (pathInfo.isExiting) {
+            blogPost.editThumbnailImagePath(pathInfo.movedUrl);
+
+            existingAttachment.changeLocation({
+              path: pathInfo.movedPath,
+              url: pathInfo.movedUrl,
+            });
+
+            await this.attachmentRepository.update(existingAttachment);
+          }
+        }
+      }
+    }
+
     await Promise.all([
       this.blogPostRepository.update(blogPost),
       this.blogPostTagRepository.bulkCreate(newBlogPostTags),
       this.blogPostAttachmentRepository.bulkCreate(newBlogPostAttachments),
     ]);
+  }
+
+  private async deleteThumbnailImage(blogPost: BlogPostEntity): Promise<void> {
+    const thumbnailImageUrl = blogPost.thumbnailImageUrl;
+
+    if (!isNil(thumbnailImageUrl)) {
+      const existingAttachment = (
+        await this.attachmentRepository.findByUrls([thumbnailImageUrl])
+      )[0];
+
+      if (isNil(existingAttachment)) {
+        return;
+      }
+
+      await this.s3Service.deleteFilesFromS3([existingAttachment.path]);
+
+      existingAttachment.delete();
+
+      await this.attachmentRepository.delete(existingAttachment);
+
+      blogPost.editThumbnailImagePath(null);
+    }
   }
 }

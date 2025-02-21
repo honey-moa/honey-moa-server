@@ -13,6 +13,8 @@ export interface BlogPostProps {
   date: string;
   location: string;
   isPublic: boolean;
+  summary: string;
+  thumbnailImagePath: string | null;
   deletedAt: Date | null;
 
   blogPostTags?: BlogPostTagEntity[];
@@ -30,5 +32,15 @@ export interface CreateBlogPostProps {
   contents: Array<Record<string, any>>;
   date: string;
   location: string;
+  summary: string;
+  thumbnailImagePath: string | null;
   isPublic?: boolean;
 }
+
+export interface UpdateBlogPostProps
+  extends Partial<
+    Omit<
+      CreateBlogPostProps,
+      'userId' | 'blogId' | 'isPublic' | 'thumbnailImagePath'
+    >
+  > {}

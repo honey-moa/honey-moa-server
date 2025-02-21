@@ -11,6 +11,8 @@ export class CreateBlogPostCommand extends Command implements ICommand {
   readonly location: string;
   readonly tagNames: string[];
   readonly fileUrls: string[];
+  readonly summary: string;
+  readonly thumbnailImageUrl: string | null;
 
   constructor(props: CommandProps<CreateBlogPostCommand>) {
     super(props);
@@ -23,5 +25,7 @@ export class CreateBlogPostCommand extends Command implements ICommand {
     this.location = props.location;
     this.tagNames = props.tagNames;
     this.fileUrls = props.fileUrls;
+    this.summary = props.summary;
+    this.thumbnailImageUrl = props.thumbnailImageUrl;
   }
 }

@@ -1,3 +1,4 @@
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
@@ -81,6 +82,7 @@ export class FindPublicBlogPostsQueryHandler
         return {
           ...blogPost,
           tags: blogPost.blogPostTags.map((blogPostTag) => blogPostTag.tag),
+          thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
           blog: {
             ...blogPost.blog,
             members: [
