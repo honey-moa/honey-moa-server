@@ -40,8 +40,9 @@ export class UserConnectionRepository implements UserConnectionRepositoryPort {
   async delete(entity: UserConnectionEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.userConnection.delete({
+    const result = await this.txHost.tx.userConnection.update({
       where: { id: entity.id },
+      data: { deletedAt: new Date() },
     });
 
     return result.id;

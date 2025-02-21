@@ -29,6 +29,7 @@ import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { UserMbtiUnion } from '@features/user/types/user.type';
+import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
 
 export class UserEntity extends AggregateRoot<UserProps> {
   static readonly USER_ATTACHMENT_URL = process.env.USER_ATTACHMENT_URL;
@@ -218,6 +219,13 @@ export class UserEntity extends AggregateRoot<UserProps> {
 
     this.acceptedConnection.disconnectConnection();
 
+    this.addEvent(
+      new UserConnectionDisconnectedDomainEvent({
+        aggregateId: this.id,
+        connectionId,
+      }),
+    );
+
     return this.acceptedConnection;
   }
 
@@ -244,6 +252,32 @@ export class UserEntity extends AggregateRoot<UserProps> {
       this.requesterConnections?.some((connection) => connection.isPending()) ||
       false
     );
+  }
+
+  setUserConnection(connection: UserConnectionEntity): void {
+    if (connection.requesterId === this.id) {
+      if (!this.props.requesterConnections) {
+        this.props.requesterConnections = [connection];
+        return;
+      }
+      const index = this.props.requesterConnections.findIndex(
+        (conn) => conn.id === connection.id,
+      );
+      if (index === -1) {
+        this.props.requesterConnections.push(connection);
+      }
+    } else if (connection.requestedId === this.id) {
+      if (!this.props.requestedConnections) {
+        this.props.requestedConnections = [connection];
+        return;
+      }
+      const index = this.props.requestedConnections.findIndex(
+        (conn) => conn.id === connection.id,
+      );
+      if (index === -1) {
+        this.props.requestedConnections.push(connection);
+      }
+    }
   }
 
   editNickname(nickname: string) {

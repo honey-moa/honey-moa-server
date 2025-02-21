@@ -35,5 +35,8 @@ export interface UserRepositoryPort
 
   createUserConnection(entity: UserConnectionEntity): Promise<void>;
 
-  updateUserConnection(entity: UserConnectionEntity): Promise<void>;
+  updateUserConnection(
+    entity: UserEntity,
+    userConnection: UserConnectionEntity,
+  ): Promise<void>;
 }
