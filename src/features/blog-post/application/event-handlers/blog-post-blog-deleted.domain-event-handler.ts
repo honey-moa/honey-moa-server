@@ -13,8 +13,8 @@ export class BlogPostBlogDeletedDomainEventHandler {
     private readonly blogPostRepository: BlogPostRepositoryPort,
   ) {}
 
-  @OnEvent(BlogDeletedDomainEvent.name, { async: false })
   @Transactional()
+  @OnEvent(BlogDeletedDomainEvent.name, { async: false, suppressErrors: false })
   async handle(event: BlogDeletedDomainEvent) {
     const { aggregateId } = event;
 
@@ -24,6 +24,8 @@ export class BlogPostBlogDeletedDomainEventHandler {
     if (isNil(blogPosts) || blogPosts.length === 0) return;
 
     blogPosts.forEach((blogPost) => blogPost.delete());
+
+    throw new Error('트랜잭션 롤백 유도');
 
     await this.blogPostRepository.bulkDelete(blogPosts);
   }

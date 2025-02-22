@@ -13,8 +13,11 @@ export class BlogUserConnectionDisconnectDomainEventHandler {
     private readonly blogRepository: BlogRepositoryPort,
   ) {}
 
-  @OnEvent(UserConnectionDisconnectedDomainEvent.name, { async: false })
   @Transactional()
+  @OnEvent(UserConnectionDisconnectedDomainEvent.name, {
+    async: false,
+    suppressErrors: false,
+  })
   async handle(event: UserConnectionDisconnectedDomainEvent) {
     const { connectionId } = event;
 

@@ -14,7 +14,10 @@ export class ChatRoomUserConnectionDisconnectDomainEventHandler {
   ) {}
 
   @Transactional()
-  @OnEvent(UserConnectionDisconnectedDomainEvent.name, { async: false })
+  @OnEvent(UserConnectionDisconnectedDomainEvent.name, {
+    async: false,
+    suppressErrors: false,
+  })
   async handle(event: UserConnectionDisconnectedDomainEvent) {
     const { connectionId } = event;
 
