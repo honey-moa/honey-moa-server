@@ -25,8 +25,6 @@ export class BlogPostBlogDeletedDomainEventHandler {
 
     blogPosts.forEach((blogPost) => blogPost.delete());
 
-    throw new Error('트랜잭션 롤백 유도');
-
     await this.blogPostRepository.bulkDelete(blogPosts);
   }
 }
