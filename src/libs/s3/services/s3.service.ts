@@ -94,6 +94,7 @@ export class S3Service implements S3ServicePort {
             Bucket: this.appConfigService.get<string>(ENV_KEY.AWS_S3_BUCKET),
             CopySource: `${this.appConfigService.get<string>(ENV_KEY.AWS_S3_BUCKET)}/${source}`,
             Key: newPath,
+            ACL: 'public-read',
           });
 
           await this.s3Client.send(command);

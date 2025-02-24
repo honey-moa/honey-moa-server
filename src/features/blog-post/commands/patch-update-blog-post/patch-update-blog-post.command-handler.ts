@@ -24,8 +24,6 @@ import { HttpForbiddenException } from '@libs/exceptions/client-errors/exception
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
-import { S3ServicePort } from '@libs/s3/services/s3.service-port';
-import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
@@ -44,8 +42,6 @@ export class PatchUpdateBlogPostCommandHandler
     private readonly blogPostRepository: BlogPostRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly attachmentRepository: AttachmentRepositoryPort,
-    @Inject(S3_SERVICE_DI_TOKEN)
-    private readonly s3Service: S3ServicePort,
     @Inject(TAG_REPOSITORY_DI_TOKEN)
     private readonly tagRepository: TagRepositoryPort,
     @Inject(BLOG_POST_TAG_REPOSITORY_DI_TOKEN)
@@ -132,6 +128,7 @@ export class PatchUpdateBlogPostCommandHandler
           const isDeleted = !jsonContents.includes(existingAttachment.url);
 
           if (isDeleted) {
+            existingAttachment.delete();
             deletedAttachmentIdsSet.add(existingAttachment.id);
           }
 
@@ -277,8 +274,6 @@ export class PatchUpdateBlogPostCommandHandler
       if (isNil(existingAttachment)) {
         return;
       }
-
-      await this.s3Service.deleteFilesFromS3([existingAttachment.path]);
 
       existingAttachment.delete();
 

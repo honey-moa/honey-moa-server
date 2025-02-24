@@ -12,7 +12,6 @@ export class UploadAttachmentDomainEventHandler {
   ) {}
 
   @OnEvent(AttachmentCreatedDomainEvent.name, {
-    async: false,
     suppressErrors: false,
   })
   async handle(event: AttachmentCreatedDomainEvent): Promise<void> {

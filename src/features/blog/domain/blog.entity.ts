@@ -17,9 +17,7 @@ import { isNil } from '@libs/utils/util';
 export class BlogEntity extends AggregateRoot<BlogProps> {
   static readonly BLOG_ATTACHMENT_URL = process.env.BLOG_ATTACHMENT_URL;
 
-  private static readonly BLOG_ATTACHMENT_PATH_PREFIX = 'blog/';
-  static readonly BLOG_BACKGROUND_IMAGE_PATH_PREFIX =
-    BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + 'background-image/';
+  static readonly BLOG_ATTACHMENT_PATH_PREFIX = 'blog/';
 
   static readonly BLOG_BACKGROUND_IMAGE_MIME_TYPE: readonly string[] = [
     'image/png',
@@ -107,15 +105,13 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
   editBackgroundImagePath(backgroundImagePath: string | null) {
     if (
       !isNil(backgroundImagePath) &&
-      !backgroundImagePath.startsWith(
-        BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
-      )
+      !backgroundImagePath.startsWith(BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX)
     ) {
       throw new HttpInternalServerErrorException({
         code: COMMON_ERROR_CODE.SERVER_ERROR,
         ctx:
           'backgroundImagePath must start with ' +
-          BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX,
+          BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX,
       });
     }
 

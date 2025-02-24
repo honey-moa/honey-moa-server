@@ -17,7 +17,6 @@ export class MoveAttachmentPathDomainEventHandler {
   ) {}
 
   @OnEvent(AttachmentLocationChangedDomainEvent.name, {
-    async: false,
     suppressErrors: false,
   })
   async handle(event: AttachmentLocationChangedDomainEvent): Promise<void> {

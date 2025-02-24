@@ -16,13 +16,10 @@ import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
-import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
-import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { Location } from '@features/attachment/domain/value-objects/location.value-object';
 import { getTsid } from 'tsid-ts';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 
 @CommandHandler(CreateBlogCommand)
 export class CreateBlogCommandHandler
@@ -35,8 +32,6 @@ export class CreateBlogCommandHandler
     private readonly blogRepository: BlogRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly attachmentRepository: AttachmentRepositoryPort,
-    @Inject(S3_SERVICE_DI_TOKEN)
-    private readonly s3Service: S3ServicePort,
   ) {}
 
   async execute(command: CreateBlogCommand): Promise<AggregateID> {
@@ -78,44 +73,27 @@ export class CreateBlogCommandHandler
       const { mimeType, capacity, buffer } = backgroundImageFile;
 
       const id = getTsid().toBigInt();
-      const path = BlogEntity.BLOG_BACKGROUND_IMAGE_PATH_PREFIX + id;
+      const path = BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + id;
+      const url = `${BlogEntity.BLOG_ATTACHMENT_URL}/${path}`;
 
-      const url = await this.s3Service.uploadFileToS3(
+      const attachment = AttachmentEntity.create(
         {
-          buffer,
+          id,
+          userId,
+          capacity: BigInt(capacity),
           mimeType,
+          uploadType: AttachmentUploadType.FILE,
+          location: new Location({
+            path,
+            url,
+          }),
         },
-        path,
+        buffer,
       );
 
-      try {
-        const attachment = AttachmentEntity.create(
-          {
-            id,
-            userId,
-            capacity: BigInt(capacity),
-            mimeType,
-            uploadType: AttachmentUploadType.FILE,
-            location: new Location({
-              path,
-              url,
-            }),
-          },
-          buffer,
-        );
+      await this.attachmentRepository.create(attachment);
 
-        await this.attachmentRepository.create(attachment);
-
-        backgroundImagePath = path;
-      } catch (err: any) {
-        await this.s3Service.deleteFilesFromS3([path]);
-
-        throw new HttpInternalServerErrorException({
-          code: COMMON_ERROR_CODE.SERVER_ERROR,
-          ctx: 'Failed files upload',
-          stack: err.stack,
-        });
-      }
+      backgroundImagePath = path;
     }
 
     const blog = BlogEntity.create({

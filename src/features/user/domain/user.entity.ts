@@ -35,9 +35,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
   private static readonly USER_DEFAULT_PROFILE_IMAGE_PATH =
     process.env.USER_DEFAULT_PROFILE_IMAGE_PATH;
 
-  private static readonly USER_ATTACHMENT_PATH_PREFIX = 'user/';
-  static readonly USER_PROFILE_IMAGE_PATH_PREFIX =
-    UserEntity.USER_ATTACHMENT_PATH_PREFIX + 'profile-image/';
+  static readonly USER_ATTACHMENT_PATH_PREFIX = 'user/';
 
   static readonly USER_PROFILE_IMAGE_MIME_TYPE: readonly string[] = [
     'image/png',
@@ -264,11 +262,11 @@ export class UserEntity extends AggregateRoot<UserProps> {
   editProfileImagePath(profileImagePath: string | null) {
     if (
       !isNil(profileImagePath) &&
-      !profileImagePath.startsWith(UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX)
+      !profileImagePath.startsWith(UserEntity.USER_ATTACHMENT_PATH_PREFIX)
     ) {
       throw new HttpInternalServerErrorException({
         code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: `profileImagePath must start with ${UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX}`,
+        ctx: `profileImagePath must start with ${UserEntity.USER_ATTACHMENT_PATH_PREFIX}`,
       });
     }
 
