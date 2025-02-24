@@ -10,6 +10,7 @@ import {
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import { ChatRoomDeletedDomainEvent } from '@features/chat-room/domain/events/chat-room-deleted.domain-event';
 
 export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
   static create(create: CreateChatRoomProps): ChatRoomEntity {
@@ -44,6 +45,14 @@ export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
     return ChatMessageEntity.create({
       ...props,
     });
+  }
+
+  delete(): void {
+    this.addEvent(
+      new ChatRoomDeletedDomainEvent({
+        aggregateId: this.id,
+      }),
+    );
   }
 
   public validate(): void {

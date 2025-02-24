@@ -1,6 +1,7 @@
 import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import { CreateChatRoomCommandHandler } from '@features/chat-room/commands/create-chat-room/create-chat-room.command-handler';
 import { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
+import { ChatRoomUserConnectionDisconnectDomainEventHandler } from '@features/chat-room/application/event-handlers/chat-room-user-connection-disconnect.domain-event-handler';
 import { ChatRoomMapper } from '@features/chat-room/mappers/chat-room.mapper';
 import { FindOneChatRoomByUserIdQueryHandler } from '@features/chat-room/queries/find-one-chat-room-by-user-id/find-one-chat-room-by-user-id.query-handler';
 import { ChatRoomRepository } from '@features/chat-room/repositories/chat-room.repository';
@@ -16,6 +17,10 @@ const repositories: Provider[] = [
 
 const commandHandlers: Provider[] = [CreateChatRoomCommandHandler];
 
+const eventHandlers: Provider[] = [
+  ChatRoomUserConnectionDisconnectDomainEventHandler,
+];
+
 const queryHandlers: Provider[] = [FindOneChatRoomByUserIdQueryHandler];
 
 const mappers: Provider[] = [ChatRoomMapper, ChatMessageMapper];
@@ -28,6 +33,7 @@ const mappers: Provider[] = [ChatRoomMapper, ChatMessageMapper];
     ...queryHandlers,
     ...repositories,
     ...mappers,
+    ...eventHandlers,
   ],
   exports: [...mappers, ...repositories],
 })

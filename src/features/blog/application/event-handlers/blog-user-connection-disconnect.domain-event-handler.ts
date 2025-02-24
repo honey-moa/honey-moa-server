@@ -1,0 +1,32 @@
+import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
+import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
+import { isNil } from '@libs/utils/util';
+import { Transactional } from '@nestjs-cls/transactional';
+import { Inject, Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+
+@Injectable()
+export class BlogUserConnectionDisconnectDomainEventHandler {
+  constructor(
+    @Inject(BLOG_REPOSITORY_DI_TOKEN)
+    private readonly blogRepository: BlogRepositoryPort,
+  ) {}
+
+  @Transactional()
+  @OnEvent(UserConnectionDisconnectedDomainEvent.name, {
+    async: false,
+    suppressErrors: false,
+  })
+  async handle(event: UserConnectionDisconnectedDomainEvent) {
+    const { connectionId } = event;
+
+    const blog = await this.blogRepository.findOneByConnectionId(connectionId);
+
+    if (isNil(blog)) return;
+
+    blog.delete();
+
+    await this.blogRepository.delete(blog);
+  }
+}

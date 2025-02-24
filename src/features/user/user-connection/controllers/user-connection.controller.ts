@@ -8,11 +8,13 @@ import {
   Post,
   Put,
   Query,
+  Delete,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { CreateUserConnectionCommand } from '@features/user/user-connection/commands/create-user-connection/create-user-connection.command';
 import { UpdateUserConnectionCommand } from '@features/user/user-connection/commands/update-user-connection/update-user-connection.command';
+import { DisconnectUserConnectionCommand } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command';
 import { ApiUserConnection } from '@features/user/user-connection/controllers/user-connection.swagger';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { CreateUserConnectionRequestBodyDto } from '@features/user/user-connection/dtos/request/create-user-connection.request-body-dto';
@@ -107,5 +109,23 @@ export class UserConnectionController {
     });
 
     await this.commandBus.execute<UpdateUserConnectionCommand, void>(command);
+  }
+
+  @ApiUserConnection.Disconnect({
+    summary: '유저 커넥션 해제',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(routesV1.userConnection.disconnect)
+  async disconnect(
+    @User('sub') userId: AggregateID,
+    @Param('id', ParsePositiveBigIntPipe) userConnectionId: string,
+  ): Promise<void> {
+    const command = new DisconnectUserConnectionCommand({
+      userId,
+      userConnectionId: BigInt(userConnectionId),
+    });
+    await this.commandBus.execute<DisconnectUserConnectionCommand, void>(
+      command,
+    );
   }
 }

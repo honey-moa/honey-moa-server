@@ -1,5 +1,8 @@
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import {
+  ChatMessageMapper,
+  ChatMessageModel,
+} from '@features/chat-message/mappers/chat-message.mapper';
 import { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { AggregateID } from '@libs/ddd/entity.base';
@@ -65,5 +68,35 @@ export class ChatMessageRepository implements ChatMessageRepositoryPort {
     });
 
     return this.mapper.toEntity(updatedRecord);
+  }
+
+  async findAllByChatRoomId(roomId: AggregateID): Promise<ChatMessageEntity[]> {
+    const records = await this.txHost.tx.chatMessage.findMany({
+      where: {
+        roomId,
+        deletedAt: null,
+      },
+    });
+
+    return records.map((record) =>
+      this.mapper.toEntity(record as ChatMessageModel),
+    );
+  }
+
+  async bulkDelete(entities: ChatMessageEntity[]): Promise<void> {
+    if (!entities.length) return;
+
+    const ids = entities.map((entity) => entity.id);
+
+    await this.txHost.tx.chatMessage.updateMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
   }
 }

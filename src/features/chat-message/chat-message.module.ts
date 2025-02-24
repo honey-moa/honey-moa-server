@@ -10,6 +10,7 @@ import { CHAT_MESSAGE_REPOSITORY_DI_TOKEN } from '@features/chat-message/tokens/
 import { CreateChatMessageCommandHandler } from '@features/chat-message/commands/create-message/create-chat-message.command-handler';
 import { GuardModule } from '@libs/guards/guard.module';
 import { AppJwtModule } from '@libs/app-jwt/app-jwt.module';
+import { ChatMessageChatRoomDeletedDomainEventHandler } from '@features/chat-message/application/event-handler/chat-message-chat-room-deleted.domain-event-handler';
 
 const controllers = [ChatMessageController];
 
@@ -24,6 +25,10 @@ const commandHandlers: Provider[] = [CreateChatMessageCommandHandler];
 
 const queryHandlers: Provider[] = [FindChatMessagesQueryHandler];
 
+const eventHandlers: Provider[] = [
+  ChatMessageChatRoomDeletedDomainEventHandler,
+];
+
 const mappers: Provider[] = [ChatMessageMapper];
 
 const gateways: Provider[] = [ChatMessageGateway];
@@ -37,6 +42,7 @@ const gateways: Provider[] = [ChatMessageGateway];
     ...repositories,
     ...mappers,
     ...gateways,
+    ...eventHandlers,
   ],
   exports: [...mappers],
 })
