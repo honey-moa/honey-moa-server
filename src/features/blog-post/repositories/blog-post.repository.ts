@@ -85,6 +85,23 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
     return result.id;
   }
 
+  async bulkDelete(entities: BlogPostEntity[]): Promise<void> {
+    if (!entities.length) return;
+
+    const ids = entities.map((entity) => entity.id);
+
+    await this.txHost.tx.blogPost.updateMany({
+      where: {
+        id: {
+          in: ids,
+        },
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
+
   async create(entity: BlogPostEntity): Promise<void> {
     entity.validate();
 
@@ -106,5 +123,18 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
     });
 
     return this.mapper.toEntity(updatedRecord as BlogPostWithEntitiesModel);
+  }
+
+  async findAllByBlogId(blogId: AggregateID): Promise<BlogPostEntity[]> {
+    const records = await this.txHost.tx.blogPost.findMany({
+      where: {
+        blogId,
+        deletedAt: null,
+      },
+    });
+
+    return records.map((record) =>
+      this.mapper.toEntity(record as BlogPostWithEntitiesModel),
+    );
   }
 }
