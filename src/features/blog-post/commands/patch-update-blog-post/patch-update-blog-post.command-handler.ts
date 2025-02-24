@@ -1,4 +1,3 @@
-import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
@@ -140,12 +139,7 @@ export class PatchUpdateBlogPostCommandHandler
         },
       );
 
-      await Promise.all([
-        this.s3Service.deleteFilesFromS3(
-          deletedAttachments.map((attachment) => attachment.path),
-        ),
-        this.attachmentRepository.bulkDelete(deletedAttachments),
-      ]);
+      await this.attachmentRepository.bulkDelete(deletedAttachments);
 
       const deletedBlogPostAttachments = blogPost.blogPostAttachments.filter(
         (blogPostAttachment) =>
@@ -186,48 +180,37 @@ export class PatchUpdateBlogPostCommandHandler
       const uploadedAttachments =
         await this.attachmentRepository.findByUrls(fileUrls);
 
-      const result = await this.s3Service.moveFiles(
-        uploadedAttachments.map((attachment) => attachment.path),
-        BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
-        AttachmentEntity.ATTACHMENT_PATH_PREFIX,
-      );
-
-      const changedAttachments: AttachmentEntity[] = [];
-      const notExistingAttachments: AttachmentEntity[] = [];
       const changedUrlInfos: {
         oldAttachmentUrl: string;
         newAttachmentUrl: string;
       }[] = [];
 
-      uploadedAttachments.forEach((attachment) => {
-        const pathInfo = result[attachment.path];
+      if (uploadedAttachments.length) {
+        uploadedAttachments.forEach((attachment) => {
+          const movedPath =
+            BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
+            attachment.id;
+          const movedUrl = `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${movedPath}`;
 
-        if (pathInfo.isExiting) {
           changedUrlInfos.push({
             oldAttachmentUrl: attachment.url,
-            newAttachmentUrl: pathInfo.movedUrl,
+            newAttachmentUrl: movedUrl,
           });
 
           attachment.changeLocation({
-            path: pathInfo.movedPath,
-            url: pathInfo.movedUrl,
+            path: movedPath,
+            url: movedUrl,
           });
+        });
 
-          changedAttachments.push(attachment);
-        } else {
-          notExistingAttachments.push(attachment);
-        }
-      });
-
-      if (changedAttachments.length) {
         await Promise.all(
-          changedAttachments.map(
+          uploadedAttachments.map(
             async (attachment) =>
               await this.attachmentRepository.update(attachment),
           ),
         );
 
-        if (contents) {
+        if (!isNil(contents)) {
           let jsonContents = JSON.stringify(contents);
 
           changedUrlInfos.forEach(({ oldAttachmentUrl, newAttachmentUrl }) => {
@@ -241,14 +224,8 @@ export class PatchUpdateBlogPostCommandHandler
         }
       }
 
-      if (notExistingAttachments.length) {
-        notExistingAttachments.forEach((attachment) => attachment.delete());
-
-        await this.attachmentRepository.bulkDelete(notExistingAttachments);
-      }
-
       newBlogPostAttachments.push(
-        ...changedAttachments.map((attachment) =>
+        ...uploadedAttachments.map((attachment) =>
           blogPost.createBlogPostAttachment(attachment),
         ),
       );
@@ -265,24 +242,19 @@ export class PatchUpdateBlogPostCommandHandler
         )[0];
 
         if (!isNil(existingAttachment)) {
-          const result = await this.s3Service.moveFiles(
-            [existingAttachment.path],
-            BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
-            AttachmentEntity.ATTACHMENT_PATH_PREFIX,
-          );
+          const movedPath =
+            BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
+            existingAttachment.id;
+          const movedUrl = `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${movedPath}`;
 
-          const pathInfo = result[existingAttachment.path];
+          blogPost.editThumbnailImagePath(movedPath);
 
-          if (pathInfo.isExiting) {
-            blogPost.editThumbnailImagePath(pathInfo.movedUrl);
+          existingAttachment.changeLocation({
+            path: movedPath,
+            url: movedUrl,
+          });
 
-            existingAttachment.changeLocation({
-              path: pathInfo.movedPath,
-              url: pathInfo.movedUrl,
-            });
-
-            await this.attachmentRepository.update(existingAttachment);
-          }
+          await this.attachmentRepository.update(existingAttachment);
         }
       }
     }

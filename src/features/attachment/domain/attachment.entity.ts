@@ -85,6 +85,7 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
     this.addEvent(
       new AttachmentDeletedDomainEvent({
         aggregateId: this.id,
+        path: this.path,
       }),
     );
   }
