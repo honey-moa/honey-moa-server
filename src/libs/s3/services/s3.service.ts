@@ -27,7 +27,7 @@ export class S3Service implements S3ServicePort {
   ) {}
 
   async uploadFileToS3(
-    file: { buffer: Buffer; mimetype: string },
+    file: { buffer: Buffer; mimeType: string },
     filename: string,
   ) {
     const command = new PutObjectCommand({
@@ -35,7 +35,7 @@ export class S3Service implements S3ServicePort {
       Key: filename,
       Body: file.buffer,
       ACL: 'public-read',
-      ContentType: file.mimetype,
+      ContentType: file.mimeType,
     });
 
     await this.s3Client.send(command);

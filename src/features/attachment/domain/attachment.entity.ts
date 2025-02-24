@@ -27,7 +27,12 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
   static readonly ATTACHMENT_PATH_PREFIX: string = 'temp/';
 
-  static create(create: CreateAttachmentProps): AttachmentEntity {
+  static readonly ATTACHMENT_URL = process.env.ATTACHMENT_URL;
+
+  static create(
+    create: CreateAttachmentProps,
+    buffer: Buffer,
+  ): AttachmentEntity {
     const { id, ...restProps } = create;
 
     const props: AttachmentProps = {
@@ -42,6 +47,7 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
         ...props,
         url: props.location.url,
         path: props.location.path,
+        buffer,
       }),
     );
 
@@ -56,9 +62,6 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
     return this.props.location.path;
   }
 
-  /**
-   * 추후 path, url을 하나의 Value-Object로 만들어야 할지에 대한 고민이 있음
-   */
   changeLocation(update: UpdateLocationProps): void {
     const newLocation = new Location({
       path: update.path,

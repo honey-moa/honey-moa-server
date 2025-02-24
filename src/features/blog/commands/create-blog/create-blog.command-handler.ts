@@ -82,24 +82,27 @@ export class CreateBlogCommandHandler
 
       const url = await this.s3Service.uploadFileToS3(
         {
-          buffer: buffer,
-          mimetype: mimeType,
+          buffer,
+          mimeType,
         },
         path,
       );
 
       try {
-        const attachment = AttachmentEntity.create({
-          id,
-          userId,
-          capacity: BigInt(capacity),
-          mimeType,
-          uploadType: AttachmentUploadType.FILE,
-          location: new Location({
-            path,
-            url,
-          }),
-        });
+        const attachment = AttachmentEntity.create(
+          {
+            id,
+            userId,
+            capacity: BigInt(capacity),
+            mimeType,
+            uploadType: AttachmentUploadType.FILE,
+            location: new Location({
+              path,
+              url,
+            }),
+          },
+          buffer,
+        );
 
         await this.attachmentRepository.create(attachment);
 
