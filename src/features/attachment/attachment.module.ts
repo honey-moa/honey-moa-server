@@ -8,6 +8,7 @@ import { S3Module } from '@libs/s3/s3.module';
 import { CreateAttachmentsCommandHandler } from '@features/attachment/commands/create-attachments/create-attachments.command-handler';
 import { UploadAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/upload-attachment.domain-event-handler';
 import { MoveAttachmentPathDomainEventHandler } from '@features/attachment/applications/event-handlers/move-attachment-path.domain-event-handler';
+import { DeleteAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/delete-attachment.domain-event-handler';
 
 const controllers = [AttachmentController];
 
@@ -20,12 +21,13 @@ const repositories: Provider[] = [
 
 const mappers: Provider[] = [AttachmentMapper];
 
-const commandHandlers: Provider[] = [
-  CreateAttachmentsCommandHandler,
-  MoveAttachmentPathDomainEventHandler,
-];
+const commandHandlers: Provider[] = [CreateAttachmentsCommandHandler];
 
-const eventHandlers: Provider[] = [UploadAttachmentDomainEventHandler];
+const eventHandlers: Provider[] = [
+  UploadAttachmentDomainEventHandler,
+  MoveAttachmentPathDomainEventHandler,
+  DeleteAttachmentDomainEventHandler,
+];
 
 @Module({
   imports: [NestjsFormDataModule, S3Module],
