@@ -15,4 +15,9 @@ export interface AttachmentRepositoryPort
     ids: AggregateID[],
     uploadType?: AttachmentUploadTypeUnion,
   ): Promise<AttachmentEntity[]>;
+
+  /**
+   * @description DomainEvent를 발생시키지 않음.
+   */
+  deleteById(id: AggregateID): Promise<void>;
 }

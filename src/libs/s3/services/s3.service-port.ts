@@ -9,7 +9,7 @@ export interface S3ServicePort {
     destinationDirectory: string,
     currentDirectory: string,
   ): Promise<{
-    [x: string]:
+    [path: string]:
       | {
           isExiting: true;
           movedPath: string;

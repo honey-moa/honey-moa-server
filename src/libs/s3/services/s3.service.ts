@@ -52,7 +52,7 @@ export class S3Service implements S3ServicePort {
     destinationDirectory: string,
     currentDirectory: string,
   ): Promise<{
-    [x: string]:
+    [path: string]:
       | {
           isExiting: true;
           movedPath: string;
@@ -67,7 +67,7 @@ export class S3Service implements S3ServicePort {
     }
 
     const sourcePathInfosObject: {
-      [x: string]:
+      [path: string]:
         | {
             isExiting: true;
             movedPath: string;
