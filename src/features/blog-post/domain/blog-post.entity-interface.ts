@@ -34,7 +34,7 @@ export interface CreateBlogPostProps {
   location: string;
   summary: string;
   thumbnailImagePath: string | null;
-  isPublic?: boolean;
+  isPublic: boolean;
 }
 
 export interface UpdateBlogPostProps

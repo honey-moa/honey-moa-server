@@ -56,6 +56,7 @@ export class CreateBlogPostCommandHandler
       fileUrls,
       summary,
       thumbnailImageUrl,
+      isPublic,
     } = command;
 
     const blog = await this.blogRepository.findOneById(blogId);
@@ -105,6 +106,7 @@ export class CreateBlogPostCommandHandler
       location,
       summary,
       thumbnailImagePath,
+      isPublic,
     });
 
     const tags = await this.tagRepository.findByNames(tagNames);
