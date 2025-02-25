@@ -7,14 +7,10 @@ import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blo
 import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
-import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
-import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
-import { S3ServicePort } from '@libs/s3/services/s3.service-port';
-import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
@@ -28,10 +24,6 @@ export class PatchUpdateBlogCommandHandler
   constructor(
     @Inject(BLOG_REPOSITORY_DI_TOKEN)
     private readonly blogRepository: BlogRepositoryPort,
-    @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
-    private readonly userConnectionRepository: UserConnectionRepositoryPort,
-    @Inject(S3_SERVICE_DI_TOKEN)
-    private readonly s3Service: S3ServicePort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly attachmentRepository: AttachmentRepositoryPort,
   ) {}
