@@ -12,7 +12,7 @@ import {
   Location,
   UpdateLocationProps,
 } from '@features/attachment/domain/value-objects/location.value-object';
-import { AttachmentLocationUpdatedDomainEvent } from '@features/attachment/domain/events/attachment-location-updated.domain-event';
+import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
 import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events/attachment-deleted.domain-event';
 
 export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
@@ -27,7 +27,12 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
   static readonly ATTACHMENT_PATH_PREFIX: string = 'temp/';
 
-  static create(create: CreateAttachmentProps): AttachmentEntity {
+  static readonly ATTACHMENT_URL = process.env.ATTACHMENT_URL;
+
+  static create(
+    create: CreateAttachmentProps,
+    buffer: Buffer,
+  ): AttachmentEntity {
     const { id, ...restProps } = create;
 
     const props: AttachmentProps = {
@@ -42,6 +47,7 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
         ...props,
         url: props.location.url,
         path: props.location.path,
+        buffer,
       }),
     );
 
@@ -56,30 +62,30 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
     return this.props.location.path;
   }
 
-  /**
-   * 추후 path, url을 하나의 Value-Object로 만들어야 할지에 대한 고민이 있음
-   */
   changeLocation(update: UpdateLocationProps): void {
     const newLocation = new Location({
       path: update.path,
       url: update.url,
     });
 
-    this.props.location = newLocation;
-
     this.addEvent(
-      new AttachmentLocationUpdatedDomainEvent({
+      new AttachmentLocationChangedDomainEvent({
         aggregateId: this.id,
-        path: newLocation.path,
-        url: newLocation.url,
+        oldPath: this.path,
+        newPath: newLocation.path,
+        oldUrl: this.url,
+        newUrl: newLocation.url,
       }),
     );
+
+    this.props.location = newLocation;
   }
 
   delete(): void {
     this.addEvent(
       new AttachmentDeletedDomainEvent({
         aggregateId: this.id,
+        path: this.path,
       }),
     );
   }

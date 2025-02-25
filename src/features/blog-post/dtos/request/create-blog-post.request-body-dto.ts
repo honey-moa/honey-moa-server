@@ -1,4 +1,5 @@
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
+import { IsInFileUrls } from '@features/blog-post/dtos/request/decorators/is-in-file-urls.decorator';
 import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
@@ -100,6 +101,7 @@ export class CreateBlogPostRequestBodyDto {
     nullable: true,
   })
   @IsUrl()
+  @IsInFileUrls()
   @IsNullable()
   thumbnailImageUrl: string | null;
 }

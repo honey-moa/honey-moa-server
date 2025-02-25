@@ -9,6 +9,7 @@ export class CreateBlogPostCommand extends Command implements ICommand {
   readonly contents: Array<Record<string, any>>;
   readonly date: string;
   readonly location: string;
+  readonly isPublic: boolean;
   readonly tagNames: string[];
   readonly fileUrls: string[];
   readonly summary: string;
@@ -23,6 +24,7 @@ export class CreateBlogPostCommand extends Command implements ICommand {
     this.contents = props.contents;
     this.date = props.date;
     this.location = props.location;
+    this.isPublic = props.isPublic;
     this.tagNames = props.tagNames;
     this.fileUrls = props.fileUrls;
     this.summary = props.summary;

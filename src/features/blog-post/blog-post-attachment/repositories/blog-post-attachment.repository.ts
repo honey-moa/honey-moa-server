@@ -68,6 +68,10 @@ export class BlogPostAttachmentRepository
   }
 
   async bulkCreate(entities: BlogPostAttachmentEntity[]): Promise<void> {
+    if (!entities.length) {
+      return;
+    }
+
     const records = entities.map((entity) => this.mapper.toPersistence(entity));
 
     await this.txHost.tx.blogPostAttachment.createMany({

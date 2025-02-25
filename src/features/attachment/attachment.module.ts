@@ -5,7 +5,10 @@ import { AttachmentRepository } from '@features/attachment/repositories/attachme
 import { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { S3Module } from '@libs/s3/s3.module';
-import { CreateAttachmentsCommandHandler } from '@features/attachment/commands/create-attachment/create-attachment.command-handler';
+import { CreateAttachmentsCommandHandler } from '@features/attachment/commands/create-attachments/create-attachments.command-handler';
+import { UploadAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/upload-attachment.domain-event-handler';
+import { MoveAttachmentPathDomainEventHandler } from '@features/attachment/applications/event-handlers/move-attachment-path.domain-event-handler';
+import { DeleteAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/delete-attachment.domain-event-handler';
 
 const controllers = [AttachmentController];
 
@@ -20,10 +23,21 @@ const mappers: Provider[] = [AttachmentMapper];
 
 const commandHandlers: Provider[] = [CreateAttachmentsCommandHandler];
 
+const eventHandlers: Provider[] = [
+  UploadAttachmentDomainEventHandler,
+  MoveAttachmentPathDomainEventHandler,
+  DeleteAttachmentDomainEventHandler,
+];
+
 @Module({
   imports: [NestjsFormDataModule, S3Module],
   controllers,
-  providers: [...repositories, ...mappers, ...commandHandlers],
+  providers: [
+    ...repositories,
+    ...mappers,
+    ...commandHandlers,
+    ...eventHandlers,
+  ],
   exports: [...repositories],
 })
 export class AttachmentModule {}

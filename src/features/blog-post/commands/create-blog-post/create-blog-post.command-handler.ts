@@ -18,9 +18,6 @@ import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
 import { TagEntity } from '@features/tag/domain/tag.entity';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
-import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
-import { S3ServicePort } from '@libs/s3/services/s3.service-port';
-import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
 import { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
@@ -42,8 +39,6 @@ export class CreateBlogPostCommandHandler
     private readonly tagRepository: TagRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly attachmentRepository: AttachmentRepositoryPort,
-    @Inject(S3_SERVICE_DI_TOKEN)
-    private readonly s3Service: S3ServicePort,
     @Inject(BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN)
     private readonly blogPostAttachmentRepository: BlogPostAttachmentRepositoryPort,
   ) {}
@@ -61,6 +56,7 @@ export class CreateBlogPostCommandHandler
       fileUrls,
       summary,
       thumbnailImageUrl,
+      isPublic,
     } = command;
 
     const blog = await this.blogRepository.findOneById(blogId);
@@ -85,24 +81,19 @@ export class CreateBlogPostCommandHandler
       )[0];
 
       if (!isNil(existingAttachment)) {
-        const result = await this.s3Service.moveFiles(
-          [existingAttachment.path],
-          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
-          AttachmentEntity.ATTACHMENT_PATH_PREFIX,
-        );
+        const movedPath =
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
+          existingAttachment.id;
+        const movedUrl = `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${movedPath}`;
 
-        const pathInfo = result[existingAttachment.path];
+        existingAttachment.changeLocation({
+          path: movedPath,
+          url: movedUrl,
+        });
 
-        if (pathInfo.isExiting) {
-          thumbnailImagePath = pathInfo.movedPath;
+        await this.attachmentRepository.update(existingAttachment);
 
-          existingAttachment.changeLocation({
-            path: pathInfo.movedPath,
-            url: pathInfo.movedUrl,
-          });
-
-          await this.attachmentRepository.update(existingAttachment);
-        }
+        thumbnailImagePath = movedPath;
       }
     }
 
@@ -115,6 +106,7 @@ export class CreateBlogPostCommandHandler
       location,
       summary,
       thumbnailImagePath,
+      isPublic,
     });
 
     const tags = await this.tagRepository.findByNames(tagNames);
@@ -133,42 +125,32 @@ export class CreateBlogPostCommandHandler
     const blogPostTags = tags.map((tag) => blogPost.createBlogPostTag(tag));
 
     const attachments = await this.attachmentRepository.findByUrls(fileUrls);
-    const result = await this.s3Service.moveFiles(
-      attachments.map((attachment) => attachment.path),
-      BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
-      AttachmentEntity.ATTACHMENT_PATH_PREFIX,
-    );
 
-    const changedAttachments: AttachmentEntity[] = [];
-    const notExistingAttachments: AttachmentEntity[] = [];
     const changedUrlInfos: {
       oldAttachmentUrl: string;
       newAttachmentUrl: string;
     }[] = [];
 
-    attachments.forEach((attachment) => {
-      const pathInfo = result[attachment.path];
+    if (attachments.length) {
+      attachments.forEach((attachment) => {
+        const movedPath =
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
+          attachment.id;
+        const movedUrl = `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${movedPath}`;
 
-      if (pathInfo.isExiting) {
         changedUrlInfos.push({
           oldAttachmentUrl: attachment.url,
-          newAttachmentUrl: pathInfo.movedUrl,
+          newAttachmentUrl: movedUrl,
         });
 
         attachment.changeLocation({
-          path: pathInfo.movedPath,
-          url: pathInfo.movedUrl,
+          path: movedPath,
+          url: movedUrl,
         });
+      });
 
-        changedAttachments.push(attachment);
-      } else {
-        notExistingAttachments.push(attachment);
-      }
-    });
-
-    if (changedAttachments.length) {
       await Promise.all(
-        changedAttachments.map(
+        attachments.map(
           async (attachment) =>
             await this.attachmentRepository.update(attachment),
         ),
@@ -183,13 +165,7 @@ export class CreateBlogPostCommandHandler
       blogPost.update({ contents: JSON.parse(jsonContents) });
     }
 
-    if (notExistingAttachments.length) {
-      notExistingAttachments.forEach((attachment) => attachment.delete());
-
-      await this.attachmentRepository.bulkDelete(notExistingAttachments);
-    }
-
-    const blogPostAttachments = changedAttachments.map((attachment) =>
+    const blogPostAttachments = attachments.map((attachment) =>
       blogPost.createBlogPostAttachment(attachment),
     );
 

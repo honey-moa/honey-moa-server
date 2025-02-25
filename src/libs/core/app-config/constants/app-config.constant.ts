@@ -48,6 +48,14 @@ const BLOG = {
   BLOG_ATTACHMENT_URL: 'BLOG_ATTACHMENT_URL',
 } as const;
 
+const BLOG_POST = {
+  BLOG_POST_ATTACHMENT_URL: 'BLOG_POST_ATTACHMENT_URL',
+} as const;
+
+const ATTACHMENT = {
+  ATTACHMENT_URL: 'ATTACHMENT_URL',
+} as const;
+
 /**
  * 각 주제에 맞게 묶어서 export 하지 않는 변수로 생성하고
  * ENV_KEY 객체에 spread
@@ -61,4 +69,6 @@ export const ENV_KEY = {
   ...AWS,
   ...USER,
   ...BLOG,
+  ...BLOG_POST,
+  ...ATTACHMENT,
 } as const;

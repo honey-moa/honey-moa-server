@@ -8,7 +8,7 @@ import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal
 import { ApiAttachment } from '@features/attachment/controllers/attachment.swagger';
 import { FormDataRequest } from 'nestjs-form-data';
 import { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
-import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachment/create-attachment.command';
+import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachments/create-attachments.command';
 
 @ApiTags('Attachment')
 @ApiInternalServerErrorBuilder()

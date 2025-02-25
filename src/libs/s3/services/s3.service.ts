@@ -27,7 +27,7 @@ export class S3Service implements S3ServicePort {
   ) {}
 
   async uploadFileToS3(
-    file: { buffer: Buffer; mimetype: string },
+    file: { buffer: Buffer; mimeType: string },
     filename: string,
   ) {
     const command = new PutObjectCommand({
@@ -35,7 +35,7 @@ export class S3Service implements S3ServicePort {
       Key: filename,
       Body: file.buffer,
       ACL: 'public-read',
-      ContentType: file.mimetype,
+      ContentType: file.mimeType,
     });
 
     await this.s3Client.send(command);
@@ -52,7 +52,7 @@ export class S3Service implements S3ServicePort {
     destinationDirectory: string,
     currentDirectory: string,
   ): Promise<{
-    [x: string]:
+    [path: string]:
       | {
           isExiting: true;
           movedPath: string;
@@ -67,7 +67,7 @@ export class S3Service implements S3ServicePort {
     }
 
     const sourcePathInfosObject: {
-      [x: string]:
+      [path: string]:
         | {
             isExiting: true;
             movedPath: string;
@@ -94,6 +94,7 @@ export class S3Service implements S3ServicePort {
             Bucket: this.appConfigService.get<string>(ENV_KEY.AWS_S3_BUCKET),
             CopySource: `${this.appConfigService.get<string>(ENV_KEY.AWS_S3_BUCKET)}/${source}`,
             Key: newPath,
+            ACL: 'public-read',
           });
 
           await this.s3Client.send(command);
