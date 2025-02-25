@@ -51,6 +51,10 @@ import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.
         [ENV_KEY.USER_DEFAULT_PROFILE_IMAGE_PATH]: Joi.string().required(),
 
         [ENV_KEY.BLOG_ATTACHMENT_URL]: Joi.string().required(),
+
+        [ENV_KEY.BLOG_POST_ATTACHMENT_URL]: Joi.string().required(),
+
+        [ENV_KEY.ATTACHMENT_URL]: Joi.string().required(),
       }),
     }),
   ],

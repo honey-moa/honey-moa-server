@@ -154,7 +154,7 @@ model BlogPost {
   blogId             BigInt    @map("blog_id") @db.BigInt()
   userId             BigInt    @map("user_id") @db.BigInt()
   title              String    @db.VarChar(255)
-  contents           Json
+  contents           Json      @db.Json()
   date               String    @db.VarChar(20)
   location           String    @db.VarChar(100)
   isPublic           Boolean   @default(false) @map("is_public") @db.Boolean

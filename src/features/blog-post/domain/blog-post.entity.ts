@@ -42,7 +42,6 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
     const props: BlogPostProps = {
       ...create,
-      isPublic: create.isPublic ?? false,
       deletedAt: null,
     };
 

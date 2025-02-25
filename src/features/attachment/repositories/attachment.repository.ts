@@ -136,4 +136,10 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
       entities.map((entity) => entity.publishEvents(this.eventEmitter)),
     );
   }
+
+  async deleteById(id: AggregateID): Promise<void> {
+    await this.txHost.tx.attachment.delete({
+      where: { id },
+    });
+  }
 }

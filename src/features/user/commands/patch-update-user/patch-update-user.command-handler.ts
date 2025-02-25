@@ -8,7 +8,6 @@ import { UserEntity } from '@features/user/domain/user.entity';
 import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
@@ -65,18 +64,11 @@ export class PatchUpdateUserCommandHandler
       const { mimeType, capacity, buffer } = profileImageFile;
 
       const id = getTsid().toBigInt();
-      const path = UserEntity.USER_PROFILE_IMAGE_PATH_PREFIX + id;
+      const path = UserEntity.USER_ATTACHMENT_PATH_PREFIX + id;
+      const url = `${UserEntity.USER_ATTACHMENT_URL}/${path}`;
 
-      const url = await this.s3Service.uploadFileToS3(
+      const attachment = AttachmentEntity.create(
         {
-          buffer: buffer,
-          mimetype: mimeType,
-        },
-        path,
-      );
-
-      try {
-        const attachment = AttachmentEntity.create({
           id,
           userId,
           capacity: BigInt(capacity),
@@ -86,20 +78,13 @@ export class PatchUpdateUserCommandHandler
             path,
             url,
           }),
-        });
+        },
+        buffer,
+      );
 
-        await this.attachmentRepository.create(attachment);
+      await this.attachmentRepository.create(attachment);
 
-        user.editProfileImagePath(path);
-      } catch (error: any) {
-        await this.s3Service.deleteFilesFromS3([path]);
-
-        throw new HttpInternalServerErrorException({
-          code: COMMON_ERROR_CODE.SERVER_ERROR,
-          ctx: 'Failed files upload',
-          stack: error.stack,
-        });
-      }
+      user.editProfileImagePath(path);
     } else if (profileImageFile === null) {
       await this.deleteProfileImage(user);
     }
@@ -118,8 +103,6 @@ export class PatchUpdateUserCommandHandler
       if (isNil(existingAttachment)) {
         return;
       }
-
-      await this.s3Service.deleteFilesFromS3([existingAttachment.path]);
 
       existingAttachment.delete();
 

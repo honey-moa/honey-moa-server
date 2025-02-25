@@ -1,6 +1,6 @@
 export interface S3ServicePort {
   uploadFileToS3(
-    file: { buffer: Buffer; mimetype: string },
+    file: { buffer: Buffer; mimeType: string },
     filename: string,
   ): Promise<string>;
 
@@ -9,7 +9,7 @@ export interface S3ServicePort {
     destinationDirectory: string,
     currentDirectory: string,
   ): Promise<{
-    [x: string]:
+    [path: string]:
       | {
           isExiting: true;
           movedPath: string;
