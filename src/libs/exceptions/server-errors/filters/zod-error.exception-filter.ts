@@ -46,25 +46,42 @@ export class ZodErrorExceptionFilter implements ExceptionFilter<ZodError> {
       exceptionError,
     );
 
-    this.logger.error(
-      JSON.stringify(
-        {
-          ctx: exception.issues,
-          stack: exception.stack,
-          request: {
-            method: request.method,
-            url: request.url,
-            body: request.body,
-            currentUser: request.user?.sub,
+    const loggingObject = {
+      ctx: exception.issues,
+      stack: exception.stack,
+      request: {
+        method: request.method,
+        url: request.url,
+        currentUser: request.user?.sub,
+        body: request.body,
+      },
+      response: {
+        body: responseJson,
+      },
+    };
+
+    for (const key in loggingObject.request.body) {
+      if (loggingObject.request.body[key].buffer) {
+        loggingObject.request.body[key] = {
+          ...loggingObject.request.body[key],
+          buffer: undefined,
+        };
+      }
+
+      if (Array.isArray(loggingObject.request.body[key])) {
+        loggingObject.request.body[key] = loggingObject.request.body[key].map(
+          (value) => {
+            if (value.buffer) {
+              return { ...value, buffer: undefined };
+            }
+
+            return value;
           },
-          response: {
-            body: responseJson,
-          },
-        },
-        null,
-        2,
-      ),
-    );
+        );
+      }
+    }
+
+    this.logger.error(JSON.stringify(loggingObject, null, 2));
 
     response.status(statusCode).json(responseJson);
   }
