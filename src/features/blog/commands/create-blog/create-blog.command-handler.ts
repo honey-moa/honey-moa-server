@@ -10,6 +10,7 @@ import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/except
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BlogDomainService } from '@features/blog/domain/domain-services/blog.domain-service';
+import { Transactional } from '@nestjs-cls/transactional';
 
 @CommandHandler(CreateBlogCommand)
 export class CreateBlogCommandHandler
@@ -24,6 +25,7 @@ export class CreateBlogCommandHandler
     private readonly blogDomainService: BlogDomainService,
   ) {}
 
+  @Transactional()
   async execute(command: CreateBlogCommand): Promise<AggregateID> {
     const { userId, name, description, dDayStartDate, backgroundImageFile } =
       command;
