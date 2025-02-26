@@ -9,6 +9,9 @@ import { CreateAttachmentsCommandHandler } from '@features/attachment/commands/c
 import { UploadAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/upload-attachment.domain-event-handler';
 import { MoveAttachmentPathDomainEventHandler } from '@features/attachment/applications/event-handlers/move-attachment-path.domain-event-handler';
 import { DeleteAttachmentDomainEventHandler } from '@features/attachment/applications/event-handlers/delete-attachment.domain-event-handler';
+import { CreateAttachmentWhenBlogCreatedDomainEventHandler } from '@features/attachment/applications/event-handlers/create-attachment-when-blog-created.domain-event-handler';
+import { UpdateAttachmentWhenBlogBackgroundImageUpdatedDomainEventHandler } from '@features/attachment/applications/event-handlers/update-attachment-when-blog-background-image-updated.domain-event-handler';
+import { UpdateAttachmentWhenUserProfileImageUpdatedDomainEventHandler } from '@features/attachment/applications/event-handlers/update-attachment-when-user-profile-image-updated.domain-event-handler';
 
 const controllers = [AttachmentController];
 
@@ -27,6 +30,9 @@ const eventHandlers: Provider[] = [
   UploadAttachmentDomainEventHandler,
   MoveAttachmentPathDomainEventHandler,
   DeleteAttachmentDomainEventHandler,
+  CreateAttachmentWhenBlogCreatedDomainEventHandler,
+  UpdateAttachmentWhenBlogBackgroundImageUpdatedDomainEventHandler,
+  UpdateAttachmentWhenUserProfileImageUpdatedDomainEventHandler,
 ];
 
 @Module({

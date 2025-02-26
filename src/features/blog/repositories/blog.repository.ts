@@ -71,6 +71,8 @@ export class BlogRepository implements BlogRepositoryPort {
       data: record,
     });
 
+    await entity.publishEvents(this.eventEmitter);
+
     return this.mapper.toEntity(updatedRecord);
   }
 
@@ -80,6 +82,7 @@ export class BlogRepository implements BlogRepositoryPort {
     const record = await this.txHost.tx.blog.findFirst({
       where: {
         connectionId,
+        deletedAt: null,
       },
     });
 

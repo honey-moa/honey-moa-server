@@ -14,6 +14,7 @@ import {
 } from '@features/attachment/domain/value-objects/location.value-object';
 import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
 import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events/attachment-deleted.domain-event';
+import { getTsid } from 'tsid-ts';
 
 export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
   static readonly ATTACHMENT_MIME_TYPE: readonly string[] = [
@@ -33,10 +34,21 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
     create: CreateAttachmentProps,
     buffer: Buffer,
   ): AttachmentEntity {
-    const { id, ...restProps } = create;
+    const id = create.id ?? getTsid().toBigInt();
+    const path = create.path
+      ? create.path + id
+      : AttachmentEntity.ATTACHMENT_PATH_PREFIX + id;
+    const url = `${create.url ?? AttachmentEntity.ATTACHMENT_URL}/${path}`;
 
     const props: AttachmentProps = {
-      ...restProps,
+      userId: create.userId,
+      mimeType: create.mimeType,
+      capacity: create.capacity,
+      uploadType: create.uploadType,
+      location: new Location({
+        path,
+        url,
+      }),
     };
 
     const attachment = new AttachmentEntity({ id, props });
