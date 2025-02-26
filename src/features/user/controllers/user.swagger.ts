@@ -367,4 +367,30 @@ export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
       ]),
     );
   },
+
+  Delete: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): MethodDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions,
+      }),
+      ApiBearerAuth('access-token'),
+      ApiNoContentResponse({
+        description: '정상적으로 유저 삭제됨.',
+      }),
+      HttpUnauthorizedException.swaggerBuilder(HttpStatus.UNAUTHORIZED, [
+        {
+          code: COMMON_ERROR_CODE.INVALID_TOKEN,
+          description: '유효하지 않은 토큰으로 인해 발생하는 에러',
+        },
+      ]),
+      HttpNotFoundException.swaggerBuilder(HttpStatus.NOT_FOUND, [
+        {
+          code: COMMON_ERROR_CODE.RESOURCE_NOT_FOUND,
+          description: '유저를 찾을 수 없습니다.',
+        },
+      ]),
+    );
+  },
 };

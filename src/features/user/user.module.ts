@@ -26,6 +26,7 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
 import { PatchUpdateUserCommandHandler } from '@features/user/commands/patch-update-user/patch-update-user.command-handler';
 import { S3Module } from '@libs/s3/s3.module';
 import { AttachmentModule } from '@features/attachment/attachment.module';
+import { DeleteUserCommandHandler } from '@features/user/commands/delete-user/delete-user.command-handler';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -39,6 +40,7 @@ const commandHandlers: Provider[] = [
   UpdateUserConnectionCommandHandler,
   DisconnectUserConnectionCommandHandler,
   PatchUpdateUserCommandHandler,
+  DeleteUserCommandHandler,
 ];
 
 const queryHandlers: Provider[] = [
