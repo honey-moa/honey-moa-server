@@ -1,4 +1,3 @@
-import { AttachmentModule } from '@features/attachment/attachment.module';
 import { CreateBlogCommandHandler } from '@features/blog/commands/create-blog/create-blog.command-handler';
 import { PatchUpdateBlogCommandHandler } from '@features/blog/commands/patch-update-blog/patch-update-blog.command-handler';
 import { BlogController } from '@features/blog/controllers/blog.controller';
@@ -9,7 +8,6 @@ import { FindOneBlogByUserIdQueryHandler } from '@features/blog/queries/find-one
 import { BlogRepository } from '@features/blog/repositories/blog.repository';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { UserModule } from '@features/user/user.module';
-import { S3Module } from '@libs/s3/s3.module';
 import { Module, Provider } from '@nestjs/common';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
@@ -35,7 +33,7 @@ const repositories: Provider[] = [
 const domainServices: Provider[] = [BlogDomainService];
 
 @Module({
-  imports: [UserModule, NestjsFormDataModule, AttachmentModule, S3Module],
+  imports: [UserModule, NestjsFormDataModule],
   controllers: [...controllers],
   providers: [
     ...mappers,
