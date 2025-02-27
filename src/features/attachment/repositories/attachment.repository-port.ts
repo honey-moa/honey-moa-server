@@ -20,4 +20,6 @@ export interface AttachmentRepositoryPort
    * @description DomainEvent를 발생시키지 않음.
    */
   deleteById(id: AggregateID): Promise<void>;
+
+  findOneByPath(path: string): Promise<AttachmentEntity | undefined>;
 }

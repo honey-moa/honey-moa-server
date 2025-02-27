@@ -8,7 +8,6 @@ import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
 import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
 import { ValueOf } from '@libs/types/type';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { MemoryStoredFile } from 'nestjs-form-data';
 
 interface ExceptionError {
   code: ValueOf<typeof ERROR_CODE>;
@@ -62,21 +61,32 @@ export class HttpExceptionService {
         method: request.method,
         url: request.url,
         currentUser: request.user?.id,
+        body: request.body,
       },
       response: {
         body: Object.assign({}, response.body),
       },
     };
 
-    if (request.body instanceof Array) {
-      loggingObject.request.body = request.body.map((value) => {
-        if (value instanceof MemoryStoredFile) {
-          return { ...value, buffer: undefined };
-        }
-        return value;
-      });
-    } else if (request.body instanceof MemoryStoredFile) {
-      loggingObject.request.body = { ...request.body, buffer: undefined };
+    for (const key in loggingObject.request.body) {
+      if (loggingObject.request.body[key].buffer) {
+        loggingObject.request.body[key] = {
+          ...loggingObject.request.body[key],
+          buffer: undefined,
+        };
+      }
+
+      if (Array.isArray(loggingObject.request.body[key])) {
+        loggingObject.request.body[key] = loggingObject.request.body[key].map(
+          (value) => {
+            if (value.buffer) {
+              return { ...value, buffer: undefined };
+            }
+
+            return value;
+          },
+        );
+      }
     }
 
     this.logger.error(JSON.stringify(loggingObject, null, 2));

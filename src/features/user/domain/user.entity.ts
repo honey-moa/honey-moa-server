@@ -30,11 +30,14 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { UserMbtiUnion } from '@features/user/types/user.type';
 import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
+import { FileProps } from '@libs/types/type';
+import { UserProfileImagePathUpdatedDomainEvent } from '@features/user/domain/events/user-profile-image-path-updated.domain-event';
 
 export class UserEntity extends AggregateRoot<UserProps> {
-  static readonly USER_ATTACHMENT_URL = process.env.USER_ATTACHMENT_URL;
-  private static readonly USER_DEFAULT_PROFILE_IMAGE_PATH =
-    process.env.USER_DEFAULT_PROFILE_IMAGE_PATH;
+  static readonly USER_ATTACHMENT_URL = process.env
+    .USER_ATTACHMENT_URL as string;
+  private static readonly USER_DEFAULT_PROFILE_IMAGE_PATH = process.env
+    .USER_DEFAULT_PROFILE_IMAGE_PATH as string;
 
   static readonly USER_ATTACHMENT_PATH_PREFIX = 'user/';
 
@@ -51,7 +54,7 @@ export class UserEntity extends AggregateRoot<UserProps> {
       role: UserRole.USER,
       isEmailVerified: false,
       deletedAt: null,
-      profileImagePath: String(UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH),
+      profileImagePath: UserEntity.USER_DEFAULT_PROFILE_IMAGE_PATH,
     };
 
     const user = new UserEntity({ id, props });
@@ -293,16 +296,40 @@ export class UserEntity extends AggregateRoot<UserProps> {
     this.props.mbti = mbti;
   }
 
-  editProfileImagePath(profileImagePath: string | null) {
-    if (
-      !isNil(profileImagePath) &&
-      !profileImagePath.startsWith(UserEntity.USER_ATTACHMENT_PATH_PREFIX)
-    ) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: `profileImagePath must start with ${UserEntity.USER_ATTACHMENT_PATH_PREFIX}`,
-      });
+  updateProfileImage(profileImageFile: FileProps | null) {
+    if (isNil(profileImageFile)) {
+      if (profileImageFile === this.props.profileImagePath) {
+        return;
+      }
+
+      this.addEvent(
+        new UserProfileImagePathUpdatedDomainEvent({
+          aggregateId: this.id,
+          profileImageFile: null,
+          previousProfileImagePath: this.props.profileImagePath,
+        }),
+      );
+
+      this.props.profileImagePath = null;
+
+      return;
     }
+
+    const fileId = getTsid().toBigInt();
+    const profileImagePath = UserEntity.USER_ATTACHMENT_PATH_PREFIX + fileId;
+
+    this.addEvent(
+      new UserProfileImagePathUpdatedDomainEvent({
+        aggregateId: this.id,
+        profileImageFile: {
+          ...profileImageFile,
+          fileId,
+          profileImagePath,
+          attachmentUrl: UserEntity.USER_ATTACHMENT_URL,
+        },
+        previousProfileImagePath: this.props.profileImagePath,
+      }),
+    );
 
     this.props.profileImagePath = profileImagePath;
   }

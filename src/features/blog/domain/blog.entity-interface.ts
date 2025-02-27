@@ -1,5 +1,6 @@
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
+import { FileProps } from '@libs/types/type';
 
 export interface BlogProps {
   createdBy: AggregateID;
@@ -19,7 +20,7 @@ export interface CreateBlogProps {
   connectionId: AggregateID;
   name: string;
   description: string;
-  backgroundImagePath: string | null;
+  backgroundImageFile: FileProps | null;
   dDayStartDate: string;
   memberIds: AggregateID[];
 }

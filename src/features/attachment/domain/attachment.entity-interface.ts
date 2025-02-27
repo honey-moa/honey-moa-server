@@ -11,10 +11,11 @@ export interface AttachmentProps {
 }
 
 export interface CreateAttachmentProps {
-  id: AggregateID;
   userId: AggregateID;
-  location: Location;
   mimeType: string;
   capacity: bigint;
   uploadType: AttachmentUploadTypeUnion;
+  path?: string;
+  id?: AggregateID;
+  url?: string;
 }

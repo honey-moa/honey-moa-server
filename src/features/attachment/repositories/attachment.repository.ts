@@ -121,6 +121,14 @@ export class AttachmentRepository implements AttachmentRepositoryPort {
     return records.map((record) => this.mapper.toEntity(record));
   }
 
+  async findOneByPath(path: string): Promise<AttachmentEntity | undefined> {
+    const record = await this.txHost.tx.attachment.findUnique({
+      where: { path },
+    });
+
+    return record ? this.mapper.toEntity(record) : undefined;
+  }
+
   async bulkDelete(entities: AttachmentEntity[]): Promise<void> {
     if (!entities.length) {
       return;

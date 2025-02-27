@@ -83,6 +83,7 @@ export class UserRepository implements UserRepositoryPort {
       data: record,
     });
 
+    await entity.publishEvents(this.eventEmitter);
     return this.mapper.toEntity(updatedRecord);
   }
 
