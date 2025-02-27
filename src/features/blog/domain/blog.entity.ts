@@ -14,9 +14,13 @@ import { UserEntity } from '@features/user/domain/user.entity';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
 import { isNil } from '@libs/utils/util';
+import { BlogCreatedDomainEvent } from '@features/blog/domain/events/blog-created.domain-event';
+import { FileProps } from '@libs/types/type';
+import { BlogBackgroundImagePathUpdatedDomainEvent } from '@features/blog/domain/events/blog-background-image-updated.domain-event';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
-  static readonly BLOG_ATTACHMENT_URL = process.env.BLOG_ATTACHMENT_URL;
+  static readonly BLOG_ATTACHMENT_URL = process.env
+    .BLOG_ATTACHMENT_URL as string;
 
   static readonly BLOG_ATTACHMENT_PATH_PREFIX = 'blog/';
 
@@ -30,8 +34,19 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
 
     const now = new Date();
 
+    let fileId: AggregateID | null = null;
+
+    const { backgroundImageFile, ...rest } = create;
+
+    if (!isNil(backgroundImageFile)) {
+      fileId = getTsid().toBigInt();
+    }
+
     const props: BlogProps = {
-      ...create,
+      ...rest,
+      backgroundImagePath: fileId
+        ? BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + fileId
+        : null,
       deletedAt: null,
     };
 
@@ -41,6 +56,21 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       createdAt: now,
       updatedAt: now,
     });
+
+    blog.addEvent(
+      new BlogCreatedDomainEvent({
+        aggregateId: id,
+        backgroundImageFile: backgroundImageFile
+          ? {
+              ...backgroundImageFile,
+              fileId: fileId as AggregateID,
+              backgroundImagePath: props.backgroundImagePath as string,
+              attachmentUrl: BlogEntity.BLOG_ATTACHMENT_URL,
+            }
+          : null,
+        createdBy: create.createdBy,
+      }),
+    );
 
     return blog;
   }
@@ -103,18 +133,45 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     this.props.description = description;
   }
 
-  editBackgroundImagePath(backgroundImagePath: string | null) {
-    if (
-      !isNil(backgroundImagePath) &&
-      !backgroundImagePath.startsWith(BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX)
-    ) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx:
-          'backgroundImagePath must start with ' +
-          BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX,
-      });
+  updateBackgroundImage(
+    backgroundImageFile: FileProps | null,
+    userId: AggregateID,
+  ) {
+    if (isNil(backgroundImageFile)) {
+      if (backgroundImageFile === this.props.backgroundImagePath) {
+        return;
+      }
+
+      this.addEvent(
+        new BlogBackgroundImagePathUpdatedDomainEvent({
+          aggregateId: this.id,
+          backgroundImageFile: null,
+          previousBackgroundImagePath: this.props.backgroundImagePath,
+          userId,
+        }),
+      );
+
+      this.props.backgroundImagePath = null;
+
+      return;
     }
+
+    const fileId = getTsid().toBigInt();
+    const backgroundImagePath = BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + fileId;
+
+    this.addEvent(
+      new BlogBackgroundImagePathUpdatedDomainEvent({
+        aggregateId: this.id,
+        backgroundImageFile: {
+          ...backgroundImageFile,
+          fileId,
+          backgroundImagePath,
+          attachmentUrl: BlogEntity.BLOG_ATTACHMENT_URL,
+        },
+        previousBackgroundImagePath: this.props.backgroundImagePath,
+        userId,
+      }),
+    );
 
     this.props.backgroundImagePath = backgroundImagePath;
   }

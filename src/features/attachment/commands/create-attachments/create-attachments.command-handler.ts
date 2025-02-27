@@ -5,8 +5,6 @@ import { CreateAttachmentsCommand } from '@features/attachment/commands/create-a
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import { Location } from '@features/attachment/domain/value-objects/location.value-object';
-import { getTsid } from 'tsid-ts';
 
 @CommandHandler(CreateAttachmentsCommand)
 export class CreateAttachmentsCommandHandler
@@ -22,21 +20,12 @@ export class CreateAttachmentsCommandHandler
     const { files, userId } = command;
 
     const attachments = files.map((file) => {
-      const id = getTsid().toBigInt();
-
-      const path = AttachmentEntity.ATTACHMENT_PATH_PREFIX + id;
-
       return AttachmentEntity.create(
         {
-          id,
           capacity: BigInt(file.capacity),
           mimeType: file.mimeType,
           uploadType: file.uploadType,
           userId,
-          location: new Location({
-            path,
-            url: `${AttachmentEntity.ATTACHMENT_URL}/${path}`,
-          }),
         },
         file.buffer,
       );

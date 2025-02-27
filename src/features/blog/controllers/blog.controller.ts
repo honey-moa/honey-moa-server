@@ -30,6 +30,12 @@ import { FormDataRequest } from 'nestjs-form-data';
 import { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
 import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blog/patch-update-blog.command';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
+import {
+  BlogAlreadyExistsError,
+  CannotCreateBlogWithoutAcceptedConnectionError,
+} from '@features/blog/domain/blog.errors';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
+import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 
 @ApiTags('Blog')
 @ApiInternalServerErrorBuilder()
@@ -64,12 +70,28 @@ export class BlogController {
         : null,
     });
 
-    const result = await this.commandBus.execute<
-      CreateBlogCommand,
-      AggregateID
-    >(command);
+    try {
+      const result = await this.commandBus.execute<
+        CreateBlogCommand,
+        AggregateID
+      >(command);
 
-    return new IdResponseDto(result);
+      return new IdResponseDto(result);
+    } catch (err) {
+      if (err instanceof CannotCreateBlogWithoutAcceptedConnectionError) {
+        throw new HttpForbiddenException({
+          code: err.code,
+        });
+      }
+
+      if (err instanceof BlogAlreadyExistsError) {
+        throw new HttpConflictException({
+          code: err.code,
+        });
+      }
+
+      throw err;
+    }
   }
 
   @SetGuardType(GuardType.PUBLIC)
