@@ -30,6 +30,7 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { UserMbtiUnion } from '@features/user/types/user.type';
 import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
+import { UserDeletedDomainEvent } from '@features/user/domain/events/user-deleted.domain-event';
 import { FileProps } from '@libs/types/type';
 import { UserProfileImagePathUpdatedDomainEvent } from '@features/user/domain/events/user-profile-image-path-updated.domain-event';
 
@@ -367,6 +368,10 @@ export class UserEntity extends AggregateRoot<UserProps> {
         (connection) => connection.id === connectionId,
       ) || null
     );
+  }
+
+  delete(): void {
+    this.addEvent(new UserDeletedDomainEvent({ aggregateId: this.id }));
   }
 
   private get requestedConnections() {

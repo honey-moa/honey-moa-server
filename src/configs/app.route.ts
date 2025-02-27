@@ -25,6 +25,7 @@ export const routesV1 = {
     sendVerificationEmail: `${userRoot}/me/user-verify-tokens/email`,
     sendPasswordChangeVerificationEmail: `${userRoot}/:email/user-verify-tokens/password-change`,
     patchUpdate: `${userRoot}/me`,
+    delete: `${userRoot}/me`,
   },
 
   userConnection: {
