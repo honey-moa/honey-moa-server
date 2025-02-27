@@ -1,12 +1,8 @@
-import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import { Location } from '@features/attachment/domain/value-objects/location.value-object';
-import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
-import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
-import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blog/patch-update-blog.command';
 import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -15,7 +11,6 @@ import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { getTsid } from 'tsid-ts';
 
 @CommandHandler(PatchUpdateBlogCommand)
 export class PatchUpdateBlogCommandHandler
@@ -24,8 +19,6 @@ export class PatchUpdateBlogCommandHandler
   constructor(
     @Inject(BLOG_REPOSITORY_DI_TOKEN)
     private readonly blogRepository: BlogRepositoryPort,
-    @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)
-    private readonly attachmentRepository: AttachmentRepositoryPort,
   ) {}
 
   @Transactional()
@@ -65,65 +58,22 @@ export class PatchUpdateBlogCommandHandler
       blog.editName(name);
     }
 
-    if (!isNil(backgroundImageFile)) {
-      await this.deleteBackgroundImage(blog);
+    if (backgroundImageFile !== undefined) {
+      this.deleteBackgroundImage(blog, userId);
 
-      /**
-       * @todo 현재 파일에 관련한 중복 로직이 많음.
-       * 또한 현재 Attachment를 생성하는 방식은 CreateAttachmentHandler
-       * 혹은 각 도메인의 핸들러에서 외부의 AggregateRoot인 Attachment를 생성해주는데
-       * Attachment 관련한 작업의 중복 제거를 위함 및
-       * Attachment의 LifeCycle에 관한 책임을 갖고 있는 중간 다리 역할인 AttachmentService가 필요해 보임.
-       * 추후에 수정 필요.
-       */
-      const { mimeType, capacity, buffer } = backgroundImageFile;
-
-      const id = getTsid().toBigInt();
-      const path = BlogEntity.BLOG_ATTACHMENT_PATH_PREFIX + id;
-      const url = `${BlogEntity.BLOG_ATTACHMENT_URL}/${path}`;
-
-      const attachment = AttachmentEntity.create(
-        {
-          id,
-          userId,
-          capacity: BigInt(capacity),
-          mimeType,
-          uploadType: AttachmentUploadType.FILE,
-          location: new Location({
-            path,
-            url,
-          }),
-        },
-        buffer,
-      );
-
-      await this.attachmentRepository.create(attachment);
-
-      blog.editBackgroundImagePath(path);
-    } else if (backgroundImageFile === null) {
-      await this.deleteBackgroundImage(blog);
+      if (backgroundImageFile) {
+        blog.updateBackgroundImage(backgroundImageFile, userId);
+      }
     }
 
     await this.blogRepository.update(blog);
   }
 
-  private async deleteBackgroundImage(blog: BlogEntity): Promise<void> {
+  private deleteBackgroundImage(blog: BlogEntity, userId: AggregateID): void {
     const backgroundImageUrl = blog.backgroundImageUrl;
 
     if (!isNil(backgroundImageUrl)) {
-      const existingAttachment = (
-        await this.attachmentRepository.findByUrls([backgroundImageUrl])
-      )[0];
-
-      if (isNil(existingAttachment)) {
-        return;
-      }
-
-      existingAttachment.delete();
-
-      await this.attachmentRepository.delete(existingAttachment);
-
-      blog.editBackgroundImagePath(null);
+      blog.updateBackgroundImage(null, userId);
     }
   }
 }

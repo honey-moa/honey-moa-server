@@ -24,8 +24,6 @@ import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/fi
 import { DisconnectUserConnectionCommandHandler } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command-handler';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { PatchUpdateUserCommandHandler } from '@features/user/commands/patch-update-user/patch-update-user.command-handler';
-import { S3Module } from '@libs/s3/s3.module';
-import { AttachmentModule } from '@features/attachment/attachment.module';
 
 const controllers = [UserController, UserConnectionController];
 
@@ -66,7 +64,7 @@ const mappers: Provider[] = [
 ];
 
 @Module({
-  imports: [EmailModule, NestjsFormDataModule, S3Module, AttachmentModule],
+  imports: [EmailModule, NestjsFormDataModule],
   controllers: [...controllers],
   providers: [
     ...mappers,

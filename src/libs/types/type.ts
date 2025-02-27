@@ -37,3 +37,9 @@ export type SingleProperty<T> = {
 
 export type HandlerReturnType<T extends IQueryHandler | ICommandHandler> =
   ReturnType<T['execute']>;
+
+export type FileProps = {
+  mimeType: string;
+  capacity: number;
+  buffer: Buffer;
+};

@@ -6,7 +6,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { MemoryStoredFile } from 'nestjs-form-data';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -39,6 +38,7 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
             currentUser: request.user?.sub,
             userAgent,
             ip,
+            body: request.body,
           },
           response: {
             statusCode,
@@ -47,15 +47,25 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
           },
         };
 
-        if (request.body instanceof Array) {
-          loggingObject.request.body = request.body.map((value) => {
-            if (value instanceof MemoryStoredFile) {
-              return { ...value, buffer: undefined };
-            }
-            return value;
-          });
-        } else if (request.body instanceof MemoryStoredFile) {
-          loggingObject.request.body = { ...request.body, buffer: undefined };
+        for (const key in loggingObject.request.body) {
+          if (loggingObject.request.body[key].buffer) {
+            loggingObject.request.body[key] = {
+              ...loggingObject.request.body[key],
+              buffer: undefined,
+            };
+          }
+
+          if (Array.isArray(loggingObject.request.body[key])) {
+            loggingObject.request.body[key] = loggingObject.request.body[
+              key
+            ].map((value) => {
+              if (value.buffer) {
+                return { ...value, buffer: undefined };
+              }
+
+              return value;
+            });
+          }
         }
 
         this.logger.log(JSON.stringify(loggingObject, null, 2));
