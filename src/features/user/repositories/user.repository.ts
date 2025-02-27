@@ -54,8 +54,9 @@ export class UserRepository implements UserRepositoryPort {
   async delete(entity: UserEntity): Promise<AggregateID> {
     entity.validate();
 
-    const result = await this.txHost.tx.user.delete({
+    const result = await this.txHost.tx.user.update({
       where: { id: entity.id },
+      data: { deletedAt: new Date() },
     });
 
     await entity.publishEvents(this.eventEmitter);

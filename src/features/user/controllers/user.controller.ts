@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -41,6 +42,7 @@ import { FormDataRequest } from 'nestjs-form-data';
 import { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
 import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
+import { DeleteUserCommand } from '@features/user/commands/delete-user/delete-user.command';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()
@@ -187,5 +189,18 @@ export class UserController {
     });
 
     await this.commandBus.execute(command);
+  }
+
+  @ApiUser.Delete({
+    summary: '유저 회원탈퇴(삭제) API',
+  })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(routesV1.user.delete)
+  async delete(@User('sub') userId: AggregateID): Promise<void> {
+    const command = new DeleteUserCommand({
+      userId,
+    });
+
+    await this.commandBus.execute<DeleteUserCommand, void>(command);
   }
 }
