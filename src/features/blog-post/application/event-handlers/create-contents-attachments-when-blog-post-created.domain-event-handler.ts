@@ -6,6 +6,7 @@ import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/bl
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
+import { Propagation, Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
@@ -24,6 +25,7 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
   @OnEvent(BlogPostCreatedDomainEvent.name, {
     async: true,
   })
+  @Transactional(Propagation.RequiresNew)
   async handle(event: BlogPostCreatedDomainEvent) {
     const { contents, fileUrls } = event;
 

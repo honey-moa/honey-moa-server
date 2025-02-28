@@ -76,9 +76,13 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
   changeLocation(update: UpdateLocationProps): void {
     const newLocation = new Location({
-      path: update.path,
       url: update.url,
+      path: update.path,
     });
+
+    if (this.props.location.equals(newLocation)) {
+      return;
+    }
 
     this.addEvent(
       new AttachmentLocationChangedDomainEvent({

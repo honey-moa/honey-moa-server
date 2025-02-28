@@ -2,6 +2,7 @@ import { AttachmentRepositoryPort } from '@features/attachment/repositories/atta
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { isNil } from '@libs/utils/util';
+import { Propagation, Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
@@ -15,6 +16,7 @@ export class CreateThumbnailAttachmentWhenBlogPostCreatedDomainEventHandler {
   @OnEvent(BlogPostCreatedDomainEvent.name, {
     async: true,
   })
+  @Transactional(Propagation.RequiresNew)
   async handle(event: BlogPostCreatedDomainEvent) {
     const { thumbnailImageUrl, attachmentUrl, attachmentPath } = event;
 
@@ -23,7 +25,9 @@ export class CreateThumbnailAttachmentWhenBlogPostCreatedDomainEventHandler {
     }
 
     const attachmentId = BigInt(
-      thumbnailImageUrl.replace(attachmentUrl, '').replace(attachmentPath, ''),
+      thumbnailImageUrl
+        .replace(`${attachmentUrl}/`, '')
+        .replace(attachmentPath, ''),
     );
 
     const existingAttachment =
@@ -35,6 +39,10 @@ export class CreateThumbnailAttachmentWhenBlogPostCreatedDomainEventHandler {
 
     const movedPath = attachmentPath + existingAttachment.id;
     const movedUrl = `${attachmentUrl}/${movedPath}`;
+
+    if (existingAttachment.path === movedPath) {
+      return;
+    }
 
     existingAttachment.changeLocation({
       path: movedPath,

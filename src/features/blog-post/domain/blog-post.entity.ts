@@ -44,7 +44,7 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
     const thumbnailImagePath = thumbnailImageUrl
       ? thumbnailImageUrl?.replace(
-          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL,
+          `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/`,
           '',
         )
       : null;
