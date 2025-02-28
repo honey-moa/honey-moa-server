@@ -28,7 +28,7 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
   static readonly ATTACHMENT_PATH_PREFIX: string = 'temp/';
 
-  static readonly ATTACHMENT_URL = process.env.ATTACHMENT_URL;
+  static readonly ATTACHMENT_URL = process.env.ATTACHMENT_URL as string;
 
   static create(
     create: CreateAttachmentProps,
@@ -76,9 +76,13 @@ export class AttachmentEntity extends AggregateRoot<AttachmentProps> {
 
   changeLocation(update: UpdateLocationProps): void {
     const newLocation = new Location({
-      path: update.path,
       url: update.url,
+      path: update.path,
     });
+
+    if (this.props.location.equals(newLocation)) {
+      return;
+    }
 
     this.addEvent(
       new AttachmentLocationChangedDomainEvent({

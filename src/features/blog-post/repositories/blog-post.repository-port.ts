@@ -16,4 +16,11 @@ export interface BlogPostRepositoryPort
     id: AggregateID,
     blogPostCommentId: AggregateID,
   ): Promise<BlogPostEntity | undefined>;
+  /**
+   * @description DomainEvent를 발생시키지 않음.
+   */
+  updateContents(
+    blogPostId: AggregateID,
+    contents: Array<Record<string, any>>,
+  ): Promise<void>;
 }

@@ -8,3 +8,7 @@ export class CannotCreateBlogWithoutAcceptedConnectionError extends DomainExcept
 export class BlogAlreadyExistsError extends DomainException {
   readonly code = ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG;
 }
+
+export class NotABlogMemberError extends DomainException {
+  readonly code = ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION;
+}
