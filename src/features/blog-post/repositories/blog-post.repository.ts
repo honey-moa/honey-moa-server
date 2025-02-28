@@ -137,4 +137,14 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
       this.mapper.toEntity(record as BlogPostWithEntitiesModel),
     );
   }
+
+  async updateContents(
+    id: AggregateID,
+    contents: Array<Record<string, any>>,
+  ): Promise<void> {
+    await this.txHost.tx.blogPost.update({
+      where: { id },
+      data: { contents },
+    });
+  }
 }

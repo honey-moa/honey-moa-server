@@ -25,10 +25,12 @@ import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/fin
 import { BlogPostRepository } from '@features/blog-post/repositories/blog-post.repository';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogModule } from '@features/blog/blog.module';
-import { TagModule } from '@features/tag/tag.module';
 import { UserModule } from '@features/user/user.module';
-import { S3Module } from '@libs/s3/s3.module';
 import { Module, Provider } from '@nestjs/common';
+import { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
+import { CreateTagsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-tags-when-blog-post-created.domain-event-handler';
+import { CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-contents-attachments-when-blog-post-created.domain-event-handler';
+import { TagModule } from '@features/tag/tag.module';
 
 const controllers = [BlogPostController, BlogPostCommentController];
 
@@ -55,7 +57,11 @@ const queryHandlers: Provider[] = [
   FindBlogPostCommentsQueryHandler,
 ];
 
-const eventHandlers: Provider[] = [BlogPostBlogDeletedDomainEventHandler];
+const eventHandlers: Provider[] = [
+  BlogPostBlogDeletedDomainEventHandler,
+  CreateTagsWhenBlogPostCreatedDomainEventHandler,
+  CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler,
+];
 
 const repositories: Provider[] = [
   { provide: BLOG_POST_REPOSITORY_DI_TOKEN, useClass: BlogPostRepository },
@@ -73,8 +79,10 @@ const repositories: Provider[] = [
   },
 ];
 
+const domainServices: Provider[] = [BlogPostDomainService];
+
 @Module({
-  imports: [BlogModule, TagModule, UserModule, AttachmentModule, S3Module],
+  imports: [BlogModule, UserModule, AttachmentModule, TagModule],
   controllers: [...controllers],
   providers: [
     ...mappers,
@@ -82,6 +90,7 @@ const repositories: Provider[] = [
     ...queryHandlers,
     ...repositories,
     ...eventHandlers,
+    ...domainServices,
   ],
 })
 export class BlogPostModule {}

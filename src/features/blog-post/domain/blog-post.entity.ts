@@ -40,8 +40,18 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
     const now = new Date();
 
+    const { thumbnailImageUrl, tagNames, fileUrls, ...rest } = create;
+
+    const thumbnailImagePath = thumbnailImageUrl
+      ? thumbnailImageUrl?.replace(
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL,
+          '',
+        )
+      : null;
+
     const props: BlogPostProps = {
-      ...create,
+      ...rest,
+      thumbnailImagePath,
       deletedAt: null,
     };
 
@@ -56,6 +66,12 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
       new BlogPostCreatedDomainEvent({
         aggregateId: id,
         ...props,
+        thumbnailImageUrl,
+        attachmentPath:
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+        attachmentUrl: BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL,
+        fileUrls,
+        tagNames,
       }),
     );
 

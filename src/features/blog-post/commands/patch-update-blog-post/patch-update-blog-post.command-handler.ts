@@ -17,8 +17,6 @@ import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { TagEntity } from '@features/tag/domain/tag.entity';
 import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
 import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
-import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
-import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -36,8 +34,6 @@ export class PatchUpdateBlogPostCommandHandler
   constructor(
     @Inject(BLOG_REPOSITORY_DI_TOKEN)
     private readonly blogRepository: BlogRepositoryPort,
-    @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
-    private readonly userConnectionRepository: UserConnectionRepositoryPort,
     @Inject(BLOG_POST_REPOSITORY_DI_TOKEN)
     private readonly blogPostRepository: BlogPostRepositoryPort,
     @Inject(ATTACHMENT_REPOSITORY_DI_TOKEN)

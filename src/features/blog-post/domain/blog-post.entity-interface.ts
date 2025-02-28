@@ -33,8 +33,10 @@ export interface CreateBlogPostProps {
   date: string;
   location: string;
   summary: string;
-  thumbnailImagePath: string | null;
+  thumbnailImageUrl: string | null;
   isPublic: boolean;
+  tagNames: string[];
+  fileUrls: string[];
 }
 
 export interface UpdateBlogPostProps
