@@ -30,7 +30,8 @@ import { Module, Provider } from '@nestjs/common';
 import { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
 import { CreateTagsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-tags-when-blog-post-created.domain-event-handler';
 import { CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-contents-attachments-when-blog-post-created.domain-event-handler';
-import { TagModule } from '@features/tag/tag.module';
+import { UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-contents-attachments-when-blog-post-updated.domain-event-handler';
+import { UpdateTagsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-tags-when-blog-post-updated.domain-event-handler';
 
 const controllers = [BlogPostController, BlogPostCommentController];
 
@@ -61,6 +62,8 @@ const eventHandlers: Provider[] = [
   BlogPostBlogDeletedDomainEventHandler,
   CreateTagsWhenBlogPostCreatedDomainEventHandler,
   CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler,
+  UpdateTagsWhenBlogPostUpdatedDomainEventHandler,
+  UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler,
 ];
 
 const repositories: Provider[] = [
@@ -82,7 +85,7 @@ const repositories: Provider[] = [
 const domainServices: Provider[] = [BlogPostDomainService];
 
 @Module({
-  imports: [BlogModule, UserModule, AttachmentModule, TagModule],
+  imports: [BlogModule, UserModule, AttachmentModule],
   controllers: [...controllers],
   providers: [
     ...mappers,

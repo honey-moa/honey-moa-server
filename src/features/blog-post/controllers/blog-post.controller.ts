@@ -41,6 +41,8 @@ import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/fin
 import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
+import { NotABlogMemberError } from '@features/blog/domain/blog.errors';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 
 @ApiTags('BlogPost')
 @ApiInternalServerErrorBuilder()
@@ -67,12 +69,22 @@ export class BlogPostController {
       ...requestBodyDto,
     });
 
-    const result = await this.commandBus.execute<
-      CreateBlogPostCommand,
-      AggregateID
-    >(command);
+    try {
+      const result = await this.commandBus.execute<
+        CreateBlogPostCommand,
+        AggregateID
+      >(command);
 
-    return new IdResponseDto(result);
+      return new IdResponseDto(result);
+    } catch (err) {
+      if (err instanceof NotABlogMemberError) {
+        throw new HttpForbiddenException({
+          code: err.code,
+        });
+      }
+
+      throw err;
+    }
   }
 
   @ApiBlogPost.FindBlogPostsFromBlog({
@@ -191,8 +203,17 @@ export class BlogPostController {
       blogPostId: BigInt(blogPostId),
       userId,
     });
+    try {
+      await this.commandBus.execute<PatchUpdateBlogPostCommand, void>(command);
+    } catch (err) {
+      if (err instanceof NotABlogMemberError) {
+        throw new HttpForbiddenException({
+          code: err.code,
+        });
+      }
 
-    await this.commandBus.execute<PatchUpdateBlogPostCommand, void>(command);
+      throw err;
+    }
   }
 
   @ApiBlogPost.Delete({

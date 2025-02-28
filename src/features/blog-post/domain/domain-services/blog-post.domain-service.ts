@@ -1,9 +1,14 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
-import { CreateBlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
+import {
+  CreateBlogPostProps,
+  UpdateBlogPostProps,
+} from '@features/blog-post/domain/blog-post.entity-interface';
 import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { NotABlogMemberError } from '@features/blog/domain/blog.errors';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { isNil } from '@libs/utils/util';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -28,9 +33,7 @@ export class BlogPostDomainService {
       isPublic,
     } = create;
 
-    if (!blog.isMember(userId)) {
-      throw new NotABlogMemberError();
-    }
+    this.hasPermission(blog, userId);
 
     const blogPost = BlogPostEntity.create({
       blogId: blog.id,
@@ -51,6 +54,47 @@ export class BlogPostDomainService {
     return blogPost;
   }
 
+  update(
+    blog: BlogEntity,
+    blogPost: BlogPostEntity,
+    userId: AggregateID,
+    update: Partial<UpdateBlogPostProps> &
+      Partial<{
+        isPublic: boolean;
+        thumbnailImageUrl: string | null;
+      }>,
+  ) {
+    const { isPublic, thumbnailImageUrl } = update;
+
+    this.hasPermission(blog, userId);
+
+    if (isPublic === true) {
+      blogPost.switchToPublic();
+    } else if (isPublic === false) {
+      blogPost.switchToPrivate();
+    }
+
+    blogPost.update({ ...update, userId });
+
+    if (thumbnailImageUrl !== undefined) {
+      this.deleteThumbnailImage(blogPost);
+
+      if (thumbnailImageUrl !== null) {
+        const convertedUrl =
+          this.convertAttachmentUrlToBlogPostUrl(thumbnailImageUrl);
+
+        const movedPath = convertedUrl.replace(
+          `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/`,
+          '',
+        );
+
+        blogPost.updateThumbnailImagePath(movedPath);
+      }
+    }
+
+    return blogPost;
+  }
+
   private convertAttachmentUrlToBlogPostUrl(attachmentUrl: string) {
     const convertedUrl = attachmentUrl
       .replace(
@@ -63,5 +107,21 @@ export class BlogPostDomainService {
       );
 
     return convertedUrl;
+  }
+
+  private hasPermission(blog: BlogEntity, userId: AggregateID) {
+    if (!blog.isMember(userId)) {
+      throw new NotABlogMemberError();
+    }
+  }
+
+  private deleteThumbnailImage(blogPost: BlogPostEntity) {
+    const thumbnailImagePath = blogPost.thumbnailImagePath;
+
+    if (isNil(thumbnailImagePath)) {
+      return;
+    }
+
+    blogPost.updateThumbnailImagePath(null);
   }
 }

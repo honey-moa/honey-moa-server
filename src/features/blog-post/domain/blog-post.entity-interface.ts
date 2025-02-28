@@ -43,6 +43,18 @@ export interface UpdateBlogPostProps
   extends Partial<
     Omit<
       CreateBlogPostProps,
-      'userId' | 'blogId' | 'isPublic' | 'thumbnailImagePath'
+      | 'userId'
+      | 'blogId'
+      | 'isPublic'
+      | 'thumbnailImagePath'
+      | 'contents'
+      | 'fileUrls'
     >
-  > {}
+  > {
+  contentInfo?: {
+    contents: Array<Record<string, any>>;
+    fileUrls?: string[];
+    blogPostAttachments?: BlogPostAttachmentEntity[];
+  };
+  userId: AggregateID;
+}

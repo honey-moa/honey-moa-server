@@ -122,6 +122,8 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
       data: record,
     });
 
+    await entity.publishEvents(this.eventEmitter);
+
     return this.mapper.toEntity(updatedRecord as BlogPostWithEntitiesModel);
   }
 
