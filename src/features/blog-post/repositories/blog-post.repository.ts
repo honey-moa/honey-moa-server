@@ -122,6 +122,8 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
       data: record,
     });
 
+    await entity.publishEvents(this.eventEmitter);
+
     return this.mapper.toEntity(updatedRecord as BlogPostWithEntitiesModel);
   }
 
@@ -136,5 +138,15 @@ export class BlogPostRepository implements BlogPostRepositoryPort {
     return records.map((record) =>
       this.mapper.toEntity(record as BlogPostWithEntitiesModel),
     );
+  }
+
+  async updateContents(
+    id: AggregateID,
+    contents: Array<Record<string, any>>,
+  ): Promise<void> {
+    await this.txHost.tx.blogPost.update({
+      where: { id },
+      data: { contents },
+    });
   }
 }

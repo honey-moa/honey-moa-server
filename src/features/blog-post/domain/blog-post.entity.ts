@@ -10,10 +10,8 @@ import {
 } from '@features/blog-post/domain/blog-post.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { TagEntity } from '@features/tag/domain/tag.entity';
-import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
-import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { isNil } from '@libs/utils/util';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
@@ -23,6 +21,8 @@ import {
 } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
 import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
+import { BlogPostThumbnailImagePathUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-thumbnail-imgae-path-updated.domain-event';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static BLOG_POST_TITLE_LENGTH = {
@@ -40,8 +40,18 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
     const now = new Date();
 
+    const { thumbnailImageUrl, tagNames, fileUrls, ...rest } = create;
+
+    const thumbnailImagePath = thumbnailImageUrl
+      ? thumbnailImageUrl?.replace(
+          `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/`,
+          '',
+        )
+      : null;
+
     const props: BlogPostProps = {
-      ...create,
+      ...rest,
+      thumbnailImagePath,
       deletedAt: null,
     };
 
@@ -56,19 +66,50 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
       new BlogPostCreatedDomainEvent({
         aggregateId: id,
         ...props,
+        thumbnailImageUrl,
+        attachmentPath:
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+        attachmentUrl: BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL,
+        fileUrls,
+        tagNames,
       }),
     );
 
     return blogPost;
   }
 
-  update(update: Partial<UpdateBlogPostProps>): void {
+  update(update: UpdateBlogPostProps): void {
+    const domainEventProps: {
+      aggregateId: AggregateID;
+      userId: AggregateID;
+      updatedProps: {
+        contents?: {
+          oldContents: Array<Record<string, any>>;
+          newContents: Array<Record<string, any>>;
+          fileUrls?: string[];
+          blogPostAttachments?: BlogPostAttachmentEntity[];
+        };
+        tagNames?: string[];
+      };
+    } = {
+      aggregateId: this.id,
+      userId: update.userId,
+      updatedProps: {},
+    };
+
     if (!isNil(update.title)) {
       this.props.title = update.title;
     }
 
-    if (!isNil(update.contents)) {
-      this.props.contents = update.contents;
+    if (!isNil(update.contentInfo)) {
+      domainEventProps.updatedProps.contents = {
+        oldContents: this.props.contents,
+        newContents: update.contentInfo.contents,
+        fileUrls: update.contentInfo.fileUrls,
+        blogPostAttachments: update.contentInfo.blogPostAttachments,
+      };
+
+      this.props.contents = update.contentInfo.contents;
     }
 
     if (!isNil(update.date)) {
@@ -83,10 +124,33 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
       this.props.summary = update.summary;
     }
 
+    if (!isNil(update.tagNames)) {
+      domainEventProps.updatedProps.tagNames = update.tagNames;
+    }
+
     this.validate();
+
+    if (Object.keys(domainEventProps.updatedProps).length > 0) {
+      this.addEvent(new BlogPostUpdatedDomainEvent(domainEventProps));
+    }
   }
 
-  editThumbnailImagePath(thumbnailImagePath: string | null): void {
+  updateThumbnailImagePath(thumbnailImagePath: string | null): void {
+    if (thumbnailImagePath === this.props.thumbnailImagePath) {
+      return;
+    }
+
+    this.addEvent(
+      new BlogPostThumbnailImagePathUpdatedDomainEvent({
+        aggregateId: this.id,
+        oldThumbnailImagePath: this.props.thumbnailImagePath,
+        newThumbnailImagePath: thumbnailImagePath,
+        attachmentUrl: BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL,
+        attachmentPath:
+          BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX,
+      }),
+    );
+
     this.props.thumbnailImagePath = thumbnailImagePath;
   }
 
@@ -108,33 +172,6 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
 
   hydrateTag(tag: TagEntity): void {
     this.props.tags = [...(this.props.tags || []), tag.hydrateProps];
-  }
-
-  createBlogPostTag(tag: TagEntity): BlogPostTagEntity {
-    const blogPostTag = BlogPostTagEntity.create({
-      blogPostId: this.id,
-      tagId: tag.id,
-    });
-
-    this.props.blogPostTags = [...(this.props.blogPostTags || []), blogPostTag];
-
-    return blogPostTag;
-  }
-
-  createBlogPostAttachment(
-    attachment: AttachmentEntity,
-  ): BlogPostAttachmentEntity {
-    const blogPostAttachment = BlogPostAttachmentEntity.create({
-      blogPostId: this.id,
-      attachmentId: attachment.id,
-    });
-
-    this.props.blogPostAttachments = [
-      ...(this.props.blogPostAttachments || []),
-      blogPostAttachment,
-    ];
-
-    return blogPostAttachment;
   }
 
   createBlogPostComment(
@@ -186,22 +223,6 @@ export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
     }
 
     this.props.blogPostComments.splice(index, 1);
-  }
-
-  deleteBlogPostAttachment(blogPostAttachment: BlogPostAttachmentEntity): void {
-    if (isNil(this.props.blogPostAttachments)) {
-      return;
-    }
-
-    const index = this.props.blogPostAttachments.findIndex(
-      (attachment) => attachment.id === blogPostAttachment.id,
-    );
-
-    if (index === -1) {
-      return;
-    }
-
-    this.props.blogPostAttachments.splice(index, 1);
   }
 
   delete(): void {
