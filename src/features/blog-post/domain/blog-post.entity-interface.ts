@@ -33,14 +33,28 @@ export interface CreateBlogPostProps {
   date: string;
   location: string;
   summary: string;
-  thumbnailImagePath: string | null;
+  thumbnailImageUrl: string | null;
   isPublic: boolean;
+  tagNames: string[];
+  fileUrls: string[];
 }
 
 export interface UpdateBlogPostProps
   extends Partial<
     Omit<
       CreateBlogPostProps,
-      'userId' | 'blogId' | 'isPublic' | 'thumbnailImagePath'
+      | 'userId'
+      | 'blogId'
+      | 'isPublic'
+      | 'thumbnailImagePath'
+      | 'contents'
+      | 'fileUrls'
     >
-  > {}
+  > {
+  contentInfo?: {
+    contents: Array<Record<string, any>>;
+    fileUrls?: string[];
+    blogPostAttachments?: BlogPostAttachmentEntity[];
+  };
+  userId: AggregateID;
+}
