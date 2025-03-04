@@ -30,6 +30,7 @@ export class FindUsersQueryHandler
         contains: nickname,
       },
       isEmailVerified,
+      deletedAt: null,
     };
 
     const cursorProps = {
