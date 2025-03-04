@@ -24,6 +24,7 @@ export class FindOneUserQueryHandler
     const user = await this.txHost.tx.user.findUnique({
       where: {
         id: userId,
+        deletedAt: null,
       },
     });
 
