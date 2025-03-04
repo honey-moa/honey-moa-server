@@ -9,6 +9,9 @@ import {
 } from '@features/user/domain/user-verify-token/user-verify-token.entity-interface';
 
 export class UserVerifyTokenEntity extends Entity<UserVerifyTokenProps> {
+  static readonly VERIFICATION_EXPIRES_IN = 5 * 60 * 1000;
+  static readonly RESEND_TIME_INTERVAL = 5 * 60 * 1000;
+
   static create(create: CreateUserVerifyTokenProps): UserVerifyTokenEntity {
     const id = getTsid().toBigInt();
 
@@ -18,7 +21,9 @@ export class UserVerifyTokenEntity extends Entity<UserVerifyTokenProps> {
       ...create,
       token: randomUUID(),
       isUsed: false,
-      expiresAt: new Date(now.getTime() + 60 * 60 * 1000),
+      expiresAt: new Date(
+        now.getTime() + UserVerifyTokenEntity.VERIFICATION_EXPIRES_IN,
+      ),
     };
 
     const userVerifyToken = new UserVerifyTokenEntity({
@@ -64,29 +69,35 @@ export class UserVerifyTokenEntity extends Entity<UserVerifyTokenProps> {
   reissueEmailVerificationToken() {
     const nowTime = new Date().getTime();
 
-    const anHour = 60 * 60 * 1000;
-
-    if (nowTime < this.updatedAt.getTime() + anHour) {
+    if (
+      nowTime <
+      this.updatedAt.getTime() + UserVerifyTokenEntity.RESEND_TIME_INTERVAL
+    ) {
       throw new HttpConflictException({
         code: USER_ERROR_CODE.CANNOT_RESEND_VERIFICATION_EMAIL_AN_HOUR,
       });
     }
 
-    this.reissueToken(new Date(nowTime + anHour));
+    this.reissueToken(
+      new Date(nowTime + UserVerifyTokenEntity.VERIFICATION_EXPIRES_IN),
+    );
   }
 
   reissuePasswordChangeVerificationToken() {
     const nowTime = new Date().getTime();
 
-    const anHour = 60 * 60 * 1000;
-
-    if (nowTime < this.updatedAt.getTime() + anHour) {
+    if (
+      nowTime <
+      this.updatedAt.getTime() + UserVerifyTokenEntity.RESEND_TIME_INTERVAL
+    ) {
       throw new HttpConflictException({
         code: USER_ERROR_CODE.CANNOT_RESEND_PASSWORD_CHANGE_VERIFICATION_EMAIL_AN_HOUR,
       });
     }
 
-    this.reissueToken(new Date(nowTime + anHour));
+    this.reissueToken(
+      new Date(nowTime + UserVerifyTokenEntity.VERIFICATION_EXPIRES_IN),
+    );
   }
 
   public validate(): void {}
