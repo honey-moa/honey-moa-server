@@ -48,7 +48,7 @@ export class RequestResponseLoggingInterceptor implements NestInterceptor {
         };
 
         for (const key in loggingObject.request.body) {
-          if (loggingObject.request.body[key].buffer) {
+          if (loggingObject.request.body[key]?.buffer) {
             loggingObject.request.body[key] = {
               ...loggingObject.request.body[key],
               buffer: undefined,
