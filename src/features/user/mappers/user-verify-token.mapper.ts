@@ -17,7 +17,10 @@ export const userVerifyTokenSchema = baseSchema
     isUsed: z.boolean(),
   })
   .superRefine(({ createdAt, expiresAt }, ctx) => {
-    if (expiresAt.getTime() < createdAt.getTime() + 60 * 60 * 1000) {
+    if (
+      expiresAt.getTime() <
+      createdAt.getTime() + UserVerifyTokenEntity.VERIFICATION_EXPIRES_IN
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: 'expiresAt must be 1 hour greater than createdAt.',
