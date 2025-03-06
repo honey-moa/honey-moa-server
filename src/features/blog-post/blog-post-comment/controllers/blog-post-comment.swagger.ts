@@ -2,6 +2,7 @@ import { applyDecorators, HttpStatus } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
+  ApiExtraModels,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -116,6 +117,8 @@ export const ApiBlogPostComment: ApiOperator<keyof BlogPostCommentController> =
       return applyDecorators(
         ApiOperation({ ...apiOperationOptions }),
         ApiBearerAuth('access-token'),
+
+        ApiExtraModels(...paginationResponseTypes),
         ApiOkResponse({
           description:
             '정상적으로 블로그 포스트 댓글 조회됨. cursor 혹은 pagination response 타입 중 하나를 리턴함.',
