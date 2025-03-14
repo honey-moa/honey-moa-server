@@ -6,3 +6,5 @@ dist
 docker-compose.yaml
 .env*
 ERD.svg
+./assets
+./docs
