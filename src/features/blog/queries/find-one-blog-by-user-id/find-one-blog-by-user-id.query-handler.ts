@@ -67,11 +67,15 @@ export class FindOneBlogByUserIdQueryHandler
       members: [
         {
           ...blog.connection.requesterUser,
-          profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requesterUser.profileImagePath}`,
+          profileImageUrl: blog.connection.requesterUser.profileImagePath
+            ? `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requesterUser.profileImagePath}`
+            : null,
         },
         {
           ...blog.connection.requestedUser,
-          profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requestedUser.profileImagePath}`,
+          profileImageUrl: blog.connection.requestedUser.profileImagePath
+            ? `${UserEntity.USER_ATTACHMENT_URL}/${blog.connection.requestedUser.profileImagePath}`
+            : null,
         },
       ],
       createdAt: blog.createdAt,

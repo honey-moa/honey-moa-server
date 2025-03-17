@@ -70,7 +70,9 @@ export class FindOneBlogPostQueryHandler
       location: blogPost.location,
       isPublic: blogPost.isPublic,
       summary: blogPost.summary,
-      thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
+      thumbnailImageUrl: blogPost.thumbnailImagePath
+        ? `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`
+        : null,
       createdAt: blogPost.createdAt,
       updatedAt: blogPost.updatedAt,
       tags: blogPost.blogPostTags.map((blogPostTag) => {

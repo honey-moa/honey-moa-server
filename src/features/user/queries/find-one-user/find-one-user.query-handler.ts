@@ -36,7 +36,9 @@ export class FindOneUserQueryHandler
 
     return {
       ...user,
-      profileImageUrl: `${UserEntity.USER_ATTACHMENT_URL}/${user.profileImagePath}`,
+      profileImageUrl: user.profileImagePath
+        ? `${UserEntity.USER_ATTACHMENT_URL}/${user.profileImagePath}`
+        : null,
     };
   }
 }

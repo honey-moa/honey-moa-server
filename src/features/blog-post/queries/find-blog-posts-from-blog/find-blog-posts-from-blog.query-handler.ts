@@ -108,7 +108,9 @@ export class FindBlogPostsFromBlogQueryHandler
       blogPosts: blogPosts.map((blogPost) => {
         return {
           ...blogPost,
-          thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
+          thumbnailImageUrl: blogPost.thumbnailImagePath
+            ? `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`
+            : null,
           tags: blogPost.blogPostTags.map((blogPostTag) => blogPostTag.tag),
         };
       }),
