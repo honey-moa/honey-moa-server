@@ -43,5 +43,3 @@ async function bootstrap() {
   await bootstrapService.startingServer(app);
 }
 bootstrap();
-
-// Deploy
