@@ -82,7 +82,9 @@ export class FindPublicBlogPostsQueryHandler
         return {
           ...blogPost,
           tags: blogPost.blogPostTags.map((blogPostTag) => blogPostTag.tag),
-          thumbnailImageUrl: `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`,
+          thumbnailImageUrl: blogPost.thumbnailImagePath
+            ? `${BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_URL}/${blogPost.thumbnailImagePath}`
+            : null,
           blog: {
             ...blogPost.blog,
             members: [
