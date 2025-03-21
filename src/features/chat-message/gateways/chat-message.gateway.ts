@@ -128,10 +128,15 @@ export class ChatMessageGateway
     const chatRoom = await this.chatRoomRepository.findOneById(roomId);
 
     if (isNil(chatRoom)) {
+      this.logger.error(
+        `[Socket] enter_chat_room failed: Room ${roomId} does not exist`,
+      );
       throw new WsException('Does not exist room');
     }
 
     socket.join(String(roomId));
+    this.logger.log(`[Socket] User ${socket.user.sub} joined room ${roomId}`);
+    return { message: 'Successfully joined room', roomId };
   }
 
   @UsePipes(customValidationPipe)
@@ -151,6 +156,10 @@ export class ChatMessageGateway
     const { roomId, message, blogPostUrl } = data;
     const { sub: userId } = socket.user;
 
+    this.logger.log(
+      `[Socket] Received message from ${userId} in room ${roomId}: ${message}`,
+    );
+
     const command = new CreateChatMessageCommand({
       roomId: BigInt(roomId),
       userId: BigInt(userId),
@@ -158,10 +167,26 @@ export class ChatMessageGateway
       blogPostUrl,
     });
 
+    this.logger.log(
+      `[Socket] Sending message from ${userId} in room ${roomId}: ${message}`,
+    );
+
     await this.commandBus.execute<CreateChatMessageCommand, void>(command);
 
     socket
       .to(String(roomId))
       .emit('receive_message', { senderId: userId, message, blogPostUrl });
+
+    this.logger.log(
+      `[Socket] Message emitted to room ${roomId} from ${userId}`,
+    );
+
+    return {
+      message: 'Successfully sent message',
+      roomId,
+      senderId: userId,
+      sentMessage: message,
+      blogPostUrl,
+    };
   }
 }
