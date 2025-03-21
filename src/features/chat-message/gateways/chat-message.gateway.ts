@@ -136,7 +136,7 @@ export class ChatMessageGateway
 
     socket.join(String(roomId));
     this.logger.log(`[Socket] User ${socket.user.sub} joined room ${roomId}`);
-    return { message: 'Successfully joined room', roomId };
+    return { message: 'Successfully joined room' };
   }
 
   @UsePipes(customValidationPipe)
@@ -168,7 +168,7 @@ export class ChatMessageGateway
     });
 
     this.logger.log(
-      `[Socket] Sending message from ${userId} in room ${roomId}: ${message}`,
+      `[Socket] Sending message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
     await this.commandBus.execute<CreateChatMessageCommand, void>(command);
@@ -181,12 +181,6 @@ export class ChatMessageGateway
       `[Socket] Message emitted to room ${roomId} from ${userId}`,
     );
 
-    return {
-      message: 'Successfully sent message',
-      roomId,
-      senderId: userId,
-      sentMessage: message,
-      blogPostUrl,
-    };
+    return { message: 'Successfully sent message' };
   }
 }
