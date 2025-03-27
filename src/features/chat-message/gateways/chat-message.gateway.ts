@@ -32,6 +32,7 @@ import { Server } from 'socket.io';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
+import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
 
 const options: Omit<ValidationPipeOptions, 'exceptionFactory'> = {
   transform: true,
@@ -135,8 +136,10 @@ export class ChatMessageGateway
     }
 
     socket.join(String(roomId));
+
     this.logger.log(`[Socket] User ${socket.user.sub} joined room ${roomId}`);
-    return { message: 'Successfully joined room' };
+
+    return { statusMessage: 'Successfully joined room' };
   }
 
   @UsePipes(customValidationPipe)
@@ -157,7 +160,7 @@ export class ChatMessageGateway
     const { sub: userId } = socket.user;
 
     this.logger.log(
-      `[Socket] Received message from ${userId} in room ${roomId}: ${message}`,
+      `[Socket] Received message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
     const command = new CreateChatMessageCommand({
@@ -171,16 +174,20 @@ export class ChatMessageGateway
       `[Socket] Sending message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
-    await this.commandBus.execute<CreateChatMessageCommand, void>(command);
+    const createdMessage = await this.commandBus.execute<
+      CreateChatMessageCommand,
+      ChatMessageResponseDto
+    >(command);
 
-    socket
-      .to(String(roomId))
-      .emit('receive_message', { senderId: userId, message, blogPostUrl });
+    socket.to(String(roomId)).emit('receive_message', { ...createdMessage });
 
     this.logger.log(
-      `[Socket] Message emitted to room ${roomId} from ${userId}`,
+      `[Socket] Message emitted to room ${data.roomId}: ${JSON.stringify(createdMessage)}`,
     );
 
-    return { message: 'Successfully sent message' };
+    return {
+      statusMessage: 'Successfully sent message',
+      sentMessage: createdMessage,
+    };
   }
 }
