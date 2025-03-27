@@ -1,7 +1,6 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
-import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
@@ -24,7 +23,6 @@ export class CreateChatMessageCommandHandler
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
     @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
     private readonly userConnectionRepository: UserConnectionRepositoryPort,
-    private readonly mapper: ChatMessageMapper,
   ) {}
 
   async execute(
@@ -66,8 +64,6 @@ export class CreateChatMessageCommandHandler
       blogPostUrl,
     });
 
-    const chatMessage = await this.chatRoomRepository.createChatMessage(entity);
-
-    return this.mapper.toResponseDto(chatMessage);
+    return this.chatRoomRepository.createChatMessage(entity);
   }
 }

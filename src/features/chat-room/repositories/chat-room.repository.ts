@@ -9,6 +9,7 @@ import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-ro
 import { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
 
 @Injectable()
 export class ChatRoomRepository implements ChatRoomRepositoryPort {
@@ -87,13 +88,15 @@ export class ChatRoomRepository implements ChatRoomRepositoryPort {
 
   async createChatMessage(
     entity: ChatMessageEntity,
-  ): Promise<ChatMessageEntity> {
+  ): Promise<ChatMessageResponseDto> {
     const record = this.chatMessageMapper.toPersistence(entity);
 
     const createdRecord = await this.txHost.tx.chatMessage.create({
       data: record,
     });
 
-    return this.chatMessageMapper.toEntity(createdRecord);
+    const entityFromRecord = this.chatMessageMapper.toEntity(createdRecord);
+
+    return this.chatMessageMapper.toResponseDto(entityFromRecord);
   }
 }
