@@ -1,6 +1,6 @@
-import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import type { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
 import { HttpStatus } from '@nestjs/common';
-import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 
 /**
  * node  process error exception

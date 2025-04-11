@@ -1,10 +1,10 @@
-import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
-import { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
+import type { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
 import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
-import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { isNil } from '@libs/utils/util';
 import { Propagation, Transactional } from '@nestjs-cls/transactional';

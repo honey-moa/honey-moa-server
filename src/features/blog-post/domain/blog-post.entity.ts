@@ -2,11 +2,11 @@ import { getTsid } from 'tsid-ts';
 
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
-import {
+import type {
   BlogPostCommentProps,
   CreateBlogPostCommentProps,
 } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
-import {
+import type {
   BlogPostProps,
   CreateBlogPostProps,
   UpdateBlogPostProps,
@@ -15,10 +15,10 @@ import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/bl
 import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
 import { BlogPostThumbnailImagePathUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-thumbnail-imgae-path-updated.domain-event';
 import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
-import { TagEntity } from '@features/tag/domain/tag.entity';
-import { UserEntity } from '@features/user/domain/user.entity';
+import type { TagEntity } from '@features/tag/domain/tag.entity';
+import type { UserEntity } from '@features/user/domain/user.entity';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';

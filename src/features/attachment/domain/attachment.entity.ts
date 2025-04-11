@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 
-import {
+import type {
   AttachmentProps,
   CreateAttachmentProps,
 } from '@features/attachment/domain/attachment.entity-interface';
@@ -9,7 +9,7 @@ import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events
 import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
 import {
   Location,
-  UpdateLocationProps,
+  type UpdateLocationProps,
 } from '@features/attachment/domain/value-objects/location.value-object';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';

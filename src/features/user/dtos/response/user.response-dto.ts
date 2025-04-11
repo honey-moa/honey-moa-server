@@ -1,11 +1,11 @@
 import { UserLoginType, UserMbti } from '@features/user/types/user.constant';
-import {
+import type {
   UserLoginTypeUnion,
   UserMbtiUnion,
 } from '@features/user/types/user.type';
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 import { ApiProperty } from '@nestjs/swagger';
 

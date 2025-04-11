@@ -2,7 +2,7 @@ import { UserEntity } from '@features/user/domain/user.entity';
 import type { UserProps } from '@features/user/domain/user.entity-interface';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
 import {
-  UserVerifyTokenMapper,
+  type UserVerifyTokenMapper,
   userVerifyTokenSchema,
 } from '@features/user/mappers/user-verify-token.mapper';
 import {
@@ -11,7 +11,7 @@ import {
   UserRole,
 } from '@features/user/types/user.constant';
 import {
-  UserConnectionMapper,
+  type UserConnectionMapper,
   userConnectionSchema,
 } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { baseSchema } from '@libs/db/base.schema';

@@ -1,8 +1,8 @@
-import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UpdateUserConnectionCommand } from '@features/user/user-connection/commands/update-user-connection/update-user-connection.command';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -11,7 +11,7 @@ import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(UpdateUserConnectionCommand)
 export class UpdateUserConnectionCommandHandler

@@ -1,6 +1,6 @@
 import { getTsid } from 'tsid-ts';
 
-import {
+import type {
   BlogPostTagProps,
   CreateBlogPostTagProps,
 } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity-interface';

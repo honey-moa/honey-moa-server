@@ -1,21 +1,21 @@
-import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserVerifyTokenMapper } from '@features/user/mappers/user-verify-token.mapper';
-import { UserMapper } from '@features/user/mappers/user.mapper';
-import {
+import type { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { UserVerifyTokenMapper } from '@features/user/mappers/user-verify-token.mapper';
+import type { UserMapper } from '@features/user/mappers/user.mapper';
+import type {
   UserInclude,
   UserRepositoryPort,
 } from '@features/user/repositories/user.repository-port';
-import { UserLoginTypeUnion } from '@features/user/types/user.type';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
-import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import type { UserLoginTypeUnion } from '@features/user/types/user.type';
+import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
+import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class UserRepository implements UserRepositoryPort {

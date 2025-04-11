@@ -1,4 +1,4 @@
-import {
+import type {
   ChatMessageProps,
   CreateChatMessageProps,
 } from '@features/chat-message/domain/chat-message.entity-interface';

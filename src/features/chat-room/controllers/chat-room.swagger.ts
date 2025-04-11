@@ -1,4 +1,4 @@
-import { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
+import type { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
@@ -18,7 +18,10 @@ import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/ch
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
 
 export const ApiChatRoom: ApiOperator<keyof ChatRoomController> = {
   Create: (

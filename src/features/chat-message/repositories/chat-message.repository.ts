@@ -1,13 +1,13 @@
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import {
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type {
   ChatMessageMapper,
   ChatMessageModel,
 } from '@features/chat-message/mappers/chat-message.mapper';
-import { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import type { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

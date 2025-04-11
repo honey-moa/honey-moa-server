@@ -1,13 +1,13 @@
 import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(PatchUpdateUserCommand)
 export class PatchUpdateUserCommandHandler

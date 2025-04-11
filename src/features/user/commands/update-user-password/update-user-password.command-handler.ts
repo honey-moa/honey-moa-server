@@ -1,11 +1,11 @@
 import { UpdateUserPasswordCommand } from '@features/user/commands/update-user-password/update-user-password.command';
-import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserVerifyTokenType } from '@features/user/types/user.constant';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import { Key } from '@libs/core/app-config/types/app-config.type';
+import type { Key } from '@libs/core/app-config/types/app-config.type';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -15,7 +15,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 @CommandHandler(UpdateUserPasswordCommand)
 export class UpdateUserPasswordCommandHandler

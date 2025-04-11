@@ -1,4 +1,4 @@
-import { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
+import type { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
 import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { HttpStatus, applyDecorators } from '@nestjs/common';
@@ -19,7 +19,10 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
 
 export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
   Create: (

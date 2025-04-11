@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import type { ConfigService } from '@nestjs/config';
 
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
-import { Key } from '@libs/core/app-config/types/app-config.type';
+import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import type { Key } from '@libs/core/app-config/types/app-config.type';
 
 @Injectable()
 export class AppConfigService implements AppConfigServicePort<Key> {

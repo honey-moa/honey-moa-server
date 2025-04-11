@@ -1,4 +1,4 @@
-import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { isNil } from '@libs/utils/util';

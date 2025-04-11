@@ -1,9 +1,9 @@
 import { DeleteBlogPostCommand } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command';
-import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
-import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import type { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
-import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import type { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -11,7 +11,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(DeleteBlogPostCommand)
 export class DeleteBlogPostCommandHandler

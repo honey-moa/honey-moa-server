@@ -1,10 +1,10 @@
 import { getTsid } from 'tsid-ts';
 
-import {
+import type {
   BlogPostCommentProps,
   CreateBlogPostCommentProps,
 } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
-import { AggregateID, Entity } from '@libs/ddd/entity.base';
+import { type AggregateID, Entity } from '@libs/ddd/entity.base';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';

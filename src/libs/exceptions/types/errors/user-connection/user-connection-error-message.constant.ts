@@ -1,5 +1,5 @@
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
-import { ErrorMessage } from '@libs/types/type';
+import type { ErrorMessage } from '@libs/types/type';
 
 export const USER_CONNECTION_ERROR_MESSAGE: ErrorMessage<
   typeof USER_CONNECTION_ERROR_CODE

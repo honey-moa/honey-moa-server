@@ -9,7 +9,7 @@ import {
   HasMimeType,
   IsFile,
   MaxFileSize,
-  MemoryStoredFile,
+  type MemoryStoredFile,
 } from 'nestjs-form-data';
 
 export class PatchUpdateBlogRequestBodyDto extends PartialType(

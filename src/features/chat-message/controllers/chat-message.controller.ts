@@ -1,19 +1,19 @@
 import { ApiChatMessage } from '@features/chat-message/controllers/chat-message.swagger';
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import { FindChatMessagesRequestQueryDto } from '@features/chat-message/dtos/request/find-chat-messages.request-query-dto';
-import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { FindChatMessagesRequestQueryDto } from '@features/chat-message/dtos/request/find-chat-messages.request-query-dto';
+import type { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
 import { User } from '@libs/api/decorators/user.decorator';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import type { QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { routesV1 } from '@src/configs/app.route';
-import { ChatMessageMapper } from '@src/features/chat-message/mappers/chat-message.mapper';
+import type { ChatMessageMapper } from '@src/features/chat-message/mappers/chat-message.mapper';
 import { FindChatMessagesQuery } from '@src/features/chat-message/queries/find-chat-messages/find-chat-messages.query';
 import { ApiInternalServerErrorBuilder } from '@src/libs/api/decorators/api-internal-server-error-builder.decorator';
 import { SetPagination } from '@src/libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import { Paginated } from '@src/libs/types/type';
+import type { Paginated } from '@src/libs/types/type';
 
 @ApiTags('ChatMessage')
 @ApiInternalServerErrorBuilder()

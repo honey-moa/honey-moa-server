@@ -1,14 +1,14 @@
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserMapper } from '@features/user/mappers/user.mapper';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { UserMapper } from '@features/user/mappers/user.mapper';
+import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { FindUserConnectionsQuery } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { Paginated } from '@libs/types/type';
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { Paginated } from '@libs/types/type';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindUserConnectionsQuery)
 export class FindUserConnectionsQueryHandler

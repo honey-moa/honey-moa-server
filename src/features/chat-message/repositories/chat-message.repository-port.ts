@@ -1,6 +1,6 @@
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { RepositoryPort } from '@libs/ddd/repository.port';
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { RepositoryPort } from '@libs/ddd/repository.port';
 
 export interface ChatMessageRepositoryPort
   extends RepositoryPort<ChatMessageEntity> {

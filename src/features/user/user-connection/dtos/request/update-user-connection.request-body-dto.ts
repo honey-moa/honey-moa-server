@@ -1,5 +1,5 @@
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 

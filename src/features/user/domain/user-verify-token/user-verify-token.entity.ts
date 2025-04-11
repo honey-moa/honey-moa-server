@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import {
+import type {
   CreateUserVerifyTokenProps,
   UserVerifyTokenProps,
 } from '@features/user/domain/user-verify-token/user-verify-token.entity-interface';

@@ -10,7 +10,7 @@ import { ChatRoomModule } from '@features/chat-room/chat-room.module';
 import { UserModule } from '@features/user/user.module';
 import { AppJwtModule } from '@libs/app-jwt/app-jwt.module';
 import { GuardModule } from '@libs/guards/guard.module';
-import { Module, Provider } from '@nestjs/common';
+import { Module, type Provider } from '@nestjs/common';
 
 const controllers = [ChatMessageController];
 

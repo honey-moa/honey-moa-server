@@ -1,5 +1,5 @@
 import { REWRITE_VALIDATION_OPTIONS_TOKEN } from '@libs/pipes/types/rewrite-validation-options.token';
-import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
+import { type ArgumentMetadata, ValidationPipe } from '@nestjs/common';
 
 export class CustomValidationPipe extends ValidationPipe {
   async transform(value: any, metadata: ArgumentMetadata) {

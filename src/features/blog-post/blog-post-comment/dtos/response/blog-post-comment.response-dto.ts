@@ -1,9 +1,9 @@
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface CreateBlogPostCommentResponseDtoProps

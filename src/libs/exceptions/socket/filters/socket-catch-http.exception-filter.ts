@@ -1,5 +1,5 @@
 import { HttpException } from '@libs/exceptions/http.exception';
-import { ArgumentsHost, Catch } from '@nestjs/common';
+import { type ArgumentsHost, Catch } from '@nestjs/common';
 import { BaseWsExceptionFilter } from '@nestjs/websockets';
 
 @Catch(HttpException)

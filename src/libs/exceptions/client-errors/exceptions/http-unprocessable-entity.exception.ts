@@ -1,7 +1,7 @@
 import { HttpStatus } from '@nestjs/common';
 
 import { HttpException } from '@libs/exceptions/http.exception';
-import { HttpError } from '@libs/exceptions/types/exceptions.type';
+import type { HttpError } from '@libs/exceptions/types/exceptions.type';
 /**
  * status code 422 error exception
  */

@@ -1,11 +1,11 @@
-import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
+import type { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
 import type {
   UserLoginTypeUnion,
   UserMbtiUnion,
   UserRoleUnion,
 } from '@features/user/types/user.type';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { BaseEntityProps } from '@libs/ddd/entity.base';
+import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { BaseEntityProps } from '@libs/ddd/entity.base';
 
 export interface UserProps {
   nickname: string;

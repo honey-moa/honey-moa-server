@@ -13,7 +13,7 @@ import { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper
 import { AttachmentRepository } from '@features/attachment/repositories/attachment.repository';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { S3Module } from '@libs/s3/s3.module';
-import { Module, Provider } from '@nestjs/common';
+import { Module, type Provider } from '@nestjs/common';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
 const controllers = [AttachmentController];

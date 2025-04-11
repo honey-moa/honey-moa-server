@@ -1,6 +1,6 @@
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 
 export interface CreateHydratedChatRoomProps

@@ -1,9 +1,9 @@
-import { HttpStatus, Type, applyDecorators } from '@nestjs/common';
-import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { type HttpStatus, type Type, applyDecorators } from '@nestjs/common';
+import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import {
   ApiExtraModels,
   ApiProperty,
-  ApiPropertyOptions,
+  type ApiPropertyOptions,
   ApiResponse,
 } from '@nestjs/swagger';
 

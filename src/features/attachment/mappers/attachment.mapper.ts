@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
+import type { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
 import { Location } from '@features/attachment/domain/value-objects/location.value-object';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { baseSchema } from '@libs/db/base.schema';

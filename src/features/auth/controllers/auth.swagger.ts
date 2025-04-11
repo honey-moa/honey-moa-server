@@ -1,4 +1,4 @@
-import { AuthController } from '@features/auth/controllers/auth.controller';
+import type { AuthController } from '@features/auth/controllers/auth.controller';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
@@ -8,7 +8,10 @@ import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-c
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
 import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBasicAuth,

@@ -1,7 +1,7 @@
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import { Key } from '@libs/core/app-config/types/app-config.type';
+import type { Key } from '@libs/core/app-config/types/app-config.type';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { BadRequestExceptionFilter } from '@libs/exceptions/client-errors/filters/bad-request.exception-filter';
 import { HttpClientErrorExceptionFilter } from '@libs/exceptions/client-errors/filters/http-client-error.exception-filter';
@@ -19,11 +19,11 @@ import { MethodOverrideMiddleware } from '@libs/middlewares/method-override.midd
 import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
 import {
   ClassSerializerInterceptor,
-  INestApplication,
+  type INestApplication,
   Injectable,
-  Logger,
-  ValidationError,
-  ValidationPipeOptions,
+  type Logger,
+  type ValidationError,
+  type ValidationPipeOptions,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

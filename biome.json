@@ -41,7 +41,6 @@
         "noNamespace": "error",
         "useAsConstAssertion": "error",
         "useBlockStatements": "off",
-        "useImportType": "off",
         "noInferrableTypes": "off",
         "useNodejsImportProtocol": "off"
       },

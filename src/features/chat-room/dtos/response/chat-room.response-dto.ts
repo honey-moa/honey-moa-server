@@ -1,8 +1,8 @@
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty } from '@nestjs/swagger';
 
 export interface CreateChatRoomResponseDtoProps
