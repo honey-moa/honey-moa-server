@@ -1,23 +1,23 @@
-name: Build on PR
+name: Code Linting
 on:
   push:
     branches-ignore:
       - main
       - develop
+  pull_request:
+
+permissions:
+  pull-requests: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 22.11.0
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
 
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Lint
-        run: npm run lint
+      - name: Run Biome
+        run: biome ci src --changed

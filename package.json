@@ -23,7 +23,7 @@
     "start:db": "docker-compose up -d postgres",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "check": "npx @biomejs/biome check --write src test",
+    "check": "npx @biomejs/biome check --changed --write src test",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
