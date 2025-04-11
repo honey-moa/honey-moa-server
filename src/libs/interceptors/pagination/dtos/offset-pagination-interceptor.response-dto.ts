@@ -71,6 +71,7 @@ export class OffsetPaginationResponseDto {
     type: Type,
     getOnlyType: true,
     options?: ApiPropertyOptions, // eslint-disable-next-line @typescript-eslint/ban-types
+    // biome-ignore lint/complexity/noBannedTypes: <explanation>
   ): Function;
 
   static swaggerBuilder(

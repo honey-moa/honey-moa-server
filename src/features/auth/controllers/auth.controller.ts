@@ -1,23 +1,23 @@
+import { routesV1 } from '@config/app.route';
+import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
+import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
+import { ApiAuth } from '@features/auth/controllers/auth.swagger';
+import { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
+import { CreateUserCommand } from '@features/user/commands/create-user/create-user.command';
+import { UserLoginType } from '@features/user/types/user.constant';
+import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
+import { User } from '@libs/api/decorators/user.decorator';
+import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
+import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
+import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
+import { BasicTokenGuard } from '@libs/guards/providers/basic-auth.guard';
+import { JwtRefreshTokenAuthGuard } from '@libs/guards/providers/jwt-refresh-token-auth.guard';
+import { GuardType } from '@libs/guards/types/guard.constant';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { routesV1 } from '@config/app.route';
-import { User } from '@libs/api/decorators/user.decorator';
-import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
-import { BasicTokenGuard } from '@libs/guards/providers/basic-auth.guard';
-import { GuardType } from '@libs/guards/types/guard.constant';
-import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
-import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
-import { ApiAuth } from '@features/auth/controllers/auth.swagger';
-import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
-import { CreateUserCommand } from '@features/user/commands/create-user/create-user.command';
-import { UserLoginType } from '@features/user/types/user.constant';
-import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
-import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
-import { JwtRefreshTokenAuthGuard } from '@libs/guards/providers/jwt-refresh-token-auth.guard';
-import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
 
 @ApiTags('Auth')
 @ApiSecurity('Api-Key')

@@ -1,10 +1,10 @@
-import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { Transactional } from '@nestjs-cls/transactional';
 import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachments/create-attachments.command';
+import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
-import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
+import { Transactional } from '@nestjs-cls/transactional';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateAttachmentsCommand)
 export class CreateAttachmentsCommandHandler

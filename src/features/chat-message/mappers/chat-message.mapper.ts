@@ -1,7 +1,7 @@
-import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
-import { Injectable } from '@nestjs/common';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
+import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
+import { Injectable } from '@nestjs/common';
 
 import { baseSchema } from '@src/libs/db/base.schema';
 import { CreateEntityProps } from '@src/libs/ddd/entity.base';

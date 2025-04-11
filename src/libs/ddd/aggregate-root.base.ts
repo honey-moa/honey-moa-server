@@ -1,7 +1,7 @@
 import { RequestContextService } from '@libs/application/context/app-request.context';
 import { DomainEvent } from '@libs/ddd/base-domain.event';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Entity } from '@libs/ddd/entity.base';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
   _domainEvents: DomainEvent[] = [];

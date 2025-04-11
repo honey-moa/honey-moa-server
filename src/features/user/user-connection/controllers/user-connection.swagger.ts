@@ -1,13 +1,13 @@
-import { applyDecorators, HttpStatus } from '@nestjs/common';
+import { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
+import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
+import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
+import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { UserConnectionController } from '@features/user/user-connection/controllers/user-connection.controller';
-import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
-import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
@@ -19,7 +19,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
+import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
 
 export const ApiUserConnection: ApiOperator<keyof UserConnectionController> = {
   Create: (

@@ -1,5 +1,5 @@
-import { ICommand } from '@nestjs/cqrs';
 import { Command, CommandProps } from '@libs/ddd/command.base';
+import { ICommand } from '@nestjs/cqrs';
 
 export class SendPasswordChangeVerificationEmailCommand
   extends Command

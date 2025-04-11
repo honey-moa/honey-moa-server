@@ -1,6 +1,6 @@
-import { RepositoryPort } from '@libs/ddd/repository.port';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { RepositoryPort } from '@libs/ddd/repository.port';
 
 export interface BlogPostInclude {
   blogPostAttachments?: boolean;

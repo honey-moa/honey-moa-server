@@ -8,7 +8,7 @@ export class SocketCatchHttpExceptionFilter extends BaseWsExceptionFilter<HttpEx
     const socket = host.switchToWs().getClient();
 
     socket.emit('exception', {
-      code: exception.getResponse()['code'],
+      code: (exception.getResponse() as any).code,
       status: exception.getStatus(),
       message: exception.message,
     });

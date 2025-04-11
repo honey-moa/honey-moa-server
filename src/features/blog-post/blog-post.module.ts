@@ -1,4 +1,9 @@
 import { AttachmentModule } from '@features/attachment/attachment.module';
+import { BlogPostBlogDeletedDomainEventHandler } from '@features/blog-post/application/event-handlers/blog-post-blog-deleted.domain-event-handler';
+import { CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-contents-attachments-when-blog-post-created.domain-event-handler';
+import { CreateTagsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-tags-when-blog-post-created.domain-event-handler';
+import { UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-contents-attachments-when-blog-post-updated.domain-event-handler';
+import { UpdateTagsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-tags-when-blog-post-updated.domain-event-handler';
 import { BlogPostAttachmentMapper } from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
 import { BlogPostAttachmentRepository } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
@@ -17,7 +22,7 @@ import { CreateBlogPostCommandHandler } from '@features/blog-post/commands/creat
 import { DeleteBlogPostCommandHandler } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command-handler';
 import { PatchUpdateBlogPostCommandHandler } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command-handler';
 import { BlogPostController } from '@features/blog-post/controllers/blog-post.controller';
-import { BlogPostBlogDeletedDomainEventHandler } from '@features/blog-post/application/event-handlers/blog-post-blog-deleted.domain-event-handler';
+import { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
 import { BlogPostMapper } from '@features/blog-post/mappers/blog-post.mapper';
 import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
 import { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
@@ -27,11 +32,6 @@ import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.tok
 import { BlogModule } from '@features/blog/blog.module';
 import { UserModule } from '@features/user/user.module';
 import { Module, Provider } from '@nestjs/common';
-import { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
-import { CreateTagsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-tags-when-blog-post-created.domain-event-handler';
-import { CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler } from '@features/blog-post/application/event-handlers/create-contents-attachments-when-blog-post-created.domain-event-handler';
-import { UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-contents-attachments-when-blog-post-updated.domain-event-handler';
-import { UpdateTagsWhenBlogPostUpdatedDomainEventHandler } from '@features/blog-post/application/event-handlers/update-tags-when-blog-post-updated.domain-event-handler';
 
 const controllers = [BlogPostController, BlogPostCommentController];
 

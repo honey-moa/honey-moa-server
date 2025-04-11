@@ -1,6 +1,6 @@
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { RequestContext } from 'nestjs-request-context';
 
 /**
@@ -14,6 +14,7 @@ export class AppRequestContext extends RequestContext {
   >; // For global transactions
 }
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class RequestContextService {
   static getContext(): AppRequestContext {
     const ctx: AppRequestContext = RequestContext.currentContext.req;

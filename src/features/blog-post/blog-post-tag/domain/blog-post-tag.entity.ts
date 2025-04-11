@@ -1,13 +1,13 @@
 import { getTsid } from 'tsid-ts';
 
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import {
   BlogPostTagProps,
   CreateBlogPostTagProps,
 } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity-interface';
 import { Entity } from '@libs/ddd/entity.base';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
 
 export class BlogPostTagEntity extends Entity<BlogPostTagProps> {
   static create(create: CreateBlogPostTagProps): BlogPostTagEntity {

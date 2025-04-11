@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum } from 'class-validator';
 
 export class UpdateUserConnectionRequestBodyDto {

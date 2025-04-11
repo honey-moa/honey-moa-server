@@ -46,7 +46,7 @@ export class UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler {
       }[] = [];
 
       if (uploadedAttachments.length) {
-        uploadedAttachments.forEach((attachment) => {
+        for (const attachment of uploadedAttachments) {
           const movedPath =
             BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
             attachment.id;
@@ -61,7 +61,7 @@ export class UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler {
             path: movedPath,
             url: movedUrl,
           });
-        });
+        }
 
         await Promise.all(
           uploadedAttachments.map(
@@ -72,12 +72,12 @@ export class UpdateContentsAttachmentsWhenBlogPostUpdatedDomainEventHandler {
 
         let jsonContents = JSON.stringify(newContents);
 
-        changedUrlInfos.forEach(({ oldAttachmentUrl, newAttachmentUrl }) => {
+        for (const { oldAttachmentUrl, newAttachmentUrl } of changedUrlInfos) {
           jsonContents = jsonContents.replace(
             oldAttachmentUrl,
             newAttachmentUrl,
           );
-        });
+        }
 
         const replacedContents = JSON.parse(jsonContents);
 

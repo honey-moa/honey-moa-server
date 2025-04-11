@@ -22,7 +22,9 @@
         "noBannedTypes": "error",
         "noUselessThisAlias": "error",
         "noUselessTypeConstraint": "error",
-        "useArrowFunction": "off"
+        "useArrowFunction": "off",
+        "noThisInStatic": "off",
+        "noUselessConstructor": "off"
       },
       "correctness": {
         "noPrecisionLoss": "error",
@@ -34,7 +36,9 @@
         "noNamespace": "error",
         "useAsConstAssertion": "error",
         "useBlockStatements": "off",
-        "useImportType": "off"
+        "useImportType": "off",
+        "noInferrableTypes": "off",
+        "useNodejsImportProtocol": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",

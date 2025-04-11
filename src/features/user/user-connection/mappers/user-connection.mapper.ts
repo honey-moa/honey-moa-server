@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
-import { AggregateID, CreateEntityProps } from '@libs/ddd/entity.base';
-import { baseSchema } from '@libs/db/base.schema';
-import { Mapper } from '@libs/ddd/mapper.interface';
-import { chatRoomSchema } from '@features/chat-room/mappers/chat-room.mapper';
 import { blogSchema } from '@features/blog/mappers/blog.mapper';
-import { HydratedUserResponseDto } from '@src/features/user/dtos/response/hydrated-user.response-dto';
-import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
+import { chatRoomSchema } from '@features/chat-room/mappers/chat-room.mapper';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import {
   CreateUserConnectionResponseDtoProps,
   UserConnectionResponseDto,
 } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
+import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
+import { baseSchema } from '@libs/db/base.schema';
+import { AggregateID, CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
+import { HydratedUserResponseDto } from '@src/features/user/dtos/response/hydrated-user.response-dto';
 
 export const userConnectionSchema = baseSchema.extend({
   requesterId: z.bigint(),

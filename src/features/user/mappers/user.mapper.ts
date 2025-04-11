@@ -1,25 +1,25 @@
-import type { Mapper } from '@libs/ddd/mapper.interface';
-import { Injectable } from '@nestjs/common';
-import { z } from 'zod';
+import { UserEntity } from '@features/user/domain/user.entity';
+import type { UserProps } from '@features/user/domain/user.entity-interface';
+import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
+import {
+  UserVerifyTokenMapper,
+  userVerifyTokenSchema,
+} from '@features/user/mappers/user-verify-token.mapper';
 import {
   UserLoginType,
   UserMbti,
   UserRole,
 } from '@features/user/types/user.constant';
-import { UserEntity } from '@features/user/domain/user.entity';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
-import { baseSchema } from '@libs/db/base.schema';
-import type { UserProps } from '@features/user/domain/user.entity-interface';
 import {
-  UserVerifyTokenMapper,
-  userVerifyTokenSchema,
-} from '@features/user/mappers/user-verify-token.mapper';
-import { isNil } from '@libs/utils/util';
-import {
-  userConnectionSchema,
   UserConnectionMapper,
+  userConnectionSchema,
 } from '@features/user/user-connection/mappers/user-connection.mapper';
+import { baseSchema } from '@libs/db/base.schema';
+import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import type { Mapper } from '@libs/ddd/mapper.interface';
+import { isNil } from '@libs/utils/util';
+import { Injectable } from '@nestjs/common';
+import { z } from 'zod';
 
 export const userSchema = baseSchema.extend({
   nickname: z.string().min(1).max(20),

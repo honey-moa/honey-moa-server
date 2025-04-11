@@ -1,5 +1,5 @@
 import { SortOrder } from '@libs/api/types/api.constant';
-import { OrderBy, CursorBy } from '@libs/api/types/api.type';
+import { CursorBy, OrderBy } from '@libs/api/types/api.type';
 import { BaseModel } from '@libs/db/base.schema';
 import type { PaginatedQueryParams } from '@libs/types/type';
 

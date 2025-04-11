@@ -1,7 +1,7 @@
 import {
-  UserRole,
   UserLoginType,
   UserMbti,
+  UserRole,
   UserVerifyTokenType,
 } from '@features/user/types/user.constant';
 import { ValueOf } from '@libs/types/type';

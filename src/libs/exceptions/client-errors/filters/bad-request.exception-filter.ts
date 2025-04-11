@@ -1,3 +1,6 @@
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import {
   ArgumentsHost,
   BadRequestException,
@@ -5,9 +8,6 @@ import {
   ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Response } from 'express';
 
 @Catch(BadRequestException)
@@ -26,7 +26,7 @@ export class BadRequestExceptionFilter implements ExceptionFilter {
       errors: [
         typeof originalResponse === 'string'
           ? originalResponse
-          : originalResponse['message'],
+          : (originalResponse as any).message,
       ],
     });
 
