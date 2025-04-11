@@ -56,11 +56,7 @@ export type UserConnectionWithEntitiesModel = z.TypeOf<
 @Injectable()
 export class UserConnectionMapper
   implements
-    Mapper<
-      UserConnectionEntity,
-      UserConnectionModel,
-      UserConnectionResponseDto
-    >
+    Mapper<UserConnectionEntity, UserConnectionModel, UserConnectionResponseDto>
 {
   toEntity(record: UserConnectionWithEntitiesModel): UserConnectionEntity {
     const userConnectionProps: CreateEntityProps<UserConnectionProps> = {

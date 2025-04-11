@@ -23,8 +23,7 @@ export type ChatMessageModel = z.TypeOf<typeof chatMessageSchema>;
 
 @Injectable()
 export class ChatMessageMapper
-  implements
-    Mapper<ChatMessageEntity, ChatMessageModel, ChatMessageResponseDto>
+  implements Mapper<ChatMessageEntity, ChatMessageModel, ChatMessageResponseDto>
 {
   toEntity(record: ChatMessageModel): ChatMessageEntity {
     const chatMessageProps: CreateEntityProps<ChatMessageProps> = {
