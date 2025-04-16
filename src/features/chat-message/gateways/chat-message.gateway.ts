@@ -32,7 +32,8 @@ import { Server } from 'socket.io';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
-import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
+import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 
 const options: Omit<ValidationPipeOptions, 'exceptionFactory'> = {
   transform: true,
@@ -79,6 +80,7 @@ export class ChatMessageGateway
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: Logger,
     private readonly commandBus: CommandBus,
+    private readonly mapper: ChatMessageMapper,
   ) {}
 
   @WebSocketServer()
@@ -174,20 +176,26 @@ export class ChatMessageGateway
       `[Socket] Sending message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
-    const createdMessage = await this.commandBus.execute<
+    const createdChatMessageEntity = await this.commandBus.execute<
       CreateChatMessageCommand,
-      ChatMessageResponseDto
+      ChatMessageEntity
     >(command);
 
-    socket.to(String(roomId)).emit('receive_message', { ...createdMessage });
+    const chatMessageResponseDto = this.mapper.toResponseDto(
+      createdChatMessageEntity,
+    );
+
+    socket
+      .to(String(roomId))
+      .emit('receive_message', { ...chatMessageResponseDto });
 
     this.logger.log(
-      `[Socket] Message emitted to room ${data.roomId}: ${JSON.stringify(createdMessage)}`,
+      `[Socket] Message emitted to room ${data.roomId}: ${JSON.stringify(chatMessageResponseDto)}`,
     );
 
     return {
       statusMessage: 'Successfully sent message',
-      sentMessage: createdMessage,
+      sentMessage: chatMessageResponseDto,
     };
   }
 }

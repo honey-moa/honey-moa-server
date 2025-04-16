@@ -1,7 +1,5 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import { ChatMessageResponseDto } from '@features/chat-message/dtos/response/chat-message.response-dto';
-import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
@@ -17,19 +15,16 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateChatMessageCommand)
 export class CreateChatMessageCommandHandler
-  implements ICommandHandler<CreateChatMessageCommand, ChatMessageResponseDto>
+  implements ICommandHandler<CreateChatMessageCommand, ChatMessageEntity>
 {
   constructor(
     @Inject(CHAT_ROOM_REPOSITORY_DI_TOKEN)
     private readonly chatRoomRepository: ChatRoomRepositoryPort,
     @Inject(USER_CONNECTION_REPOSITORY_DI_TOKEN)
     private readonly userConnectionRepository: UserConnectionRepositoryPort,
-    private readonly mapper: ChatMessageMapper,
   ) {}
 
-  async execute(
-    command: CreateChatMessageCommand,
-  ): Promise<ChatMessageResponseDto> {
+  async execute(command: CreateChatMessageCommand): Promise<ChatMessageEntity> {
     const { roomId, userId, message, blogPostUrl } = command;
 
     const chatRoom = await this.chatRoomRepository.findOneById(roomId);
@@ -68,6 +63,6 @@ export class CreateChatMessageCommandHandler
 
     await this.chatRoomRepository.createChatMessage(entity);
 
-    return this.mapper.toResponseDto(entity);
+    return entity;
   }
 }
