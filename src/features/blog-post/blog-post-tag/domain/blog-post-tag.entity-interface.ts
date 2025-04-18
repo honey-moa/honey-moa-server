@@ -1,4 +1,4 @@
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 
 export interface BlogPostTagProps {
   blogPostId: AggregateID;

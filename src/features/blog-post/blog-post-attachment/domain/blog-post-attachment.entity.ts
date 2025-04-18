@@ -1,13 +1,13 @@
 import { getTsid } from 'tsid-ts';
 
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import {
+import type {
   BlogPostAttachmentProps,
   CreateBlogPostAttachmentProps,
 } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity-interface';
-import { AggregateID, Entity } from '@libs/ddd/entity.base';
+import { type AggregateID, Entity } from '@libs/ddd/entity.base';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
 
 export class BlogPostAttachmentEntity extends Entity<BlogPostAttachmentProps> {
   static readonly BLOG_POST_ATTACHMENT_URL = process.env

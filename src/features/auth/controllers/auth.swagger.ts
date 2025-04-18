@@ -1,21 +1,24 @@
-import { applyDecorators, HttpStatus } from '@nestjs/common';
+import type { AuthController } from '@features/auth/controllers/auth.controller';
+import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
+import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
+import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
+import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
+import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
+import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBasicAuth,
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
-import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
-import { AuthController } from '@features/auth/controllers/auth.controller';
-import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
-import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
-import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
 
 export const ApiAuth: ApiOperator<keyof AuthController> = {
   SignUp: (

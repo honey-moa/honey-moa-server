@@ -1,10 +1,10 @@
-import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
-import { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
+import type { BlogPostAttachmentRepositoryPort } from '@features/blog-post/blog-post-attachment/repositories/blog-post-attachment.repository-port';
 import { BLOG_POST_ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-attachment/tokens/di.token';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
-import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { Propagation, Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';
@@ -40,7 +40,7 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
       return;
     }
 
-    attachments.forEach((attachment) => {
+    for (const attachment of attachments) {
       const movedPath =
         BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
         attachment.id;
@@ -55,7 +55,7 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
         path: movedPath,
         url: movedUrl,
       });
-    });
+    }
 
     await Promise.all(
       attachments.map(
@@ -66,9 +66,9 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
 
     let jsonContents = JSON.stringify(contents);
 
-    changedUrlInfos.forEach(({ oldAttachmentUrl, newAttachmentUrl }) => {
+    for (const { oldAttachmentUrl, newAttachmentUrl } of changedUrlInfos) {
       jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
-    });
+    }
 
     await this.blogPostRepository.updateContents(
       event.aggregateId,

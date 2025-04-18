@@ -1,14 +1,18 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { Request } from 'express';
+import {
+  type CanActivate,
+  type ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+import type { Request } from 'express';
 
 @Injectable()
 export class BasicTokenGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const req = context.switchToHttp().getRequest<Request>();
 
-    const rawToken = req.headers['authorization'];
+    const rawToken = req.headers.authorization;
 
     if (!rawToken) {
       throw new HttpUnauthorizedException({

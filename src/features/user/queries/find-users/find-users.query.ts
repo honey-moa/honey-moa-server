@@ -1,5 +1,5 @@
-import { IQuery } from '@nestjs/cqrs';
-import { PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
+import { type PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
+import type { IQuery } from '@nestjs/cqrs';
 
 export class FindUsersQuery extends PaginatedQueryBase implements IQuery {
   readonly email?: string;

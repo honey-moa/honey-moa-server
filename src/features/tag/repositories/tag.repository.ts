@@ -1,12 +1,12 @@
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import type { TagEntity } from '@features/tag/domain/tag.entity';
+import type { TagMapper } from '@features/tag/mappers/tag.mapper';
+import type { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
-import { TagMapper } from '@features/tag/mappers/tag.mapper';
-import { TagEntity } from '@features/tag/domain/tag.entity';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class TagRepository implements TagRepositoryPort {

@@ -1,12 +1,12 @@
 import {
+  type CallHandler,
+  type ExecutionContext,
   Injectable,
-  NestInterceptor,
-  ExecutionContext,
-  CallHandler,
+  type NestInterceptor,
 } from '@nestjs/common';
 import { nanoid } from 'nanoid';
 
-import { Observable, tap } from 'rxjs';
+import { type Observable, tap } from 'rxjs';
 import { RequestContextService } from 'src/libs/application/context/app-request.context';
 
 @Injectable()

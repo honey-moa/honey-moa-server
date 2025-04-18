@@ -3,13 +3,13 @@ import {
   AttachmentUploadType,
   FILE_ARRAY_SIZE,
 } from '@features/attachment/types/attachment.constant';
-import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
+import type { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
 import { ArrayMaxSize, ArrayMinSize, IsEnum } from 'class-validator';
 import {
   HasMimeType,
   IsFiles,
   MaxFileSize,
-  MemoryStoredFile,
+  type MemoryStoredFile,
 } from 'nestjs-form-data';
 
 export class CreateAttachmentRequestBodyDto {

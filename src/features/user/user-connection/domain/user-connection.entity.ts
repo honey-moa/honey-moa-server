@@ -1,17 +1,17 @@
-import { getTsid } from 'tsid-ts';
-import { AggregateID, Entity } from '@libs/ddd/entity.base';
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
-import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
-import {
-  UserConnectionProps,
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type {
   CreateUserConnectionProps,
+  UserConnectionProps,
 } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import { UserEntity } from '@features/user/domain/user.entity';
+import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import { type AggregateID, Entity } from '@libs/ddd/entity.base';
+import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
+import { Guard } from '@libs/guard';
+import { getTsid } from 'tsid-ts';
 
 export class UserConnectionEntity extends Entity<UserConnectionProps> {
   static create(create: CreateUserConnectionProps): UserConnectionEntity {

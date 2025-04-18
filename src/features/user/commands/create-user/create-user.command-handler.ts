@@ -1,18 +1,18 @@
-import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '@features/user/commands/create-user/create-user.command';
 import { UserEntity } from '@features/user/domain/user.entity';
 import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
+import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
+import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
+import type { Key } from '@libs/core/app-config/types/app-config.type';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { Transactional } from '@nestjs-cls/transactional';
-import { AggregateID } from '@libs/ddd/entity.base';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
-import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
-import { Key } from '@libs/core/app-config/types/app-config.type';
-import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler

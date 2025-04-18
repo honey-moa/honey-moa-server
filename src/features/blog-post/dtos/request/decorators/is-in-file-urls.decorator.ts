@@ -1,7 +1,7 @@
 import {
+  type ValidationArguments,
+  type ValidationOptions,
   registerDecorator,
-  ValidationArguments,
-  ValidationOptions,
 } from 'class-validator';
 
 export function IsInFileUrls(
@@ -16,12 +16,12 @@ export function IsInFileUrls(
       options: validationOptions,
       validator: {
         validate(value: any, args: ValidationArguments) {
-          const fileUrls = args.object['fileUrls'];
+          const fileUrls = (args.object as any).fileUrls;
 
           return !fileUrls.includes(value);
         },
         defaultMessage() {
-          return `$property should not be included in fileUrls`;
+          return '$property should not be included in fileUrls';
         },
       },
     });

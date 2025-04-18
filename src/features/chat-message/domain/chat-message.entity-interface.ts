@@ -1,4 +1,4 @@
-import { AggregateID } from '@src/libs/ddd/entity.base';
+import type { AggregateID } from '@src/libs/ddd/entity.base';
 
 export interface ChatMessageProps {
   roomId: AggregateID;

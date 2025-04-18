@@ -1,10 +1,10 @@
-import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
 import { isNil } from '@libs/utils/util';
+import { Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
-import { Transactional } from '@nestjs-cls/transactional';
 
 @Injectable()
 export class BlogPostBlogDeletedDomainEventHandler {
@@ -23,7 +23,7 @@ export class BlogPostBlogDeletedDomainEventHandler {
 
     if (isNil(blogPosts) || blogPosts.length === 0) return;
 
-    blogPosts.forEach((blogPost) => blogPost.delete());
+    for (const blogPost of blogPosts) blogPost.delete();
 
     await this.blogPostRepository.bulkDelete(blogPosts);
   }

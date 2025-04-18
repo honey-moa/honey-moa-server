@@ -6,33 +6,33 @@ import {
   UserRole,
 } from '@features/user/types/user.constant';
 
-import { getTsid } from 'tsid-ts';
-import bcrypt from 'bcrypt';
+import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
 import { UserCreatedDomainEvent } from '@features/user/domain/events/user-created.event';
-import type {
-  UserProps,
-  CreateUserProps,
-  HydratedUserEntityProps,
-} from '@features/user/domain/user.entity-interface';
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { UserDeletedDomainEvent } from '@features/user/domain/events/user-deleted.domain-event';
 import { UserIsEmailVerifiedUpdatedDomainEvent } from '@features/user/domain/events/user-is-email-verified-modified.event';
 import { UserPasswordUpdatedDomainEvent } from '@features/user/domain/events/user-password-updated.event';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { CreateUserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
-import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import { isNil } from '@libs/utils/util';
-import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
-import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
-import { UserMbtiUnion } from '@features/user/types/user.type';
-import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
-import { UserDeletedDomainEvent } from '@features/user/domain/events/user-deleted.domain-event';
-import { FileProps } from '@libs/types/type';
 import { UserProfileImagePathUpdatedDomainEvent } from '@features/user/domain/events/user-profile-image-path-updated.domain-event';
+import type {
+  CreateUserProps,
+  HydratedUserEntityProps,
+  UserProps,
+} from '@features/user/domain/user.entity-interface';
+import type { UserMbtiUnion } from '@features/user/types/user.type';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { CreateUserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
+import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
+import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
+import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
+import { Guard } from '@libs/guard';
+import type { FileProps } from '@libs/types/type';
+import { isNil } from '@libs/utils/util';
+import bcrypt from 'bcrypt';
+import { getTsid } from 'tsid-ts';
 
 export class UserEntity extends AggregateRoot<UserProps> {
   static readonly USER_ATTACHMENT_URL = process.env

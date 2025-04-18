@@ -1,21 +1,21 @@
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
+import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
 import {
   HttpException as NestHttpException,
-  Type,
+  type Type,
   applyDecorators,
 } from '@nestjs/common';
-import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import {
+import type {
   ExampleObject,
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
-import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
 
-import { HttpError } from '@libs/exceptions/types/exceptions.type';
-import { ValueOf } from '@libs/types/type';
+import type { HttpError } from '@libs/exceptions/types/exceptions.type';
+import type { ValueOf } from '@libs/types/type';
 
 export class HttpException extends NestHttpException {
   public readonly statusCode: ErrorHttpStatusCode;
@@ -93,13 +93,12 @@ export class HttpException extends NestHttpException {
     if (hasAdditionalErrors) {
       const oneOf: (SchemaObject | ReferenceObject)[] = [];
 
-      codeAndDescription.forEach(({ additionalErrors }) => {
-        if (!additionalErrors) {
-          return;
-        }
+      for (const { additionalErrors } of codeAndDescription) {
+        if (!additionalErrors) continue;
+
         oneOf.push({ $ref: getSchemaPath(additionalErrors.errorType) });
         ExtraModels.push(ApiExtraModels(additionalErrors.errorType));
-      });
+      }
 
       errorsProperty = {
         description: '에러 목록',
@@ -154,7 +153,8 @@ export class HttpException extends NestHttpException {
     };
 
     if (hasAdditionalErrors) {
-      content['application/json'].schema.properties['errors'] = errorsProperty;
+      (content['application/json'].schema.properties as any).errors =
+        errorsProperty;
     }
 
     return applyDecorators(

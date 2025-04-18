@@ -1,14 +1,14 @@
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import type { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
+import type { ChatRoomMapper } from '@features/chat-room/mappers/chat-room.mapper';
+import type { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { ChatRoomMapper } from '@features/chat-room/mappers/chat-room.mapper';
-import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
-import { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ChatRoomRepository implements ChatRoomRepositoryPort {

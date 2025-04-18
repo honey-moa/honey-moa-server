@@ -1,28 +1,28 @@
 import { getTsid } from 'tsid-ts';
 
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import {
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
+import type {
+  BlogPostCommentProps,
+  CreateBlogPostCommentProps,
+} from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
+import type {
   BlogPostProps,
   CreateBlogPostProps,
   UpdateBlogPostProps,
 } from '@features/blog-post/domain/blog-post.entity-interface';
-import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { TagEntity } from '@features/tag/domain/tag.entity';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
-import { isNil } from '@libs/utils/util';
 import { BlogPostCreatedDomainEvent } from '@features/blog-post/domain/events/blog-post-created.domain-event';
 import { BlogPostDeletedDomainEvent } from '@features/blog-post/domain/events/blog-post-deleted.domain-event';
-import {
-  BlogPostCommentProps,
-  CreateBlogPostCommentProps,
-} from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
-import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
 import { BlogPostThumbnailImagePathUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-thumbnail-imgae-path-updated.domain-event';
+import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
+import type { TagEntity } from '@features/tag/domain/tag.entity';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
+import { isNil } from '@libs/utils/util';
 
 export class BlogPostEntity extends AggregateRoot<BlogPostProps> {
   static BLOG_POST_TITLE_LENGTH = {

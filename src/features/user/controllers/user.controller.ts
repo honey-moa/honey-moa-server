@@ -1,3 +1,31 @@
+import { routesV1 } from '@config/app.route';
+import { DeleteUserCommand } from '@features/user/commands/delete-user/delete-user.command';
+import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
+import { SendPasswordChangeVerificationEmailCommand } from '@features/user/commands/send-password-change-verification-email/send-password-change-verification-email.command';
+import { SendVerificationEmailCommand } from '@features/user/commands/send-verification-email/send-verification-email.command';
+import { UpdateUserPasswordCommand } from '@features/user/commands/update-user-password/update-user-password.command';
+import { VerifyUserEmailCommand } from '@features/user/commands/verify-user-email/verify-user-email.command';
+import { ApiUser } from '@features/user/controllers/user.swagger';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users.request-query-dto';
+import type { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
+import type { SendPasswordChangeVerificationEmailRequestDto } from '@features/user/dtos/request/send-password-change-verification-email.request-dto';
+import type { UpdatePasswordRequestDto } from '@features/user/dtos/request/update-password.request-dto';
+import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
+import type { UserMapper } from '@features/user/mappers/user.mapper';
+import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
+import type { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
+import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
+import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
+import { User } from '@libs/api/decorators/user.decorator';
+import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
+import { ParseEmailPipe } from '@libs/api/pipes/parse-email.pipe';
+import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
+import { GuardType } from '@libs/guards/types/guard.constant';
+import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
+import type { HandlerReturnType, Paginated } from '@libs/types/type';
 import {
   Body,
   Controller,
@@ -12,37 +40,9 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import type { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiExcludeEndpoint, ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { ApiUser } from '@features/user/controllers/user.swagger';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
-import { UserMapper } from '@features/user/mappers/user.mapper';
-import { routesV1 } from '@config/app.route';
-import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
-import { GuardType } from '@libs/guards/types/guard.constant';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { VerifyUserEmailCommand } from '@features/user/commands/verify-user-email/verify-user-email.command';
-import { User } from '@libs/api/decorators/user.decorator';
-import { SendVerificationEmailCommand } from '@features/user/commands/send-verification-email/send-verification-email.command';
-import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
-import { SendPasswordChangeVerificationEmailCommand } from '@features/user/commands/send-password-change-verification-email/send-password-change-verification-email.command';
-import { ParseEmailPipe } from '@libs/api/pipes/parse-email.pipe';
-import { SendPasswordChangeVerificationEmailRequestDto } from '@features/user/dtos/request/send-password-change-verification-email.request-dto';
-import { UpdatePasswordRequestDto } from '@features/user/dtos/request/update-password.request-dto';
-import { UpdateUserPasswordCommand } from '@features/user/commands/update-user-password/update-user-password.command';
-import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users.request-query-dto';
-import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
-import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import { HandlerReturnType, Paginated } from '@libs/types/type';
-import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
-import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
 import { FormDataRequest } from 'nestjs-form-data';
-import { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
-import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
-import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
-import { DeleteUserCommand } from '@features/user/commands/delete-user/delete-user.command';
 
 @ApiTags('User')
 @ApiInternalServerErrorBuilder()

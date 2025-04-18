@@ -1,4 +1,4 @@
-import { applyDecorators, HttpStatus } from '@nestjs/common';
+import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -10,8 +10,9 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
-import { UserController } from '@features/user/controllers/user.controller';
+import type { UserController } from '@features/user/controllers/user.controller';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
+import { UserMbti } from '@features/user/types/user.constant';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -22,8 +23,10 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
-import { UserMbti } from '@features/user/types/user.constant';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
 
 export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
   FindUsers: (

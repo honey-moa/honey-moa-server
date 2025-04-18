@@ -1,4 +1,4 @@
-import { PaginationBy } from '@libs/interceptors/pagination/types/pagination-interceptor.enum';
+import type { PaginationBy } from '@libs/interceptors/pagination/types/pagination-interceptor.enum';
 
 export type PaginationInterceptorArgs =
   | PaginationBy.Cursor

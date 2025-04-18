@@ -1,18 +1,18 @@
-import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { SendPasswordChangeVerificationEmailCommand } from '@features/user/commands/send-password-change-verification-email/send-password-change-verification-email.command';
 import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
-import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import {
   UserLoginType,
   UserVerifyTokenType,
 } from '@features/user/types/user.constant';
 import { EMAIL_SERVICE_DI_TOKEN } from '@libs/email/constants/email-service.di-token';
-import { EmailServicePort } from '@libs/email/services/email.service-port';
+import type { EmailServicePort } from '@libs/email/services/email.service-port';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
+import { Inject } from '@nestjs/common';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(SendPasswordChangeVerificationEmailCommand)
 export class SendPasswordChangeVerificationEmailCommandHandler

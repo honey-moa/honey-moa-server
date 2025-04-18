@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
+import { Injectable } from '@nestjs/common';
+import type { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class JwtRefreshTokenAuthGuard extends AuthGuard('jwt') {

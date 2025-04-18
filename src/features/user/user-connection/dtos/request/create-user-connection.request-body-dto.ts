@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsPositiveBigInt } from '@libs/api/decorators/is-positive-bigint.decorator';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserConnectionRequestBodyDto {
   @ApiProperty({

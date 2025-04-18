@@ -1,13 +1,14 @@
-import { applyDecorators, HttpStatus } from '@nestjs/common';
+import type { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
+import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
+import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
 } from '@nestjs/swagger';
-import { ChatRoomController } from '@features/chat-room/controllers/chat-room.controller';
-import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 
+import { ChatRoomResponseDto } from '@features/chat-room/dtos/response/chat-room.response-dto';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -17,8 +18,10 @@ import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/ch
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import { ApiOperator, ApiOperationOptionsWithSummary } from '@libs/types/type';
-import { ChatRoomResponseDto } from '@features/chat-room/dtos/response/chat-room.response-dto';
+import type {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@libs/types/type';
 
 export const ApiChatRoom: ApiOperator<keyof ChatRoomController> = {
   Create: (

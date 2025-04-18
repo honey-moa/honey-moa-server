@@ -1,8 +1,8 @@
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@src/libs/api/dtos/response/base.response-dto';
 
 export interface CreateChatMessageResponseDtoProps

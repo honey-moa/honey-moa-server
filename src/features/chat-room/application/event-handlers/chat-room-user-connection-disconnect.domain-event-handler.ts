@@ -1,4 +1,4 @@
-import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import type { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import { UserConnectionDisconnectedDomainEvent } from '@features/user/domain/events/user-connection-disconnected.domain-event';
 import { isNil } from '@libs/utils/util';

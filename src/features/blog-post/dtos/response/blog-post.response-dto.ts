@@ -1,13 +1,13 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
+import type { BlogPostContents } from '@features/blog-post/types/blog-post.type';
+import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
+import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
-import { BlogPostContents } from '@features/blog-post/types/blog-post.type';
-import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
-import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface CreateBlogPostResponseDtoProps
   extends CreateBaseResponseDtoProps {

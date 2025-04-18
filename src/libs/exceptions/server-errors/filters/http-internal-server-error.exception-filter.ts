@@ -1,8 +1,12 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
-import { Response } from 'express';
+import {
+  type ArgumentsHost,
+  Catch,
+  type ExceptionFilter,
+} from '@nestjs/common';
+import type { Response } from 'express';
 
-import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import type { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 
 /**
  * nestJS 메서드를 이용한 500번 에러 를 잡는 exception filter

@@ -1,6 +1,7 @@
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 
+// biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 export class Guard {
   /**
    * Checks if value is empty. Accepts strings, numbers, booleans, objects and arrays.

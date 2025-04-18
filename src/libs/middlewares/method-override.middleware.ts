@@ -1,6 +1,6 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Injectable, type NestMiddleware } from '@nestjs/common';
 
-import { NextFunction, Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 
 const requestMethodsArray = [
   'GET',
@@ -26,7 +26,7 @@ export class MethodOverrideMiddleware implements NestMiddleware {
       requestMethodsArray.includes(body[fieldForOverrideMethod])
     ) {
       req.method = body[fieldForOverrideMethod];
-      delete req.body._method;
+      req.body._method = undefined;
     }
 
     next();

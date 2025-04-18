@@ -1,10 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
 import {
   USER_PASSWORD_REGEXP,
   UserMbti,
 } from '@features/user/types/user.constant';
-import { UserMbtiUnion } from '@features/user/types/user.type';
+import type { UserMbtiUnion } from '@features/user/types/user.type';
 import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, Length, Matches } from 'class-validator';
 
 export class SignUpRequestBodyDto {

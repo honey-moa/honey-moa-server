@@ -1,8 +1,8 @@
 import { TagEntity } from '@features/tag/domain/tag.entity';
-import { TagProps } from '@features/tag/domain/tag.entity-interface';
+import type { TagProps } from '@features/tag/domain/tag.entity-interface';
 import { baseSchema } from '@libs/db/base.schema';
-import { CreateEntityProps } from '@libs/ddd/entity.base';
-import { Mapper } from '@libs/ddd/mapper.interface';
+import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import type { Mapper } from '@libs/ddd/mapper.interface';
 import { z } from 'zod';
 
 export const tagSchema = baseSchema.extend({

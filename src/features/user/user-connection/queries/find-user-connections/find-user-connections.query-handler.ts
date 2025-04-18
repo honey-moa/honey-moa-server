@@ -1,14 +1,14 @@
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
-import { UserMapper } from '@features/user/mappers/user.mapper';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { UserMapper } from '@features/user/mappers/user.mapper';
+import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import type { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { FindUserConnectionsQuery } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { Paginated } from '@libs/types/type';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import type { Paginated } from '@libs/types/type';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindUserConnectionsQuery)
 export class FindUserConnectionsQueryHandler
@@ -72,10 +72,10 @@ export class FindUserConnectionsQueryHandler
 
     const allUserIdSet = new Set<AggregateID>();
 
-    userConnections.forEach((userConnection) => {
+    for (const userConnection of userConnections) {
       allUserIdSet.add(userConnection.requesterId);
       allUserIdSet.add(userConnection.requestedId);
-    });
+    }
 
     const users = await this.txHost.tx.user.findMany({
       where: {
@@ -92,11 +92,11 @@ export class FindUserConnectionsQueryHandler
 
     const userMap = new Map<AggregateID, UserEntity>();
 
-    userEntities.forEach((user) => {
+    for (const user of userEntities) {
       userMap.set(user.id, user);
-    });
+    }
 
-    userConnectionEntities.forEach((userConnection) => {
+    for (const userConnection of userConnectionEntities) {
       const requesterUser = userMap.get(userConnection.requesterId);
       const requestedUser = userMap.get(userConnection.requestedId);
 
@@ -107,7 +107,7 @@ export class FindUserConnectionsQueryHandler
       if (requestedUser) {
         userConnection.hydrateRequestedUser(requestedUser);
       }
-    });
+    }
 
     return [userConnectionEntities, count];
   }

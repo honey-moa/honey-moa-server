@@ -1,9 +1,13 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
-import { CreateChatMessageDto } from '@features/chat-message/dtos/socket/create-chat-message.dto';
-import { EnterChatDto } from '@features/chat-message/dtos/socket/enter-chat.dto';
-import { SocketWithUserDto } from '@features/chat-message/dtos/socket/socket-with-user.dto';
-import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { CreateChatMessageDto } from '@features/chat-message/dtos/socket/create-chat-message.dto';
+import type { EnterChatDto } from '@features/chat-message/dtos/socket/enter-chat.dto';
+import type { SocketWithUserDto } from '@features/chat-message/dtos/socket/socket-with-user.dto';
+import type { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
+import type { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
+import type { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
+import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { SocketCatchHttpExceptionFilter } from '@libs/exceptions/socket/filters/socket-catch-http.exception-filter';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
@@ -11,29 +15,25 @@ import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
 import { isNil } from '@libs/utils/util';
 import {
   Inject,
+  type Logger,
   UseFilters,
   UsePipes,
-  ValidationPipeOptions,
-  Logger,
+  type ValidationPipeOptions,
 } from '@nestjs/common';
-import { CommandBus } from '@nestjs/cqrs';
+import type { CommandBus } from '@nestjs/cqrs';
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
+  type OnGatewayConnection,
+  type OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
-import { ValidationError } from 'class-validator';
-import { Server } from 'socket.io';
+import type { ValidationError } from 'class-validator';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
-import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
-import { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { Server } from 'socket.io';
 
 const options: Omit<ValidationPipeOptions, 'exceptionFactory'> = {
   transform: true,

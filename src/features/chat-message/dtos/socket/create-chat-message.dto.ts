@@ -1,6 +1,6 @@
 import { IsBigIntString } from '@libs/api/decorators/is-big-int.decorator';
 import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, IsUrl, Length } from 'class-validator';
 

@@ -1,19 +1,19 @@
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 
-import {
+import type {
   AttachmentProps,
   CreateAttachmentProps,
 } from '@features/attachment/domain/attachment.entity-interface';
 import { AttachmentCreatedDomainEvent } from '@features/attachment/domain/events/attachment-created.domain-event';
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events/attachment-deleted.domain-event';
+import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
 import {
   Location,
-  UpdateLocationProps,
+  type UpdateLocationProps,
 } from '@features/attachment/domain/value-objects/location.value-object';
-import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
-import { AttachmentDeletedDomainEvent } from '@features/attachment/domain/events/attachment-deleted.domain-event';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
 import { getTsid } from 'tsid-ts';
 
 export class AttachmentEntity extends AggregateRoot<AttachmentProps> {

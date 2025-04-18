@@ -1,10 +1,10 @@
 import { CreateNewTagsCommand } from '@features/tag/commands/create-new-tags/create-new-tags.command';
 import { TagEntity } from '@features/tag/domain/tag.entity';
-import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
+import type { TagRepositoryPort } from '@features/tag/repositories/tag.repository-port';
 import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateNewTagsCommand)
 export class CreateNewTagsCommandHandler

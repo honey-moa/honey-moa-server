@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
-import { CreateEntityProps } from '@libs/ddd/entity.base';
-import { baseSchema } from '@libs/db/base.schema';
-import { Mapper } from '@libs/ddd/mapper.interface';
 import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
-import { UserVerifyTokenProps } from '@features/user/domain/user-verify-token/user-verify-token.entity-interface';
+import type { UserVerifyTokenProps } from '@features/user/domain/user-verify-token/user-verify-token.entity-interface';
 import { UserVerifyTokenType } from '@features/user/types/user.constant';
+import { baseSchema } from '@libs/db/base.schema';
+import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import type { Mapper } from '@libs/ddd/mapper.interface';
 
 export const userVerifyTokenSchema = baseSchema
   .extend({

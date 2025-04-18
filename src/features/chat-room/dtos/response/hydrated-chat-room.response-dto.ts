@@ -1,6 +1,6 @@
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 
 export interface CreateHydratedChatRoomProps
@@ -8,8 +8,7 @@ export interface CreateHydratedChatRoomProps
 
 export class HydratedChatRoomResponseDto
   extends BaseResponseDto
-  implements
-    Omit<CreateHydratedChatRoomProps, keyof CreateBaseResponseDtoProps>
+  implements Omit<CreateHydratedChatRoomProps, keyof CreateBaseResponseDtoProps>
 {
   constructor(props: CreateHydratedChatRoomProps) {
     super(props);

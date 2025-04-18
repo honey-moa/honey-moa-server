@@ -1,12 +1,12 @@
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { isNil } from '@libs/utils/util';
+import { UserEntity } from '@features/user/domain/user.entity';
+import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
-import { UserEntity } from '@features/user/domain/user.entity';
+import { isNil } from '@libs/utils/util';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindOneUserQuery)
 export class FindOneUserQueryHandler

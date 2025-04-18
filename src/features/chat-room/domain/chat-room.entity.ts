@@ -1,16 +1,16 @@
-import { getTsid } from 'tsid-ts';
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import {
+import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
+import type { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
+import type {
   ChatRoomProps,
   CreateChatRoomProps,
   HydratedChatRoomEntityProps,
 } from '@features/chat-room/domain/chat-room.entity-interface';
-import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
-import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import { ChatRoomDeletedDomainEvent } from '@features/chat-room/domain/events/chat-room-deleted.domain-event';
+import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
+import { getTsid } from 'tsid-ts';
 
 export class ChatRoomEntity extends AggregateRoot<ChatRoomProps> {
   static create(create: CreateChatRoomProps): ChatRoomEntity {

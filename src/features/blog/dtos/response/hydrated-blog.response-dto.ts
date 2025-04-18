@@ -1,9 +1,9 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import {
   BaseResponseDto,
-  CreateBaseResponseDtoProps,
+  type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
-import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface CreateHydratedBlogProps extends CreateBaseResponseDtoProps {
   name: string;

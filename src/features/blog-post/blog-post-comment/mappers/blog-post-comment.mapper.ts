@@ -1,8 +1,8 @@
 import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
-import { BlogPostCommentProps } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
+import type { BlogPostCommentProps } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';
 import { baseSchema } from '@libs/db/base.schema';
-import { CreateEntityProps } from '@libs/ddd/entity.base';
-import { Mapper } from '@libs/ddd/mapper.interface';
+import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import type { Mapper } from '@libs/ddd/mapper.interface';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 

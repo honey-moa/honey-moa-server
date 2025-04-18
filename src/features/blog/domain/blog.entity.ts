@@ -1,22 +1,22 @@
 import { getTsid } from 'tsid-ts';
 
-import { Guard } from '@libs/guard';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import {
+import type {
   BlogProps,
   CreateBlogProps,
   HydratedBlogEntityProps,
 } from '@features/blog/domain/blog.entity-interface';
-import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { UserEntity } from '@features/user/domain/user.entity';
-import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
-import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
-import { isNil } from '@libs/utils/util';
-import { BlogCreatedDomainEvent } from '@features/blog/domain/events/blog-created.domain-event';
-import { FileProps } from '@libs/types/type';
 import { BlogBackgroundImagePathUpdatedDomainEvent } from '@features/blog/domain/events/blog-background-image-updated.domain-event';
+import { BlogCreatedDomainEvent } from '@features/blog/domain/events/blog-created.domain-event';
+import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
+import type { UserEntity } from '@features/user/domain/user.entity';
+import type { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
+import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
+import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
+import { Guard } from '@libs/guard';
+import type { FileProps } from '@libs/types/type';
+import { isNil } from '@libs/utils/util';
 
 export class BlogEntity extends AggregateRoot<BlogProps> {
   static readonly BLOG_ATTACHMENT_URL = process.env
@@ -188,7 +188,9 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
   }
 
   hydrateMember(user: UserEntity) {
-    (this.props.members = this.props.members ?? []).push(user.hydrateProps);
+    if (!this.props.members) this.props.members = [];
+
+    this.props.members.push(user.hydrateProps);
   }
 
   delete(): void {

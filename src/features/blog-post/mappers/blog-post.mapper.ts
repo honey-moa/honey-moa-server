@@ -1,25 +1,25 @@
 import {
-  BlogPostAttachmentMapper,
+  type BlogPostAttachmentMapper,
   blogPostAttachmentSchema,
 } from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
 import {
-  BlogPostCommentMapper,
+  type BlogPostCommentMapper,
   blogPostCommentSchema,
 } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
 import {
-  BlogPostTagMapper,
+  type BlogPostTagMapper,
   blogPostTagSchema,
 } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
-import { BlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
+import type { BlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
 import {
   BlogPostResponseDto,
-  CreateBlogPostResponseDtoProps,
+  type CreateBlogPostResponseDtoProps,
 } from '@features/blog-post/dtos/response/blog-post.response-dto';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
-import { CreateEntityProps } from '@libs/ddd/entity.base';
-import { Mapper } from '@libs/ddd/mapper.interface';
+import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import type { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';

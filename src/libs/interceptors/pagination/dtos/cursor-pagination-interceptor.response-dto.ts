@@ -1,13 +1,13 @@
-import { HttpStatus, Type, applyDecorators } from '@nestjs/common';
-import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import type { CursorBy } from '@libs/api/types/api.type';
+import type { BaseModel } from '@libs/db/base.schema';
+import { type HttpStatus, type Type, applyDecorators } from '@nestjs/common';
+import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import {
   ApiExtraModels,
   ApiProperty,
-  ApiPropertyOptions,
+  type ApiPropertyOptions,
   ApiResponse,
 } from '@nestjs/swagger';
-import { CursorBy } from '@libs/api/types/api.type';
-import { BaseModel } from '@libs/db/base.schema';
 
 export class CursorPaginationResponseDto {
   @ApiProperty({
@@ -47,6 +47,7 @@ export class CursorPaginationResponseDto {
     cursorTypes: { format?: string; key: string }[],
     getOnlyType: true,
     options?: ApiPropertyOptions, // eslint-disable-next-line @typescript-eslint/ban-types
+    // biome-ignore lint/complexity/noBannedTypes: <explanation>
   ): Function;
 
   static swaggerBuilder(

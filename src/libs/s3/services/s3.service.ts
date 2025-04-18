@@ -3,17 +3,17 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   CopyObjectCommand,
   DeleteObjectsCommand,
-  ObjectIdentifier,
+  type ObjectIdentifier,
   PutObjectCommand,
-  S3Client,
+  type S3Client,
   S3ServiceException,
 } from '@aws-sdk/client-s3';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { S3_CLIENT_TOKEN } from '@libs/s3/tokens/di.token';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
-import { Key } from '@libs/core/app-config/types/app-config.type';
+import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import { S3ServicePort } from '@libs/s3/services/s3.service-port';
+import type { Key } from '@libs/core/app-config/types/app-config.type';
+import type { S3ServicePort } from '@libs/s3/services/s3.service-port';
+import { S3_CLIENT_TOKEN } from '@libs/s3/tokens/di.token';
 
 @Injectable()
 export class S3Service implements S3ServicePort {

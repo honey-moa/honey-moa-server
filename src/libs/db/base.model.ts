@@ -1,5 +1,5 @@
 import { IdModel } from '@libs/db/id.model';
-import { AggregateID } from '@libs/ddd/entity.base';
+import type { AggregateID } from '@libs/ddd/entity.base';
 
 export interface BaseModelProps {
   id: AggregateID;

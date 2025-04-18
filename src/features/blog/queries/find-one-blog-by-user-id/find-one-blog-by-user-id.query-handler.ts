@@ -2,13 +2,13 @@ import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { FindOneBlogByUserIdQuery } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
-import { TransactionHost } from '@nestjs-cls/transactional';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import type { TransactionHost } from '@nestjs-cls/transactional';
+import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindOneBlogByUserIdQuery)
 export class FindOneBlogByUserIdQueryHandler

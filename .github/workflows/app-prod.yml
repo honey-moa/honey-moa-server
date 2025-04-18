@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: CHECK OUT
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: APP API CHANGE CHECK FOR DEPLOY
         uses: technote-space/get-diff-action@v6
