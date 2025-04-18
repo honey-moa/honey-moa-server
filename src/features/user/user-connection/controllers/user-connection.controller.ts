@@ -3,20 +3,20 @@ import { CreateUserConnectionCommand } from '@features/user/user-connection/comm
 import { DisconnectUserConnectionCommand } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command';
 import { UpdateUserConnectionCommand } from '@features/user/user-connection/commands/update-user-connection/update-user-connection.command';
 import { ApiUserConnection } from '@features/user/user-connection/controllers/user-connection.swagger';
-import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import type { CreateUserConnectionRequestBodyDto } from '@features/user/user-connection/dtos/request/create-user-connection.request-body-dto';
-import type { FindUserConnectionsRequestQueryDto } from '@features/user/user-connection/dtos/request/find-user-connections.request-query-dto';
-import type { UpdateUserConnectionRequestBodyDto } from '@features/user/user-connection/dtos/request/update-user-connection.request-body-dto';
-import type { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
-import type { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import { CreateUserConnectionRequestBodyDto } from '@features/user/user-connection/dtos/request/create-user-connection.request-body-dto';
+import { FindUserConnectionsRequestQueryDto } from '@features/user/user-connection/dtos/request/find-user-connections.request-query-dto';
+import { UpdateUserConnectionRequestBodyDto } from '@features/user/user-connection/dtos/request/update-user-connection.request-body-dto';
+import { UserConnectionResponseDto } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
+import { UserConnectionMapper } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { FindUserConnectionsQuery } from '@features/user/user-connection/queries/find-user-connections/find-user-connections.query';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import type { Paginated } from '@libs/types/type';
+import { Paginated } from '@libs/types/type';
 import {
   Body,
   Controller,
@@ -29,7 +29,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import type { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('UserConnection')

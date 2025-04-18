@@ -2,8 +2,8 @@ import {
   DomainEvent,
   type DomainEventProps,
 } from '@libs/ddd/base-domain.event';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { FileProps } from '@libs/types/type';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { FileProps } from '@libs/types/type';
 
 export class BlogCreatedDomainEvent extends DomainEvent {
   readonly backgroundImageFile:

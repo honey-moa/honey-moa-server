@@ -4,15 +4,15 @@ import { z } from 'zod';
 import { blogSchema } from '@features/blog/mappers/blog.mapper';
 import { chatRoomSchema } from '@features/chat-room/mappers/chat-room.mapper';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import type { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
+import { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import {
   type CreateUserConnectionResponseDtoProps,
   UserConnectionResponseDto,
 } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { baseSchema } from '@libs/db/base.schema';
-import type { AggregateID, CreateEntityProps } from '@libs/ddd/entity.base';
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { AggregateID, CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
 import { HydratedUserResponseDto } from '@src/features/user/dtos/response/hydrated-user.response-dto';
 

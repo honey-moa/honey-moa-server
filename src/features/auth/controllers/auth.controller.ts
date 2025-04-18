@@ -2,21 +2,21 @@ import { routesV1 } from '@config/app.route';
 import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
 import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
 import { ApiAuth } from '@features/auth/controllers/auth.swagger';
-import type { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
+import { SignUpRequestBodyDto } from '@features/auth/dtos/request/sign-up.request-body-dto';
 import { CreateUserCommand } from '@features/user/commands/create-user/create-user.command';
 import { UserLoginType } from '@features/user/types/user.constant';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { JwtResponseDto } from '@libs/api/dtos/response/jwt.response-dto';
-import type { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { BasicTokenGuard } from '@libs/guards/providers/basic-auth.guard';
 import { JwtRefreshTokenAuthGuard } from '@libs/guards/providers/jwt-refresh-token-auth.guard';
 import { GuardType } from '@libs/guards/types/guard.constant';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import type { CommandBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth')

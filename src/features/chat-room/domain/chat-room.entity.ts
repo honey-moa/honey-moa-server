@@ -1,6 +1,6 @@
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import type { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
-import type {
+import { CreateChatMessageProps } from '@features/chat-message/domain/chat-message.entity-interface';
+import {
   ChatRoomProps,
   CreateChatRoomProps,
   HydratedChatRoomEntityProps,

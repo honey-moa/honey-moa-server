@@ -1,5 +1,5 @@
 import { type HttpStatus, type Type, applyDecorators } from '@nestjs/common';
-import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import {
   ApiExtraModels,
   ApiProperty,

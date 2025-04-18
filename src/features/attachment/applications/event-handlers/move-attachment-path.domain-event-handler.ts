@@ -1,8 +1,8 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { AttachmentLocationChangedDomainEvent } from '@features/attachment/domain/events/attachment-location-changed.domain-event';
-import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
-import type { S3ServicePort } from '@libs/s3/services/s3.service-port';
+import { S3ServicePort } from '@libs/s3/services/s3.service-port';
 import { S3_SERVICE_DI_TOKEN } from '@libs/s3/tokens/di.token';
 import { Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';

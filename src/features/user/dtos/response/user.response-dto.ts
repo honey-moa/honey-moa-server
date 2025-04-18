@@ -1,5 +1,5 @@
 import { UserLoginType, UserMbti } from '@features/user/types/user.constant';
-import type {
+import {
   UserLoginTypeUnion,
   UserMbtiUnion,
 } from '@features/user/types/user.type';

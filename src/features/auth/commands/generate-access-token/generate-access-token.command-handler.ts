@@ -1,7 +1,7 @@
 import { GenerateAccessTokenCommand } from '@features/auth/commands/generate-access-token/generate-access-token.command';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
-import type { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
+import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';

@@ -1,13 +1,13 @@
 import { BlogEntity } from '@features/blog/domain/blog.entity';
-import type { BlogProps } from '@features/blog/domain/blog.entity-interface';
+import { BlogProps } from '@features/blog/domain/blog.entity-interface';
 import {
   BlogResponseDto,
   type CreateBlogResponseDtoProps,
 } from '@features/blog/dtos/response/blog.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { z } from 'zod';
 
 export const blogSchema = baseSchema.extend({

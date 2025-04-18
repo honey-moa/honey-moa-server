@@ -1,5 +1,5 @@
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
-import type { ErrorMessage } from '@libs/types/type';
+import { ErrorMessage } from '@libs/types/type';
 
 export const USER_ERROR_MESSAGE: ErrorMessage<typeof USER_ERROR_CODE> = {
   [USER_ERROR_CODE.ALREADY_CREATED_USER]: "You're already signed up.",

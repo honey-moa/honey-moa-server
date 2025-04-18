@@ -1,13 +1,13 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
-import type {
+import {
   CreateBlogPostProps,
   UpdateBlogPostProps,
 } from '@features/blog-post/domain/blog-post.entity-interface';
-import type { BlogEntity } from '@features/blog/domain/blog.entity';
+import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { NotABlogMemberError } from '@features/blog/domain/blog.errors';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { isNil } from '@libs/utils/util';
 import { Injectable } from '@nestjs/common';
 

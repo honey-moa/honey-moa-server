@@ -1,9 +1,9 @@
-import type { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import {
   DomainEvent,
   type DomainEventProps,
 } from '@libs/ddd/base-domain.event';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export class BlogPostUpdatedDomainEvent extends DomainEvent {
   readonly updatedProps: {

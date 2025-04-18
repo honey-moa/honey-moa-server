@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 
-import type {
+import {
   AttachmentProps,
   CreateAttachmentProps,
 } from '@features/attachment/domain/attachment.entity-interface';

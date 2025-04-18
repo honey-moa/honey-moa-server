@@ -1,5 +1,5 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { BlogBackgroundImagePathUpdatedDomainEvent } from '@features/blog/domain/events/blog-background-image-updated.domain-event';

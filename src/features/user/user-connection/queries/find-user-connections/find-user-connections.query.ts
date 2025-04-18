@@ -1,7 +1,7 @@
-import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { type PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
-import type { IQuery } from '@nestjs/cqrs';
+import { IQuery } from '@nestjs/cqrs';
 
 export class FindUserConnectionsQuery
   extends PaginatedQueryBase

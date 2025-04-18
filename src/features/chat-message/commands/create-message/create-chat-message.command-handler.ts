@@ -1,8 +1,8 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
 import { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
-import type { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
+import { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
-import type { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';

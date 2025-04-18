@@ -3,7 +3,7 @@ import {
   BaseResponseDto,
   type CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface CreateBlogPostCommentResponseDtoProps

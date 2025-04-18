@@ -1,6 +1,6 @@
 import { PatchUpdateUserCommand } from '@features/user/commands/patch-update-user/patch-update-user.command';
-import type { UserEntity } from '@features/user/domain/user.entity';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserEntity } from '@features/user/domain/user.entity';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';

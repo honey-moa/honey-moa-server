@@ -6,16 +6,16 @@ import {
   type Type,
   applyDecorators,
 } from '@nestjs/common';
-import type { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
+import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { ApiExtraModels, ApiResponse, getSchemaPath } from '@nestjs/swagger';
-import type {
+import {
   ExampleObject,
   ReferenceObject,
   SchemaObject,
 } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
-import type { HttpError } from '@libs/exceptions/types/exceptions.type';
-import type { ValueOf } from '@libs/types/type';
+import { HttpError } from '@libs/exceptions/types/exceptions.type';
+import { ValueOf } from '@libs/types/type';
 
 export class HttpException extends NestHttpException {
   public readonly statusCode: ErrorHttpStatusCode;

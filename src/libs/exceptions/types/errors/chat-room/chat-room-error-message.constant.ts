@@ -1,5 +1,5 @@
 import { CHAT_ROOM_ERROR_CODE } from '@libs/exceptions/types/errors/chat-room/chat-room-error-code.constant';
-import type { ErrorMessage } from '@libs/types/type';
+import { ErrorMessage } from '@libs/types/type';
 
 export const CHAT_ROOM_ERROR_MESSAGE: ErrorMessage<
   typeof CHAT_ROOM_ERROR_CODE

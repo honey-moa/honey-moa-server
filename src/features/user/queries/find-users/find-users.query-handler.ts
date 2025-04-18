@@ -1,10 +1,10 @@
-import type { UserEntity } from '@features/user/domain/user.entity';
-import type { UserMapper } from '@features/user/mappers/user.mapper';
+import { UserEntity } from '@features/user/domain/user.entity';
+import { UserMapper } from '@features/user/mappers/user.mapper';
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
-import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import type { Paginated } from '@libs/types/type';
-import type { TransactionHost } from '@nestjs-cls/transactional';
-import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import { Paginated } from '@libs/types/type';
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindUsersQuery)

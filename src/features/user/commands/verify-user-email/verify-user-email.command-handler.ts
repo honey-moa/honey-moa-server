@@ -1,5 +1,5 @@
 import { VerifyUserEmailCommand } from '@features/user/commands/verify-user-email/verify-user-email.command';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserVerifyTokenType } from '@features/user/types/user.constant';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';

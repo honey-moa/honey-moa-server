@@ -1,6 +1,6 @@
 import { getTsid } from 'tsid-ts';
 
-import type {
+import {
   BlogPostAttachmentProps,
   CreateBlogPostAttachmentProps,
 } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity-interface';

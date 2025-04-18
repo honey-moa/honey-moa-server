@@ -1,4 +1,4 @@
-import type { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
+import { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
 
 export interface ChatRoomProps {
   createdBy: AggregateID;

@@ -11,15 +11,15 @@ import {
   blogPostTagSchema,
 } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
-import type { BlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
+import { BlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
 import {
   BlogPostResponseDto,
   type CreateBlogPostResponseDtoProps,
 } from '@features/blog-post/dtos/response/blog-post.response-dto';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';

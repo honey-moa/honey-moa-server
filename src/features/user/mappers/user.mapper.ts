@@ -1,5 +1,5 @@
 import { UserEntity } from '@features/user/domain/user.entity';
-import type { UserProps } from '@features/user/domain/user.entity-interface';
+import { UserProps } from '@features/user/domain/user.entity-interface';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
 import {
   type UserVerifyTokenMapper,
@@ -15,8 +15,8 @@ import {
   userConnectionSchema,
 } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { baseSchema } from '@libs/db/base.schema';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { isNil } from '@libs/utils/util';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';

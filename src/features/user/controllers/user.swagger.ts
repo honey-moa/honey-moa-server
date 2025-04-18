@@ -10,7 +10,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
-import type { UserController } from '@features/user/controllers/user.controller';
+import { UserController } from '@features/user/controllers/user.controller';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
 import { UserMbti } from '@features/user/types/user.constant';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
@@ -23,10 +23,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import type {
-  ApiOperationOptionsWithSummary,
-  ApiOperator,
-} from '@libs/types/type';
+import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
 
 export const ApiUser: ApiOperator<keyof Omit<UserController, 'verifyEmail'>> = {
   FindUsers: (

@@ -2,7 +2,7 @@ import {
   DomainEvent,
   type DomainEventProps,
 } from '@libs/ddd/base-domain.event';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export class BlogPostCreatedDomainEvent extends DomainEvent {
   readonly userId: AggregateID;

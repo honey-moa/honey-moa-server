@@ -1,5 +1,5 @@
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { IQuery } from '@nestjs/cqrs';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { IQuery } from '@nestjs/cqrs';
 import {
   type PaginatedParams,
   PaginatedQueryBase,

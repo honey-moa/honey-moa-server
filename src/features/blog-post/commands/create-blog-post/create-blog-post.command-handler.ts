@@ -1,10 +1,10 @@
 import { CreateBlogPostCommand } from '@features/blog-post/commands/create-blog-post/create-blog-post.command';
-import type { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
-import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import { BlogPostDomainService } from '@features/blog-post/domain/domain-services/blog-post.domain-service';
+import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
-import type { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';

@@ -1,6 +1,6 @@
 import { getTsid } from 'tsid-ts';
 
-import type {
+import {
   BlogPostCommentProps,
   CreateBlogPostCommentProps,
 } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity-interface';

@@ -1,7 +1,7 @@
-import type { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import type { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { RepositoryPort } from '@libs/ddd/repository.port';
+import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
+import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { RepositoryPort } from '@libs/ddd/repository.port';
 
 export interface AttachmentRepositoryPort
   extends RepositoryPort<AttachmentEntity> {

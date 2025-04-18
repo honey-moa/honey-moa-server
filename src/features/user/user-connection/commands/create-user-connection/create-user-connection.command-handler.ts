@@ -1,8 +1,8 @@
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { CreateUserConnectionCommand } from '@features/user/user-connection/commands/create-user-connection/create-user-connection.command';
-import type { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';

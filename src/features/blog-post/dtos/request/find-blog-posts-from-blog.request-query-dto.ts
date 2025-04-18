@@ -1,10 +1,10 @@
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
-import type { BlogPostModel } from '@features/blog-post/mappers/blog-post.mapper';
+import { BlogPostModel } from '@features/blog-post/mappers/blog-post.mapper';
 import { CursorPaginationRequestQueryDto } from '@libs/api/dtos/request/cursor-pagination.request-query-dto';
 import { ParseQueryByColonAndTransformToObject } from '@libs/api/transformers/parse-query-by-colon-and-transform-to-object.transformer';
 import { transformStringToBoolean } from '@libs/api/transformers/transform-string-to-boolean.transformer';
 import { SortOrder } from '@libs/api/types/api.constant';
-import type { CursorBy, OrderBy } from '@libs/api/types/api.type';
+import { CursorBy, OrderBy } from '@libs/api/types/api.type';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {

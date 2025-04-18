@@ -42,7 +42,8 @@
         "useAsConstAssertion": "error",
         "useBlockStatements": "off",
         "noInferrableTypes": "off",
-        "useNodejsImportProtocol": "off"
+        "useNodejsImportProtocol": "off",
+        "useImportType": "off"
       },
       "suspicious": {
         "noExplicitAny": "off",

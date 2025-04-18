@@ -3,7 +3,7 @@ import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
-import type { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import {
   type ArgumentsHost,
   Catch,
@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
-import type { Response } from 'express';
+import { Response } from 'express';
 
 type ClientErrorException =
   | HttpBadRequestException

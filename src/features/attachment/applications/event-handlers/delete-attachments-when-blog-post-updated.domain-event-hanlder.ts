@@ -1,8 +1,8 @@
-import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { isNil } from '@libs/utils/util';
 import { Propagation, Transactional } from '@nestjs-cls/transactional';
 import { Inject, Injectable } from '@nestjs/common';

@@ -1,7 +1,7 @@
 import { SortOrder } from '@libs/api/types/api.constant';
-import type { CursorBy, OrderBy } from '@libs/api/types/api.type';
-import type { BaseModel } from '@libs/db/base.schema';
-import type { PaginatedQueryParams } from '@libs/types/type';
+import { CursorBy, OrderBy } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
+import { PaginatedQueryParams } from '@libs/types/type';
 
 /**
  * Base class for regular queries

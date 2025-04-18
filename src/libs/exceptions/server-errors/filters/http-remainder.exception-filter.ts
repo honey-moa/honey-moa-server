@@ -6,10 +6,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import type { Response } from 'express';
+import { Response } from 'express';
 
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import type { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 
 /**

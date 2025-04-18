@@ -12,24 +12,24 @@ import { UserDeletedDomainEvent } from '@features/user/domain/events/user-delete
 import { UserIsEmailVerifiedUpdatedDomainEvent } from '@features/user/domain/events/user-is-email-verified-modified.event';
 import { UserPasswordUpdatedDomainEvent } from '@features/user/domain/events/user-password-updated.event';
 import { UserProfileImagePathUpdatedDomainEvent } from '@features/user/domain/events/user-profile-image-path-updated.domain-event';
-import type {
+import {
   CreateUserProps,
   HydratedUserEntityProps,
   UserProps,
 } from '@features/user/domain/user.entity-interface';
-import type { UserMbtiUnion } from '@features/user/types/user.type';
+import { UserMbtiUnion } from '@features/user/types/user.type';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import type { CreateUserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
+import { CreateUserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import type { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { Guard } from '@libs/guard';
-import type { FileProps } from '@libs/types/type';
+import { FileProps } from '@libs/types/type';
 import { isNil } from '@libs/utils/util';
 import bcrypt from 'bcrypt';
 import { getTsid } from 'tsid-ts';

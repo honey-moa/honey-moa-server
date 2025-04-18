@@ -3,7 +3,7 @@ import {
   type DomainEventProps,
 } from '@libs/ddd/base-domain.event';
 
-import type { UserLoginTypeUnion } from '@features/user/types/user.type';
+import { UserLoginTypeUnion } from '@features/user/types/user.type';
 
 export class UserCreatedDomainEvent extends DomainEvent {
   readonly email: string;
