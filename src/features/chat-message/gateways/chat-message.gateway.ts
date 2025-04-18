@@ -1,7 +1,9 @@
 import { CreateChatMessageCommand } from '@features/chat-message/commands/create-message/create-chat-message.command';
+import type { ChatMessageEntity } from '@features/chat-message/domain/chat-message.entity';
 import type { CreateChatMessageDto } from '@features/chat-message/dtos/socket/create-chat-message.dto';
 import type { EnterChatDto } from '@features/chat-message/dtos/socket/enter-chat.dto';
 import type { SocketWithUserDto } from '@features/chat-message/dtos/socket/socket-with-user.dto';
+import type { ChatMessageMapper } from '@features/chat-message/mappers/chat-message.mapper';
 import type { ChatRoomRepositoryPort } from '@features/chat-room/repositories/chat-room.repository-port';
 import { CHAT_ROOM_REPOSITORY_DI_TOKEN } from '@features/chat-room/tokens/di.token';
 import type { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
@@ -78,6 +80,7 @@ export class ChatMessageGateway
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: Logger,
     private readonly commandBus: CommandBus,
+    private readonly mapper: ChatMessageMapper,
   ) {}
 
   @WebSocketServer()
@@ -135,8 +138,10 @@ export class ChatMessageGateway
     }
 
     socket.join(String(roomId));
+
     this.logger.log(`[Socket] User ${socket.user.sub} joined room ${roomId}`);
-    return { message: 'Successfully joined room' };
+
+    return { statusMessage: 'Successfully joined room' };
   }
 
   @UsePipes(customValidationPipe)
@@ -157,7 +162,7 @@ export class ChatMessageGateway
     const { sub: userId } = socket.user;
 
     this.logger.log(
-      `[Socket] Received message from ${userId} in room ${roomId}: ${message}`,
+      `[Socket] Received message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
     const command = new CreateChatMessageCommand({
@@ -171,16 +176,26 @@ export class ChatMessageGateway
       `[Socket] Sending message from ${userId} in room ${roomId}: ${message}, ${blogPostUrl}`,
     );
 
-    await this.commandBus.execute<CreateChatMessageCommand, void>(command);
+    const createdChatMessageEntity = await this.commandBus.execute<
+      CreateChatMessageCommand,
+      ChatMessageEntity
+    >(command);
+
+    const chatMessageResponseDto = this.mapper.toResponseDto(
+      createdChatMessageEntity,
+    );
 
     socket
       .to(String(roomId))
-      .emit('receive_message', { senderId: userId, message, blogPostUrl });
+      .emit('receive_message', { ...chatMessageResponseDto });
 
     this.logger.log(
-      `[Socket] Message emitted to room ${roomId} from ${userId}`,
+      `[Socket] Message emitted to room ${data.roomId}: ${JSON.stringify(chatMessageResponseDto)}`,
     );
 
-    return { message: 'Successfully sent message' };
+    return {
+      statusMessage: 'Successfully sent message',
+      sentMessage: chatMessageResponseDto,
+    };
   }
 }
