@@ -10,7 +10,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { BootstrapService } from '@src/bootstrap.service';
 import { ClsModule } from 'nestjs-cls';
 import { RequestContextModule } from 'nestjs-request-context';
-import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -35,7 +34,7 @@ import { AppController } from './app.controller';
     LibsModule,
     FeaturesModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [BootstrapService],
 })
 export class AppModule {}
