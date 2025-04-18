@@ -1,4 +1,3 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
 import { UserConnectionModel } from '@features/user/user-connection/mappers/user-connection.mapper';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
@@ -7,13 +6,14 @@ import { ParseQueryByColonAndTransformToObject } from '@libs/api/transformers/pa
 import { transformStringToBoolean } from '@libs/api/transformers/transform-string-to-boolean.transformer';
 import { SortOrder } from '@libs/api/types/api.constant';
 import { OrderBy } from '@libs/api/types/api.type';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
-  IsOptional,
-  IsBoolean,
-  IsEnum,
   ArrayNotEmpty,
   ArrayUnique,
+  IsBoolean,
+  IsEnum,
+  IsOptional,
 } from 'class-validator';
 
 type UserConnectionModelForPaginated = Pick<

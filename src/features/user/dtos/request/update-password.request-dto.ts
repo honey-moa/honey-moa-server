@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { USER_PASSWORD_REGEXP } from '@features/user/types/user.constant';
+import { ApiProperty } from '@nestjs/swagger';
 import { Matches } from 'class-validator';
 
 export class UpdatePasswordRequestDto {

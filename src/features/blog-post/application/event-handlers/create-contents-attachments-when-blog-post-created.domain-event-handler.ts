@@ -40,7 +40,7 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
       return;
     }
 
-    attachments.forEach((attachment) => {
+    for (const attachment of attachments) {
       const movedPath =
         BlogPostAttachmentEntity.BLOG_POST_ATTACHMENT_PATH_PREFIX +
         attachment.id;
@@ -55,7 +55,7 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
         path: movedPath,
         url: movedUrl,
       });
-    });
+    }
 
     await Promise.all(
       attachments.map(
@@ -66,9 +66,9 @@ export class CreateContentsAttachmentsWhenBlogPostCreatedDomainEventHandler {
 
     let jsonContents = JSON.stringify(contents);
 
-    changedUrlInfos.forEach(({ oldAttachmentUrl, newAttachmentUrl }) => {
+    for (const { oldAttachmentUrl, newAttachmentUrl } of changedUrlInfos) {
       jsonContents = jsonContents.replace(oldAttachmentUrl, newAttachmentUrl);
-    });
+    }
 
     await this.blogPostRepository.updateContents(
       event.aggregateId,

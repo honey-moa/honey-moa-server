@@ -1,12 +1,12 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { GUARD_TYPE_TOKEN, GuardType } from '@libs/guards/types/guard.constant';
 import { GuardTypeUnion } from '@libs/guards/types/guard.type';
+import { ExecutionContext, Injectable } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
-import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
 
 @Injectable()
 export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
@@ -33,7 +33,7 @@ export class JwtAccessTokenAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest(err: any, payload: any, info: any, context: ExecutionContext) {
+  handleRequest(err: any, payload: any, _info: any, context: ExecutionContext) {
     const guardType = this.reflector.getAllAndOverride<
       GuardTypeUnion,
       typeof GUARD_TYPE_TOKEN

@@ -26,7 +26,7 @@ export class MethodOverrideMiddleware implements NestMiddleware {
       requestMethodsArray.includes(body[fieldForOverrideMethod])
     ) {
       req.method = body[fieldForOverrideMethod];
-      delete req.body._method;
+      req.body._method = undefined;
     }
 
     next();

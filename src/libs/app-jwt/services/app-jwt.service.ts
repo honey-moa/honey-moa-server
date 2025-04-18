@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
+import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
+import { JwtPayload } from '@libs/app-jwt/types/app-jwt.interface';
+import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
+import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@libs/core/app-config/types/app-config.type';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
-import type { JwtPayload } from '@libs/app-jwt/types/app-jwt.interface';
-import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
-import { Key } from '@libs/core/app-config/types/app-config.type';
-import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
+import { Inject, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AppJwtService implements AppJwtServicePort {

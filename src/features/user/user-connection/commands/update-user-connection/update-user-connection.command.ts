@@ -1,7 +1,7 @@
-import { ICommand } from '@nestjs/cqrs';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import { Command, CommandProps } from '@libs/ddd/command.base';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { ICommand } from '@nestjs/cqrs';
 
 export class UpdateUserConnectionCommand extends Command implements ICommand {
   readonly userConnectionId: AggregateID;

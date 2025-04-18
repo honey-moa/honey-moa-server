@@ -8,8 +8,7 @@ export interface CreateHydratedChatRoomProps
 
 export class HydratedChatRoomResponseDto
   extends BaseResponseDto
-  implements
-    Omit<CreateHydratedChatRoomProps, keyof CreateBaseResponseDtoProps>
+  implements Omit<CreateHydratedChatRoomProps, keyof CreateBaseResponseDtoProps>
 {
   constructor(props: CreateHydratedChatRoomProps) {
     super(props);

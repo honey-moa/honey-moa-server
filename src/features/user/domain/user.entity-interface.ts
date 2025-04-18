@@ -1,10 +1,10 @@
 import { UserVerifyTokenEntity } from '@features/user/domain/user-verify-token/user-verify-token.entity';
-import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
-import type {
+import {
   UserLoginTypeUnion,
   UserMbtiUnion,
   UserRoleUnion,
 } from '@features/user/types/user.type';
+import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { BaseEntityProps } from '@libs/ddd/entity.base';
 
 export interface UserProps {

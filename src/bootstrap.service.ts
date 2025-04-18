@@ -1,13 +1,3 @@
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  Injectable,
-  Logger,
-  ValidationError,
-  ValidationPipeOptions,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
 import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
@@ -27,6 +17,16 @@ import { RequestResponseLoggingInterceptor } from '@libs/interceptors/logging/re
 import { PaginationInterceptor } from '@libs/interceptors/pagination/pagination.interceptor';
 import { MethodOverrideMiddleware } from '@libs/middlewares/method-override.middleware';
 import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
+import {
+  ClassSerializerInterceptor,
+  type INestApplication,
+  Injectable,
+  type Logger,
+  type ValidationError,
+  type ValidationPipeOptions,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import bodyParser from 'body-parser';
 
 import { singularize } from 'inflection';
@@ -90,7 +90,7 @@ export class BootstrapService {
               : '',
           };
 
-          if (error.value instanceof Array) {
+          if (Array.isArray(error.value)) {
             error.value = error.value.map((value) => {
               if (value instanceof MemoryStoredFile) {
                 return { ...value, buffer: undefined };
@@ -145,9 +145,9 @@ export class BootstrapService {
     const config = new DocumentBuilder()
       .setTitle('Honey Moa Server')
       .setDescription(
-        'Honey Moa Server API</br>' +
-          `<a target="_black" href="${DOMAIN}/${JSON_PATH}">json document</a></br>` +
-          `<a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`,
+        `Honey Moa Server API</br>
+        <a target="_black" href="${DOMAIN}/${JSON_PATH}">json document</a></br>
+        <a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`,
       )
       .setVersion('0.1')
       .addBearerAuth(

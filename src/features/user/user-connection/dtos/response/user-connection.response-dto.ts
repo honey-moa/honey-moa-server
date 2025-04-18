@@ -1,4 +1,3 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
@@ -7,6 +6,7 @@ import {
   CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export interface CreateUserConnectionResponseDtoProps
   extends CreateBaseResponseDtoProps {

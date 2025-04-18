@@ -1,12 +1,12 @@
-import { getTsid } from 'tsid-ts';
 import { randomUUID } from 'crypto';
-import { Entity } from '@libs/ddd/entity.base';
-import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
-import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import {
   CreateUserVerifyTokenProps,
   UserVerifyTokenProps,
 } from '@features/user/domain/user-verify-token/user-verify-token.entity-interface';
+import { Entity } from '@libs/ddd/entity.base';
+import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
+import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
+import { getTsid } from 'tsid-ts';
 
 export class UserVerifyTokenEntity extends Entity<UserVerifyTokenProps> {
   static readonly VERIFICATION_EXPIRES_IN = 5 * 60 * 1000;

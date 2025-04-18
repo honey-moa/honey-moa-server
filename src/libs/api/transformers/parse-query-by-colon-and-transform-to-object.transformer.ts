@@ -1,10 +1,10 @@
-import { applyDecorators } from '@nestjs/common';
-import { ApiPropertyOptional } from '@nestjs/swagger';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { SingleProperty } from '@libs/types/type';
+import { applyDecorators } from '@nestjs/common';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { isJSON, isEnum, IsOptional, IsObject } from 'class-validator';
+import { IsObject, IsOptional, isEnum, isJSON } from 'class-validator';
 
 type AllowType = 'string' | 'number' | 'boolean' | 'bigint' | 'date';
 
@@ -39,69 +39,63 @@ export function ParseQueryByColonAndTransformToObject(
     IsObject(),
     ApiPropertyOptional({
       type: 'string',
-      description:
-        '허용 된 값에 맞게 key:value 포맷의 스트링을 담은 JSON 배열로 보내야 합니다.<br>' +
-        '허용된 key 및 value: ' +
+      description: `허용 된 값에 맞게 key:value 포맷의 스트링을 담은 JSON 배열로 보내야 합니다.<br>허용된 key 및 value: ${Object.entries(
+        option,
+      )
+        .map(([key, value]) => {
+          if (value?.enum) {
+            return `${key}:${Object.values(value.enum).join(' || ')}`;
+          }
+
+          if (value?.type) {
+            return `${key}:format이 ${value.type}인 string만 허용`;
+          }
+
+          return `${key}:모든 값 허용`;
+        })
+        .join(
+          ', ',
+        )}<br>만약 해당 쿼리를 사용한다면 필수 key값은 모두 포함해야 합니다.<br>필수 key값: ${
         Object.entries(option)
-          .map(([key, value]) => {
-            if (value?.enum) {
-              return `${key}:${Object.values(value.enum).join(' || ')}`;
+          .filter(([, value]) => value?.required)
+          .map(([key]) => ` ${key}`)
+          .join(', ') || '없음'
+      }`,
+      example: `[${Object.entries(option)
+        .map(([key, value]) => {
+          if (value?.enum) {
+            return `"${key}:${Object.values(value.enum)[0]}"`;
+          }
+
+          if (value?.type) {
+            let example: string = '';
+
+            if (value.type === 'number') {
+              example = '123';
             }
 
-            if (value?.type) {
-              return `${key}:format이 ${value.type}인 string만 허용`;
+            if (value.type === 'bigint') {
+              example = '123';
             }
 
-            return `${key}:모든 값 허용`;
-          })
-          .join(', ') +
-        '<br>' +
-        '만약 해당 쿼리를 사용한다면 필수 key값은 모두 포함해야 합니다.<br>' +
-        '필수 key값: ' +
-        `${
-          Object.entries(option)
-            .filter(([, value]) => value?.required)
-            .map(([key]) => ` ${key}`)
-            .join(', ') || '없음'
-        }`,
-      example:
-        '[' +
-        Object.entries(option)
-          .map(([key, value]) => {
-            if (value?.enum) {
-              return `"${key}:${Object.values(value.enum)[0]}"`;
+            if (value.type === 'boolean') {
+              example = 'true';
             }
 
-            if (value?.type) {
-              let example: string = '';
-
-              if (value.type === 'number') {
-                example = '123';
-              }
-
-              if (value.type === 'bigint') {
-                example = '123';
-              }
-
-              if (value.type === 'boolean') {
-                example = 'true';
-              }
-
-              if (value.type === 'date') {
-                example = '2025-01-01';
-              }
-
-              if (value.type === 'string') {
-                example = 'example';
-              }
-
-              return `"${key}:${example}"`;
+            if (value.type === 'date') {
+              example = '2025-01-01';
             }
 
-            return `${key}:모든 값 허용`;
-          })
-          .join(', ') +
-        ']',
+            if (value.type === 'string') {
+              example = 'example';
+            }
+
+            return `"${key}:${example}"`;
+          }
+
+          return `${key}:모든 값 허용`;
+        })
+        .join(', ')}]`,
     }),
 
     Transform(({ value }) => {

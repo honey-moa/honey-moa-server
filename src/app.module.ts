@@ -1,16 +1,15 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { BootstrapService } from '@src/bootstrap.service';
-import { LibsModule } from '@libs/libs.module';
-import { ClsModule } from 'nestjs-cls';
-import { ClsPluginTransactional } from '@nestjs-cls/transactional';
+import { FeaturesModule } from '@features/features.module';
 import { PrismaModule } from '@libs/core/prisma/prisma.module';
-import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import { RequestContextModule } from 'nestjs-request-context';
+import { LibsModule } from '@libs/libs.module';
+import { ClsPluginTransactional } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { FeaturesModule } from '@features/features.module';
+import { BootstrapService } from '@src/bootstrap.service';
+import { ClsModule } from 'nestjs-cls';
+import { RequestContextModule } from 'nestjs-request-context';
 
 @Module({
   imports: [
@@ -35,7 +34,7 @@ import { FeaturesModule } from '@features/features.module';
     LibsModule,
     FeaturesModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [BootstrapService],
 })
 export class AppModule {}

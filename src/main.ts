@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { BootstrapService } from '@src/bootstrap.service';
+import { AppModule } from './app.module';
 
 declare global {
   interface BigInt {
@@ -14,6 +14,7 @@ BigInt.prototype.toJSON = function () {
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
+  // biome-ignore lint/style/noNamespace: <explanation>
   namespace Express {
     export interface User {
       sub?: string;

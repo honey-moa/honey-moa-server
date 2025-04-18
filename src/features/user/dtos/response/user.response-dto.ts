@@ -1,4 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { UserLoginType, UserMbti } from '@features/user/types/user.constant';
 import {
   UserLoginTypeUnion,
@@ -8,6 +7,7 @@ import {
   BaseResponseDto,
   CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
+import { ApiProperty } from '@nestjs/swagger';
 
 export interface CreateUserResponseDtoProps extends CreateBaseResponseDtoProps {
   nickname: string;

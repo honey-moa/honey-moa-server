@@ -1,6 +1,6 @@
-import { ArgumentMetadata } from '@nestjs/common';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { ArgumentMetadata } from '@nestjs/common';
 
 describe(ParsePositiveBigIntPipe.name, () => {
   let target: ParsePositiveBigIntPipe;
@@ -61,7 +61,7 @@ describe(ParsePositiveBigIntPipe.name, () => {
         const num = '3';
 
         expect(target.transform(num, {} as ArgumentMetadata)).toBe(
-          parseInt(num, 10),
+          Number.parseInt(num, 10),
         );
       });
     });

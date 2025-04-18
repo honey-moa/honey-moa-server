@@ -1,14 +1,14 @@
+import { routesV1 } from '@config/app.route';
+import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachments/create-attachments.command';
+import { ApiAttachment } from '@features/attachment/controllers/attachment.swagger';
+import { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
+import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
+import { User } from '@libs/api/decorators/user.decorator';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { Body, Controller, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
-import { routesV1 } from '@config/app.route';
-import { AggregateID } from '@libs/ddd/entity.base';
-import { User } from '@libs/api/decorators/user.decorator';
-import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
-import { ApiAttachment } from '@features/attachment/controllers/attachment.swagger';
 import { FormDataRequest } from 'nestjs-form-data';
-import { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
-import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachments/create-attachments.command';
 
 @ApiTags('Attachment')
 @ApiInternalServerErrorBuilder()

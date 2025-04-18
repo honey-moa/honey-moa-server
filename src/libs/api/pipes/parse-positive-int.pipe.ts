@@ -1,11 +1,11 @@
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
+import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import {
   ArgumentMetadata,
   Injectable,
   Optional,
   PipeTransform,
 } from '@nestjs/common';
-import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 
 interface Options {
   transform?: boolean;
@@ -45,7 +45,7 @@ export class ParsePositiveBigIntPipe
     return (
       ['string', 'number'].includes(typeof value) &&
       /^-?\d+$/.test(value) &&
-      isFinite(value as any) &&
+      Number.isFinite(value as any) &&
       Number(value) >= 1
     );
   }
