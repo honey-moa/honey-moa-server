@@ -1,13 +1,13 @@
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import type { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
+import { AttachmentProps } from '@features/attachment/domain/attachment.entity-interface';
 import { Location } from '@features/attachment/domain/value-objects/location.value-object';
 import { AttachmentUploadType } from '@features/attachment/types/attachment.constant';
 import { baseSchema } from '@libs/db/base.schema';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
+import { CreateEntityProps } from '@libs/ddd/entity.base';
 
 export const attachmentSchema = baseSchema.extend({
   userId: z.bigint(),

@@ -1,7 +1,7 @@
 import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserMbti } from '@features/user/types/user.constant';
-import type { UserMbtiUnion } from '@features/user/types/user.type';
+import { UserMbtiUnion } from '@features/user/types/user.type';
 import { IsNullable } from '@libs/api/decorators/is-nullable.decorator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -10,7 +10,7 @@ import {
   HasMimeType,
   IsFile,
   MaxFileSize,
-  type MemoryStoredFile,
+  MemoryStoredFile,
 } from 'nestjs-form-data';
 
 export class PatchUpdateUserRequestBodyDto {

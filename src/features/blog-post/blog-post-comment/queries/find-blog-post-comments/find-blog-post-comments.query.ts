@@ -1,6 +1,6 @@
-import type { AggregateID } from '@libs/ddd/entity.base';
-import { type PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
-import type { IQuery } from '@nestjs/cqrs';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
+import { IQuery } from '@nestjs/cqrs';
 
 export class FindBlogPostCommentsQuery
   extends PaginatedQueryBase

@@ -23,7 +23,7 @@ import { UserConnectionRepository } from '@features/user/user-connection/reposit
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { EmailModule } from '@libs/email/email.module';
 import { Module } from '@nestjs/common';
-import type { Provider } from '@nestjs/common/interfaces';
+import { Provider } from '@nestjs/common/interfaces';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
 const controllers = [UserController, UserConnectionController];

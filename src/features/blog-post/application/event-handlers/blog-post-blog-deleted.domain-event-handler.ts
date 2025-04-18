@@ -1,4 +1,4 @@
-import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
 import { isNil } from '@libs/utils/util';

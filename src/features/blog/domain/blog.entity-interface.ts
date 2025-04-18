@@ -1,6 +1,6 @@
-import type { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
-import type { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
-import type { FileProps } from '@libs/types/type';
+import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
+import { AggregateID, BaseEntityProps } from '@libs/ddd/entity.base';
+import { FileProps } from '@libs/types/type';
 
 export interface BlogProps {
   createdBy: AggregateID;

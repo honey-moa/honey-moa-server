@@ -1,5 +1,5 @@
 import { VerifyUserEmailCommand } from '@features/user/commands/verify-user-email/verify-user-email.command';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserVerifyTokenType } from '@features/user/types/user.constant';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
@@ -11,7 +11,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject, UnauthorizedException } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(VerifyUserEmailCommand)
 export class VerifyUserEmailCommandHandler

@@ -1,4 +1,4 @@
-import type { Entity } from './entity.base';
+import { Entity } from './entity.base';
 
 export interface Mapper<
   DomainEntity extends Entity<unknown>,

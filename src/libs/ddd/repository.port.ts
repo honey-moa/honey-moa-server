@@ -5,7 +5,7 @@
     in a respective repository.
 */
 
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export interface RepositoryPort<Entity, Include = unknown> {
   create(entity: Entity): Promise<void>;

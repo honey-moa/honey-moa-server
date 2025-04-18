@@ -1,7 +1,7 @@
 import { transformPage } from '@libs/api/transformers/page.transformer';
 import { PageLimit, SortOrder } from '@libs/api/types/api.constant';
-import type { OrderBy, SortOrderUnion } from '@libs/api/types/api.type';
-import type { BaseModel } from '@libs/db/base.schema';
+import { OrderBy, SortOrderUnion } from '@libs/api/types/api.type';
+import { BaseModel } from '@libs/db/base.schema';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 import { Transform, Type } from 'class-transformer';

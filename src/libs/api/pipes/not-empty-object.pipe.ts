@@ -2,11 +2,7 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
-import {
-  type ArgumentMetadata,
-  Injectable,
-  type PipeTransform,
-} from '@nestjs/common';
+import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 
 @Injectable()
 export class NotEmptyObjectPipe implements PipeTransform {

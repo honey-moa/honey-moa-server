@@ -1,13 +1,13 @@
 import { routesV1 } from '@config/app.route';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';
-import type { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
+import { AppConfigServicePort } from '@libs/core/app-config/services/app-config.service-port';
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-config.di-token';
-import type { Key } from '@libs/core/app-config/types/app-config.type';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { EmailServicePort } from '@libs/email/services/email.service-port';
+import { Key } from '@libs/core/app-config/types/app-config.type';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { EmailServicePort } from '@libs/email/services/email.service-port';
 import { Inject, Injectable } from '@nestjs/common';
 import nodemailer from 'nodemailer';
-import type Mail from 'nodemailer/lib/mailer';
+import Mail from 'nodemailer/lib/mailer';
 
 @Injectable()
 export class EmailService implements EmailServicePort {

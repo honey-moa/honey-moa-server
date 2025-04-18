@@ -1,16 +1,16 @@
 import { GenerateJwtCommand } from '@features/auth/commands/generate-jwt/generate-jwt.command';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserLoginType } from '@features/user/types/user.constant';
-import type { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
+import { AppJwtServicePort } from '@libs/app-jwt/services/app-jwt.service-port';
 import { APP_JWT_SERVICE_DI_TOKEN } from '@libs/app-jwt/tokens/app-jwt.di-token';
 import { TokenType } from '@libs/app-jwt/types/app-jwt.enum';
-import type { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
+import { JwtTokens } from '@libs/app-jwt/types/app-jwt.interface';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(GenerateJwtCommand)
 export class GenerateJwtCommandHandler

@@ -1,7 +1,7 @@
-import type { UserMbtiUnion } from '@features/user/types/user.type';
-import { Command, type CommandProps } from '@libs/ddd/command.base';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { ICommand } from '@nestjs/cqrs';
+import { UserMbtiUnion } from '@features/user/types/user.type';
+import { Command, CommandProps } from '@libs/ddd/command.base';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { ICommand } from '@nestjs/cqrs';
 
 export class PatchUpdateUserCommand extends Command implements ICommand {
   readonly userId: AggregateID;

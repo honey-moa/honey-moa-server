@@ -1,13 +1,13 @@
 import {
-  type ArgumentsHost,
+  ArgumentsHost,
   Catch,
-  type ExceptionFilter,
+  ExceptionFilter,
   NotFoundException,
 } from '@nestjs/common';
 
-import type { Response } from 'express';
+import { Response } from 'express';
 
-import type { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 
 /**

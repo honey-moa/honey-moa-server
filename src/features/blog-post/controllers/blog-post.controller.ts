@@ -3,17 +3,17 @@ import { CreateBlogPostCommand } from '@features/blog-post/commands/create-blog-
 import { DeleteBlogPostCommand } from '@features/blog-post/commands/delete-blog-post/delete-blog-post.command';
 import { PatchUpdateBlogPostCommand } from '@features/blog-post/commands/patch-update-blog-post/patch-update-blog-post.command';
 import { ApiBlogPost } from '@features/blog-post/controllers/blog-post.swagger';
-import type { CreateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/create-blog-post.request-body-dto';
-import type { FindBlogPostsFromBlogRequestQueryDto } from '@features/blog-post/dtos/request/find-blog-posts-from-blog.request-query-dto';
-import type { FindPublicBlogPostsRequestQueryDto } from '@features/blog-post/dtos/request/find-public-blog-posts.request-query-dto';
-import type { PatchUpdateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/patch-update-blog-post.request-body-dto';
+import { CreateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/create-blog-post.request-body-dto';
+import { FindBlogPostsFromBlogRequestQueryDto } from '@features/blog-post/dtos/request/find-blog-posts-from-blog.request-query-dto';
+import { FindPublicBlogPostsRequestQueryDto } from '@features/blog-post/dtos/request/find-public-blog-posts.request-query-dto';
+import { PatchUpdateBlogPostRequestBodyDto } from '@features/blog-post/dtos/request/patch-update-blog-post.request-body-dto';
 import { BlogPostResponseDto } from '@features/blog-post/dtos/response/blog-post.response-dto';
 import { FindBlogPostsFromBlogQuery } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query';
-import type { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
+import { FindBlogPostsFromBlogQueryHandler } from '@features/blog-post/queries/find-blog-posts-from-blog/find-blog-posts-from-blog.query-handler';
 import { FindOneBlogPostQuery } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query';
-import type { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
+import { FindOneBlogPostQueryHandler } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query-handler';
 import { FindPublicBlogPostsQuery } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query';
-import type { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
+import { FindPublicBlogPostsQueryHandler } from '@features/blog-post/queries/find-public-blog-posts/find-public-blog-posts.query-handler';
 import { NotABlogMemberError } from '@features/blog/domain/blog.errors';
 import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-blog.response-dto';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
@@ -23,12 +23,12 @@ import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import type { HandlerReturnType } from '@libs/types/type';
+import { HandlerReturnType } from '@libs/types/type';
 import {
   Body,
   Controller,
@@ -41,7 +41,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import type { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('BlogPost')

@@ -1,12 +1,12 @@
 import { BlogEntity } from '@features/blog/domain/blog.entity';
-import type { CreateBlogProps } from '@features/blog/domain/blog.entity-interface';
+import { CreateBlogProps } from '@features/blog/domain/blog.entity-interface';
 import {
   BlogAlreadyExistsError,
   CannotCreateBlogWithoutAcceptedConnectionError,
 } from '@features/blog/domain/blog.errors';
-import type { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
-import type { UserEntity } from '@features/user/domain/user.entity';
+import { UserEntity } from '@features/user/domain/user.entity';
 import { isNil } from '@libs/utils/util';
 import { Inject, Injectable } from '@nestjs/common';
 

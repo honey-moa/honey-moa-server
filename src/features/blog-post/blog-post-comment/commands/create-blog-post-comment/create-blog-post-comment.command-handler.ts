@@ -1,13 +1,13 @@
 import { CreateBlogPostCommentCommand } from '@features/blog-post/blog-post-comment/commands/create-blog-post-comment/create-blog-post-comment.command';
-import type { BlogPostCommentRepositoryPort } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository-port';
+import { BlogPostCommentRepositoryPort } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository-port';
 import { BLOG_POST_COMMENT_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-comment/tokens/di.token';
-import type { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
+import { BlogPostRepositoryPort } from '@features/blog-post/repositories/blog-post.repository-port';
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
-import type { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
+import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
@@ -17,7 +17,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateBlogPostCommentCommand)
 export class CreateBlogPostCommentCommandHandler

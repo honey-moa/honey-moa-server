@@ -10,7 +10,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 
-import type { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
+import { BlogPostCommentController } from '@features/blog-post/blog-post-comment/controllers/blog-post-comment.controller';
 import { BlogPostCommentResponseDto } from '@features/blog-post/blog-post-comment/dtos/response/blog-post-comment.response-dto';
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -22,10 +22,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { CursorPaginationResponseDto } from '@libs/interceptors/pagination/dtos/cursor-pagination-interceptor.response-dto';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/offset-pagination-interceptor.response-dto';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import type {
-  ApiOperationOptionsWithSummary,
-  ApiOperator,
-} from '@libs/types/type';
+import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
 export const ApiBlogPostComment: ApiOperator<keyof BlogPostCommentController> =
   {
     Create: (

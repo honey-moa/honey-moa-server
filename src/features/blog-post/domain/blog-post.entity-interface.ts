@@ -1,9 +1,9 @@
-import type { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
-import type { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
-import type { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
-import type { HydratedTagEntityProps } from '@features/tag/domain/tag.entity-interface';
-import type { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
+import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
+import { HydratedTagEntityProps } from '@features/tag/domain/tag.entity-interface';
+import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export interface BlogPostProps {
   userId: AggregateID;

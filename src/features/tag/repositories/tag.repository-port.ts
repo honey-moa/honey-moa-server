@@ -1,5 +1,5 @@
-import type { TagEntity } from '@features/tag/domain/tag.entity';
-import type { RepositoryPort } from '@libs/ddd/repository.port';
+import { TagEntity } from '@features/tag/domain/tag.entity';
+import { RepositoryPort } from '@libs/ddd/repository.port';
 
 export interface TagRepositoryPort extends RepositoryPort<TagEntity> {
   findByNames(names: string[]): Promise<TagEntity[]>;

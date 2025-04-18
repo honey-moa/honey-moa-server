@@ -1,7 +1,4 @@
-import {
-  DomainEvent,
-  type DomainEventProps,
-} from '@libs/ddd/base-domain.event';
+import { DomainEvent, DomainEventProps } from '@libs/ddd/base-domain.event';
 
 export class AttachmentCreatedDomainEvent extends DomainEvent {
   readonly userId: bigint;

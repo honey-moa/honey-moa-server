@@ -8,7 +8,7 @@ import {
   HasMimeType,
   IsFile,
   MaxFileSize,
-  type MemoryStoredFile,
+  MemoryStoredFile,
 } from 'nestjs-form-data';
 
 export class CreateBlogRequestBodyDto {

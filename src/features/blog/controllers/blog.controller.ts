@@ -6,23 +6,23 @@ import {
   BlogAlreadyExistsError,
   CannotCreateBlogWithoutAcceptedConnectionError,
 } from '@features/blog/domain/blog.errors';
-import type { CreateBlogRequestBodyDto } from '@features/blog/dtos/request/create-blog.request-body-dto';
-import type { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
+import { CreateBlogRequestBodyDto } from '@features/blog/dtos/request/create-blog.request-body-dto';
+import { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
 import { BlogResponseDto } from '@features/blog/dtos/response/blog.response-dto';
 import { FindOneBlogByUserIdQuery } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query';
-import type { FindOneBlogByUserIdQueryHandler } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query-handler';
+import { FindOneBlogByUserIdQueryHandler } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query-handler';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@libs/api/decorators/user.decorator';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
-import type { HandlerReturnType } from '@libs/types/type';
+import { HandlerReturnType } from '@libs/types/type';
 import {
   Body,
   Controller,
@@ -33,7 +33,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import type { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { FormDataRequest } from 'nestjs-form-data';
 

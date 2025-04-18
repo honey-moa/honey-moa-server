@@ -1,13 +1,13 @@
 import { BlogPostAttachmentEntity } from '@features/blog-post/blog-post-attachment/domain/blog-post-attachment.entity';
 import { FindOneBlogPostQuery } from '@features/blog-post/queries/find-one-blog-post/find-one-blog-post.query';
-import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
-import type { TransactionHost } from '@nestjs-cls/transactional';
-import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindOneBlogPostQuery)
 export class FindOneBlogPostQueryHandler

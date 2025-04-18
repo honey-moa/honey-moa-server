@@ -2,7 +2,7 @@ import { OffsetPaginationQueryDto } from '@libs/api/dtos/offset-pagination-query
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { PaginationResponseBuilder } from '@libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
 import { OffsetPaginationResponseDto } from '@libs/interceptors/pagination/dtos/pagination-interceptor-response.dto';
-import { Test, type TestingModule } from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 
 describe(PaginationResponseBuilder.name, () => {
   let builder: PaginationResponseBuilder;

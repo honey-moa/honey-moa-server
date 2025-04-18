@@ -4,7 +4,7 @@ import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';
 
-import type {
+import {
   CreateTagProps,
   HydratedTagEntityProps,
   TagProps,

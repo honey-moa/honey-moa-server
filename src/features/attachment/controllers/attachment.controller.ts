@@ -1,12 +1,12 @@
 import { routesV1 } from '@config/app.route';
 import { CreateAttachmentsCommand } from '@features/attachment/commands/create-attachments/create-attachments.command';
 import { ApiAttachment } from '@features/attachment/controllers/attachment.swagger';
-import type { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
+import { CreateAttachmentRequestBodyDto } from '@features/attachment/dtos/request/create-attachment.request-body-dto';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@libs/api/decorators/user.decorator';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { Body, Controller, Post } from '@nestjs/common';
-import type { CommandBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { FormDataRequest } from 'nestjs-form-data';
 

@@ -1,9 +1,6 @@
-import {
-  DomainEvent,
-  type DomainEventProps,
-} from '@libs/ddd/base-domain.event';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { FileProps } from '@libs/types/type';
+import { DomainEvent, DomainEventProps } from '@libs/ddd/base-domain.event';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { FileProps } from '@libs/types/type';
 
 export class UserProfileImagePathUpdatedDomainEvent extends DomainEvent {
   readonly profileImageFile:

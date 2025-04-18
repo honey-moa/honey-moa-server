@@ -1,4 +1,4 @@
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export interface EmailServicePort {
   sendVerificationEmail(

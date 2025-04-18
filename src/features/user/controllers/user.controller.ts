@@ -6,26 +6,26 @@ import { SendVerificationEmailCommand } from '@features/user/commands/send-verif
 import { UpdateUserPasswordCommand } from '@features/user/commands/update-user-password/update-user-password.command';
 import { VerifyUserEmailCommand } from '@features/user/commands/verify-user-email/verify-user-email.command';
 import { ApiUser } from '@features/user/controllers/user.swagger';
-import type { UserEntity } from '@features/user/domain/user.entity';
-import type { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users.request-query-dto';
-import type { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
-import type { SendPasswordChangeVerificationEmailRequestDto } from '@features/user/dtos/request/send-password-change-verification-email.request-dto';
-import type { UpdatePasswordRequestDto } from '@features/user/dtos/request/update-password.request-dto';
+import { UserEntity } from '@features/user/domain/user.entity';
+import { FindUsersRequestQueryDto } from '@features/user/dtos/request/find-users.request-query-dto';
+import { PatchUpdateUserRequestBodyDto } from '@features/user/dtos/request/patch-update-user.request-body-dto';
+import { SendPasswordChangeVerificationEmailRequestDto } from '@features/user/dtos/request/send-password-change-verification-email.request-dto';
+import { UpdatePasswordRequestDto } from '@features/user/dtos/request/update-password.request-dto';
 import { UserResponseDto } from '@features/user/dtos/response/user.response-dto';
-import type { UserMapper } from '@features/user/mappers/user.mapper';
+import { UserMapper } from '@features/user/mappers/user.mapper';
 import { FindOneUserQuery } from '@features/user/queries/find-one-user/find-one-user.query';
-import type { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
+import { FindOneUserQueryHandler } from '@features/user/queries/find-one-user/find-one-user.query-handler';
 import { FindUsersQuery } from '@features/user/queries/find-users/find-users.query';
 import { ApiInternalServerErrorBuilder } from '@libs/api/decorators/api-internal-server-error-builder.decorator';
 import { User } from '@libs/api/decorators/user.decorator';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 import { ParseEmailPipe } from '@libs/api/pipes/parse-email.pipe';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
 import { GuardType } from '@libs/guards/types/guard.constant';
 import { SetPagination } from '@libs/interceptors/pagination/decorators/pagination-interceptor.decorator';
-import type { HandlerReturnType, Paginated } from '@libs/types/type';
+import { HandlerReturnType, Paginated } from '@libs/types/type';
 import {
   Body,
   Controller,
@@ -40,7 +40,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import type { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiExcludeEndpoint, ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { FormDataRequest } from 'nestjs-form-data';
 

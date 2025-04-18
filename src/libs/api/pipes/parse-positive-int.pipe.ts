@@ -1,10 +1,10 @@
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import {
-  type ArgumentMetadata,
+  ArgumentMetadata,
   Injectable,
   Optional,
-  type PipeTransform,
+  PipeTransform,
 } from '@nestjs/common';
 
 interface Options {

@@ -1,4 +1,4 @@
-import { type ValidationOptions, registerDecorator } from 'class-validator';
+import { ValidationOptions, registerDecorator } from 'class-validator';
 
 export function MinForBigInt(
   min: number,

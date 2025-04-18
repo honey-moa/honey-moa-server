@@ -1,4 +1,4 @@
-import type { BlogController } from '@features/blog/controllers/blog.controller';
+import { BlogController } from '@features/blog/controllers/blog.controller';
 import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { HttpStatus, applyDecorators } from '@nestjs/common';
 import {
@@ -21,10 +21,7 @@ import { BLOG_ERROR_CODE } from '@libs/exceptions/types/errors/blog/blog-error-c
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { CustomValidationError } from '@libs/types/custom-validation-errors.type';
-import type {
-  ApiOperationOptionsWithSummary,
-  ApiOperator,
-} from '@libs/types/type';
+import { ApiOperationOptionsWithSummary, ApiOperator } from '@libs/types/type';
 
 export const ApiBlog: ApiOperator<keyof BlogController> = {
   Create: (

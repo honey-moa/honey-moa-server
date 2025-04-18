@@ -1,12 +1,12 @@
 import { BlogPostTagEntity } from '@features/blog-post/blog-post-tag/domain/blog-post-tag.entity';
-import type { BlogPostTagRepositoryPort } from '@features/blog-post/blog-post-tag/repositories/blog-post-tag.repository-port';
+import { BlogPostTagRepositoryPort } from '@features/blog-post/blog-post-tag/repositories/blog-post-tag.repository-port';
 import { BLOG_POST_TAG_REPOSITORY_DI_TOKEN } from '@features/blog-post/blog-post-tag/tokens/di.token';
 import { BlogPostUpdatedDomainEvent } from '@features/blog-post/domain/events/blog-post-updated.domain-event';
 import { CreateNewTagsCommand } from '@features/tag/commands/create-new-tags/create-new-tags.command';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { isNil } from '@libs/utils/util';
 import { Inject, Injectable } from '@nestjs/common';
-import type { CommandBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()

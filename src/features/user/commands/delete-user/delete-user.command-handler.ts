@@ -1,5 +1,5 @@
 import { DeleteUserCommand } from '@features/user/commands/delete-user/delete-user.command';
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
@@ -7,7 +7,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(DeleteUserCommand)
 export class DeleteUserCommandHandler

@@ -1,13 +1,13 @@
-import type { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
-import type { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper';
-import type { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
-import type { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
-import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { TransactionHost } from '@nestjs-cls/transactional';
-import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { AttachmentEntity } from '@features/attachment/domain/attachment.entity';
+import { AttachmentMapper } from '@features/attachment/mappers/attachment.mapper';
+import { AttachmentRepositoryPort } from '@features/attachment/repositories/attachment.repository-port';
+import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
-import type { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AttachmentRepository implements AttachmentRepositoryPort {

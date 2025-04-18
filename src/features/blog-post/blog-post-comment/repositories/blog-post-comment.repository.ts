@@ -1,10 +1,10 @@
-import type { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
-import type { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
-import type { BlogPostCommentRepositoryPort } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository-port';
-import type { PrismaService } from '@libs/core/prisma/services/prisma.service';
-import type { AggregateID } from '@libs/ddd/entity.base';
-import type { TransactionHost } from '@nestjs-cls/transactional';
-import type { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { BlogPostCommentEntity } from '@features/blog-post/blog-post-comment/domain/blog-post-comment.entity';
+import { BlogPostCommentMapper } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
+import { BlogPostCommentRepositoryPort } from '@features/blog-post/blog-post-comment/repositories/blog-post-comment.repository-port';
+import { PrismaService } from '@libs/core/prisma/services/prisma.service';
+import { AggregateID } from '@libs/ddd/entity.base';
+import { TransactionHost } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

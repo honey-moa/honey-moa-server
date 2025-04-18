@@ -1,5 +1,5 @@
-import type { UserVerifyTokenTypeUnion } from '@features/user/types/user.type';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { UserVerifyTokenTypeUnion } from '@features/user/types/user.type';
+import { AggregateID } from '@libs/ddd/entity.base';
 
 export interface UserVerifyTokenProps {
   userId: AggregateID;

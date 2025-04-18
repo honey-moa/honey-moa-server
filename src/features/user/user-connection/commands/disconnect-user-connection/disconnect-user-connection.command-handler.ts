@@ -1,7 +1,7 @@
-import type { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
+import { UserRepositoryPort } from '@features/user/repositories/user.repository-port';
 import { USER_REPOSITORY_DI_TOKEN } from '@features/user/tokens/di.token';
 import { DisconnectUserConnectionCommand } from '@features/user/user-connection/commands/disconnect-user-connection/disconnect-user-connection.command';
-import type { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
+import { UserConnectionRepositoryPort } from '@features/user/user-connection/repositories/user-connection.repository-port';
 import { USER_CONNECTION_REPOSITORY_DI_TOKEN } from '@features/user/user-connection/tokens/di.token';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
@@ -11,7 +11,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(DisconnectUserConnectionCommand)
 export class DisconnectUserConnectionCommandHandler

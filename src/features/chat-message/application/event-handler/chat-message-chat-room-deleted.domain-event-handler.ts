@@ -1,4 +1,4 @@
-import type { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
+import { ChatMessageRepositoryPort } from '@features/chat-message/repositories/chat-message.repository-port';
 import { CHAT_MESSAGE_REPOSITORY_DI_TOKEN } from '@features/chat-message/tokens/di.token';
 import { ChatRoomDeletedDomainEvent } from '@features/chat-room/domain/events/chat-room-deleted.domain-event';
 import { isNil } from '@libs/utils/util';

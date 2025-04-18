@@ -1,9 +1,9 @@
 import { ChatRoomEntity } from '@features/chat-room/domain/chat-room.entity';
-import type { ChatRoomProps } from '@features/chat-room/domain/chat-room.entity-interface';
+import { ChatRoomProps } from '@features/chat-room/domain/chat-room.entity-interface';
 import { ChatRoomResponseDto } from '@features/chat-room/dtos/response/chat-room.response-dto';
 import { baseSchema } from '@libs/db/base.schema';
-import type { CreateEntityProps } from '@libs/ddd/entity.base';
-import type { Mapper } from '@libs/ddd/mapper.interface';
+import { CreateEntityProps } from '@libs/ddd/entity.base';
+import { Mapper } from '@libs/ddd/mapper.interface';
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 

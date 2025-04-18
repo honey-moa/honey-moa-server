@@ -1,11 +1,11 @@
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { GUARD_TYPE_TOKEN, GuardType } from '@libs/guards/types/guard.constant';
-import type { GuardTypeUnion } from '@libs/guards/types/guard.type';
+import { GuardTypeUnion } from '@libs/guards/types/guard.type';
 import { isNil } from '@libs/utils/util';
-import { type ExecutionContext, createParamDecorator } from '@nestjs/common';
+import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import type { Request } from 'express';
+import { Request } from 'express';
 
 export const User = createParamDecorator(
   (data: keyof Express.User | undefined, ctx: ExecutionContext) => {

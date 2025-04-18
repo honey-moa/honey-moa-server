@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { RequestContextService } from '@libs/application/context/app-request.context';
-import type { AggregateID } from '@libs/ddd/entity.base';
+import { AggregateID } from '@libs/ddd/entity.base';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';

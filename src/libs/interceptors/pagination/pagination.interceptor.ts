@@ -1,19 +1,19 @@
-import type { OffsetPaginationRequestQueryDto } from '@libs/api/dtos/request/offset-pagination.request-query-dto';
-import type { BaseModel } from '@libs/db/base.schema';
-import type { PaginationResponseBuilder } from '@libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
+import { OffsetPaginationRequestQueryDto } from '@libs/api/dtos/request/offset-pagination.request-query-dto';
+import { BaseModel } from '@libs/db/base.schema';
+import { PaginationResponseBuilder } from '@libs/interceptors/pagination/builders/pagination-interceptor-response.builder';
 import { SET_PAGINATION } from '@libs/interceptors/pagination/types/pagination-interceptor.constant';
 import {
-  type CallHandler,
-  type ExecutionContext,
+  CallHandler,
+  ExecutionContext,
   Injectable,
-  type NestInterceptor,
+  NestInterceptor,
 } from '@nestjs/common';
-import type { Reflector } from '@nestjs/core';
+import { Reflector } from '@nestjs/core';
 
-import type { PaginationInterceptorArgs } from '@libs/interceptors/pagination/types/pagination-interceptor.type';
+import { PaginationInterceptorArgs } from '@libs/interceptors/pagination/types/pagination-interceptor.type';
 import { isNil } from '@libs/utils/util';
 
-import type { Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()

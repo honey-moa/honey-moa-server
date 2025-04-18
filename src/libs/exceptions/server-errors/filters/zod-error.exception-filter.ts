@@ -1,16 +1,16 @@
 import {
-  type ArgumentsHost,
+  ArgumentsHost,
   Catch,
-  type ExceptionFilter,
+  ExceptionFilter,
   HttpStatus,
   Inject,
-  type Logger,
+  Logger,
 } from '@nestjs/common';
 
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import type { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
+import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import type { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ZodError } from 'zod';
 
