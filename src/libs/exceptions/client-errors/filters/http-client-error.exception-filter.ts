@@ -4,11 +4,7 @@ import { HttpForbiddenException } from '@libs/exceptions/client-errors/exception
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
-import {
-  type ArgumentsHost,
-  Catch,
-  type ExceptionFilter,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 
 import { HttpUnprocessableEntityException } from '@libs/exceptions/client-errors/exceptions/http-unprocessable-entity.exception';
 import { Response } from 'express';

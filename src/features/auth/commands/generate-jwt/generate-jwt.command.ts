@@ -1,4 +1,4 @@
-import { Command, type CommandProps } from '@libs/ddd/command.base';
+import { Command, CommandProps } from '@libs/ddd/command.base';
 import { ICommand } from '@nestjs/cqrs';
 
 export class GenerateJwtCommand extends Command implements ICommand {

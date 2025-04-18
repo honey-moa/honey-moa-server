@@ -11,7 +11,7 @@ import { isNil } from '@libs/utils/util';
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Inject } from '@nestjs/common';
-import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { ChatMessageMapper } from '@src/features/chat-message/mappers/chat-message.mapper';
 import { FindChatMessagesQuery } from '@src/features/chat-message/queries/find-chat-messages/find-chat-messages.query';
 import { PrismaService } from '@src/libs/core/prisma/services/prisma.service';

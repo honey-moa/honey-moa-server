@@ -2,7 +2,7 @@ import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { BlogProps } from '@features/blog/domain/blog.entity-interface';
 import {
   BlogResponseDto,
-  type CreateBlogResponseDtoProps,
+  CreateBlogResponseDtoProps,
 } from '@features/blog/dtos/response/blog.response-dto';
 import { HydratedUserResponseDto } from '@features/user/dtos/response/hydrated-user.response-dto';
 import { baseSchema } from '@libs/db/base.schema';

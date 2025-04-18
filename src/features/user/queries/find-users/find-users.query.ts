@@ -1,4 +1,4 @@
-import { type PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
+import { PaginatedParams, PaginatedQueryBase } from '@libs/ddd/query.base';
 import { IQuery } from '@nestjs/cqrs';
 
 export class FindUsersQuery extends PaginatedQueryBase implements IQuery {

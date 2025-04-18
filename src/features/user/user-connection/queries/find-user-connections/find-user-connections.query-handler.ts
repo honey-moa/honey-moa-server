@@ -8,7 +8,7 @@ import { AggregateID } from '@libs/ddd/entity.base';
 import { Paginated } from '@libs/types/type';
 import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
-import { type IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 @QueryHandler(FindUserConnectionsQuery)
 export class FindUserConnectionsQueryHandler

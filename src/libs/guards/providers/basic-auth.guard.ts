@@ -1,10 +1,6 @@
 import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/exceptions/http-unauthorized.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import {
-  type CanActivate,
-  type ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 
 @Injectable()

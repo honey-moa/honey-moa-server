@@ -1,9 +1,4 @@
-import {
-  Global,
-  Inject,
-  Module,
-  type OnApplicationBootstrap,
-} from '@nestjs/common';
+import { Global, Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import * as Joi from 'joi';

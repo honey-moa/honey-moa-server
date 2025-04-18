@@ -3,9 +3,9 @@ import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   CopyObjectCommand,
   DeleteObjectsCommand,
-  type ObjectIdentifier,
+  ObjectIdentifier,
   PutObjectCommand,
-  type S3Client,
+  S3Client,
   S3ServiceException,
 } from '@aws-sdk/client-s3';
 import { ENV_KEY } from '@libs/core/app-config/constants/app-config.constant';

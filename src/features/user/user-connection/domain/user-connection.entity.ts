@@ -5,7 +5,7 @@ import {
 } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
-import { type AggregateID, Entity } from '@libs/ddd/entity.base';
+import { AggregateID, Entity } from '@libs/ddd/entity.base';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';

@@ -1,8 +1,4 @@
-import {
-  type ArgumentsHost,
-  Catch,
-  type ExceptionFilter,
-} from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
 
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';

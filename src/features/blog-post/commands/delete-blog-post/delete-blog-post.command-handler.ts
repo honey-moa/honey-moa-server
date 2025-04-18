@@ -11,7 +11,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(DeleteBlogPostCommand)
 export class DeleteBlogPostCommandHandler

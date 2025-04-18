@@ -4,7 +4,7 @@ import { TagRepositoryPort } from '@features/tag/repositories/tag.repository-por
 import { TAG_REPOSITORY_DI_TOKEN } from '@features/tag/tokens/di.token';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateNewTagsCommand)
 export class CreateNewTagsCommandHandler

@@ -15,7 +15,7 @@ import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-c
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 @CommandHandler(UpdateUserPasswordCommand)
 export class UpdateUserPasswordCommandHandler

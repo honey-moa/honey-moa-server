@@ -12,7 +12,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateUserConnectionCommand)
 export class CreateUserConnectionCommandHandler

@@ -15,17 +15,17 @@ import { CustomValidationPipe } from '@libs/pipes/custom-validation.pipe';
 import { isNil } from '@libs/utils/util';
 import {
   Inject,
-  type Logger,
+  Logger,
   UseFilters,
   UsePipes,
-  type ValidationPipeOptions,
+  ValidationPipeOptions,
 } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import {
   ConnectedSocket,
   MessageBody,
-  type OnGatewayConnection,
-  type OnGatewayDisconnect,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,

@@ -4,7 +4,7 @@ import { AttachmentRepositoryPort } from '@features/attachment/repositories/atta
 import { ATTACHMENT_REPOSITORY_DI_TOKEN } from '@features/attachment/tokens/di.token';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(CreateAttachmentsCommand)
 export class CreateAttachmentsCommandHandler

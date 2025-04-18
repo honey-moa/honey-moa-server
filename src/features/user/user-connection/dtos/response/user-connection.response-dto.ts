@@ -3,7 +3,7 @@ import { UserConnectionStatus } from '@features/user/user-connection/types/user.
 import { UserConnectionStatusUnion } from '@features/user/user-connection/types/user.type';
 import {
   BaseResponseDto,
-  type CreateBaseResponseDtoProps,
+  CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';

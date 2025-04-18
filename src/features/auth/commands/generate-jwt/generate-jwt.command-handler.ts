@@ -10,7 +10,7 @@ import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/except
 import { AUTH_ERROR_CODE } from '@libs/exceptions/types/errors/auth/auth-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(GenerateJwtCommand)
 export class GenerateJwtCommandHandler

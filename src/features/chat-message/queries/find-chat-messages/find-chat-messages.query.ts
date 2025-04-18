@@ -1,9 +1,6 @@
 import { AggregateID } from '@libs/ddd/entity.base';
 import { IQuery } from '@nestjs/cqrs';
-import {
-  type PaginatedParams,
-  PaginatedQueryBase,
-} from '@src/libs/ddd/query.base';
+import { PaginatedParams, PaginatedQueryBase } from '@src/libs/ddd/query.base';
 
 export class FindChatMessagesQuery
   extends PaginatedQueryBase

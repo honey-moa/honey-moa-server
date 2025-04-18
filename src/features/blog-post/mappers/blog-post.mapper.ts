@@ -1,20 +1,20 @@
 import {
-  type BlogPostAttachmentMapper,
+  BlogPostAttachmentMapper,
   blogPostAttachmentSchema,
 } from '@features/blog-post/blog-post-attachment/mappers/blog-post-attachment.mapper';
 import {
-  type BlogPostCommentMapper,
+  BlogPostCommentMapper,
   blogPostCommentSchema,
 } from '@features/blog-post/blog-post-comment/mappers/blog-post-comment.mapper';
 import {
-  type BlogPostTagMapper,
+  BlogPostTagMapper,
   blogPostTagSchema,
 } from '@features/blog-post/blog-post-tag/mappers/blog-post-tag.mapper';
 import { BlogPostEntity } from '@features/blog-post/domain/blog-post.entity';
 import { BlogPostProps } from '@features/blog-post/domain/blog-post.entity-interface';
 import {
   BlogPostResponseDto,
-  type CreateBlogPostResponseDtoProps,
+  CreateBlogPostResponseDtoProps,
 } from '@features/blog-post/dtos/response/blog-post.response-dto';
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import { baseSchema } from '@libs/db/base.schema';

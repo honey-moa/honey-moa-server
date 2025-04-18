@@ -8,7 +8,7 @@ import { HttpUnauthorizedException } from '@libs/exceptions/client-errors/except
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(GenerateAccessTokenCommand)
 export class GenerateAccessTokenCommandHandler

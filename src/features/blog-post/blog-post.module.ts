@@ -31,7 +31,7 @@ import { BlogPostRepository } from '@features/blog-post/repositories/blog-post.r
 import { BLOG_POST_REPOSITORY_DI_TOKEN } from '@features/blog-post/tokens/di.token';
 import { BlogModule } from '@features/blog/blog.module';
 import { UserModule } from '@features/user/user.module';
-import { Module, type Provider } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 
 const controllers = [BlogPostController, BlogPostCommentController];
 

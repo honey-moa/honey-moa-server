@@ -11,7 +11,7 @@ import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions
 import { USER_ERROR_CODE } from '@libs/exceptions/types/errors/user/user-error-code.constant';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 
 @CommandHandler(CreateUserCommand)

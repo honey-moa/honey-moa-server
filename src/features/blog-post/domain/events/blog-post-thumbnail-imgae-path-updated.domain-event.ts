@@ -1,7 +1,4 @@
-import {
-  DomainEvent,
-  type DomainEventProps,
-} from '@libs/ddd/base-domain.event';
+import { DomainEvent, DomainEventProps } from '@libs/ddd/base-domain.event';
 
 export class BlogPostThumbnailImagePathUpdatedDomainEvent extends DomainEvent {
   readonly oldThumbnailImagePath: string | null;

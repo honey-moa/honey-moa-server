@@ -7,7 +7,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(PatchUpdateUserCommand)
 export class PatchUpdateUserCommandHandler

@@ -1,4 +1,4 @@
-import { Command, type CommandProps } from '@libs/ddd/command.base';
+import { Command, CommandProps } from '@libs/ddd/command.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { FileProps } from '@libs/types/type';
 import { ICommand } from '@nestjs/cqrs';

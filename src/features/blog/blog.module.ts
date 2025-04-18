@@ -8,7 +8,7 @@ import { FindOneBlogByUserIdQueryHandler } from '@features/blog/queries/find-one
 import { BlogRepository } from '@features/blog/repositories/blog.repository';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { UserModule } from '@features/user/user.module';
-import { Module, type Provider } from '@nestjs/common';
+import { Module, Provider } from '@nestjs/common';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
 const controllers = [BlogController];

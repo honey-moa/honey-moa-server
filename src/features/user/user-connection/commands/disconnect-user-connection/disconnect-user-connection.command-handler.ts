@@ -11,7 +11,7 @@ import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-c
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
-import { CommandHandler, type ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(DisconnectUserConnectionCommand)
 export class DisconnectUserConnectionCommandHandler

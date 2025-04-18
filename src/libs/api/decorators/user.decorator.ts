@@ -3,7 +3,7 @@ import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-e
 import { GUARD_TYPE_TOKEN, GuardType } from '@libs/guards/types/guard.constant';
 import { GuardTypeUnion } from '@libs/guards/types/guard.type';
 import { isNil } from '@libs/utils/util';
-import { type ExecutionContext, createParamDecorator } from '@nestjs/common';
+import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 

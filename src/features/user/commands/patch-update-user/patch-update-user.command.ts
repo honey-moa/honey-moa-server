@@ -1,5 +1,5 @@
 import { UserMbtiUnion } from '@features/user/types/user.type';
-import { Command, type CommandProps } from '@libs/ddd/command.base';
+import { Command, CommandProps } from '@libs/ddd/command.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ICommand } from '@nestjs/cqrs';
 

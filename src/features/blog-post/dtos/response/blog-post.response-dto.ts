@@ -4,7 +4,7 @@ import { HydratedBlogResponseDto } from '@features/blog/dtos/response/hydrated-b
 import { HydratedTagResponseDto } from '@features/tag/dtos/response/hydrated-tag.response-dto';
 import {
   BaseResponseDto,
-  type CreateBaseResponseDtoProps,
+  CreateBaseResponseDtoProps,
 } from '@libs/api/dtos/response/base.response-dto';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';

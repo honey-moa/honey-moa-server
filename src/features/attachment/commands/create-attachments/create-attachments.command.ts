@@ -1,5 +1,5 @@
 import { AttachmentUploadTypeUnion } from '@features/attachment/types/attachment.type';
-import { Command, type CommandProps } from '@libs/ddd/command.base';
+import { Command, CommandProps } from '@libs/ddd/command.base';
 import { AggregateID } from '@libs/ddd/entity.base';
 import { ICommand } from '@nestjs/cqrs';
 

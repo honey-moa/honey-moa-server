@@ -9,7 +9,7 @@ import {
   HasMimeType,
   IsFiles,
   MaxFileSize,
-  type MemoryStoredFile,
+  MemoryStoredFile,
 } from 'nestjs-form-data';
 
 export class CreateAttachmentRequestBodyDto {

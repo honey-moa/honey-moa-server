@@ -6,7 +6,7 @@ import { chatRoomSchema } from '@features/chat-room/mappers/chat-room.mapper';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { UserConnectionProps } from '@features/user/user-connection/domain/user-connection.entity-interface';
 import {
-  type CreateUserConnectionResponseDtoProps,
+  CreateUserConnectionResponseDtoProps,
   UserConnectionResponseDto,
 } from '@features/user/user-connection/dtos/response/user-connection.response-dto';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';

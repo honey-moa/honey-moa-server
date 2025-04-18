@@ -2,10 +2,10 @@ import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptio
 import { HttpExceptionService } from '@libs/exceptions/services/http-exception.service';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import {
-  type ArgumentsHost,
+  ArgumentsHost,
   BadRequestException,
   Catch,
-  type ExceptionFilter,
+  ExceptionFilter,
   HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';

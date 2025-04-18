@@ -1,10 +1,10 @@
 import {
-  type ArgumentsHost,
+  ArgumentsHost,
   Catch,
-  type ExceptionFilter,
+  ExceptionFilter,
   HttpStatus,
   Inject,
-  type Logger,
+  Logger,
 } from '@nestjs/common';
 
 import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';

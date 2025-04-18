@@ -4,8 +4,8 @@ import { APP_CONFIG_SERVICE_DI_TOKEN } from '@libs/core/app-config/tokens/app-co
 import { Key } from '@libs/core/app-config/types/app-config.type';
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  type WinstonModuleOptions,
-  type WinstonModuleOptionsFactory,
+  WinstonModuleOptions,
+  WinstonModuleOptionsFactory,
   utilities,
 } from 'nest-winston';
 import winston from 'winston';

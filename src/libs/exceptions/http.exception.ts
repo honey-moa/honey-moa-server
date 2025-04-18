@@ -3,7 +3,7 @@ import { ERROR_CODE } from '@libs/exceptions/types/errors/error-code.constant';
 import { ERROR_MESSAGE } from '@libs/exceptions/types/errors/error-message.constant';
 import {
   HttpException as NestHttpException,
-  type Type,
+  Type,
   applyDecorators,
 } from '@nestjs/common';
 import { ErrorHttpStatusCode } from '@nestjs/common/utils/http-error-by-code.util';
