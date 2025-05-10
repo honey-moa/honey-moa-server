@@ -45,7 +45,7 @@ export class ParsePositiveBigIntPipe
     return (
       ['string', 'number'].includes(typeof value) &&
       /^-?\d+$/.test(value) &&
-      Number.isFinite(value as any) &&
+      isFinite(value as any) &&
       Number(value) >= 1
     );
   }
