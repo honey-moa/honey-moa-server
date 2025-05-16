@@ -25,7 +25,8 @@
       "@config/*": ["src/configs/*"],
       "@libs/*": ["src/libs/*"],
       "@src/*": ["src/*"],
-      "@tests/*": ["tests/*"]
+      "@tests/*": ["test/*"]
     }
-  }
+  },
+  "include": ["src/**/*", "test/**/*"]
 }
