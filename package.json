@@ -36,7 +36,6 @@
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "^3.726.1",
     "@aws-sdk/client-s3": "^3.735.0",
-    "@faker-js/faker": "^9.8.0",
     "@nest-middlewares/helmet": "^10.0.0",
     "@nest-middlewares/method-override": "^10.0.0",
     "@nestjs-cls/transactional": "^2.4.2",
@@ -80,6 +79,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@faker-js/faker": "^9.8.0",
     "@golevelup/ts-jest": "^0.7.0",
     "@mermaid-js/mermaid-cli": "^11.4.2",
     "@nestjs/cli": "^10.0.0",
