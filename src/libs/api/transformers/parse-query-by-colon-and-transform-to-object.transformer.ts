@@ -1,6 +1,6 @@
 import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { SingleProperty } from '@libs/types/type';
+import { Exclusive } from '@libs/types/type';
 import { applyDecorators } from '@nestjs/common';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -26,10 +26,13 @@ type ValueType = string | number | boolean | bigint | Date;
  */
 export function ParseQueryByColonAndTransformToObject(
   option: {
-    [key: string]: SingleProperty<{
-      enum?: object;
-      type?: AllowType;
-    }> & {
+    [key: string]: Exclusive<
+      {
+        enum?: object;
+        type?: AllowType;
+      },
+      'enum' | 'type'
+    > & {
       required?: boolean;
     };
   } = {},

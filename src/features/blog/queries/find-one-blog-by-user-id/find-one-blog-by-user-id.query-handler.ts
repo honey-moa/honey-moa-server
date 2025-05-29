@@ -1,5 +1,6 @@
 import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { FindOneBlogByUserIdQuery } from '@features/blog/queries/find-one-blog-by-user-id/find-one-blog-by-user-id.query';
+import { BlogReadModel } from '@features/blog/read-models/blog.read-model';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { PrismaService } from '@libs/core/prisma/services/prisma.service';
@@ -53,7 +54,7 @@ export class FindOneBlogByUserIdQueryHandler
       });
     }
 
-    return {
+    return new BlogReadModel({
       id: blog.id,
       name: blog.name,
       description: blog.description,
@@ -80,6 +81,6 @@ export class FindOneBlogByUserIdQueryHandler
       ],
       createdAt: blog.createdAt,
       updatedAt: blog.updatedAt,
-    };
+    });
   }
 }
