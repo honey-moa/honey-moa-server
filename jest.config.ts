@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
@@ -9,7 +8,7 @@ export default {
     '^@features/(.*)$': '<rootDir>/features/$1',
     '^@config/(.*)$': '<rootDir>/configs/$1',
     '^@libs/(.*)$': '<rootDir>/libs/$1',
-    '^@tests/(.*)$': '<rootDir>/test/$1',
+    '^@tests/(.*)$': '<rootDir>/../test/$1',
   },
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
@@ -19,4 +18,7 @@ export default {
   },
   globalSetup: '<rootDir>/../test/global-setup.ts',
   globalTeardown: '<rootDir>/../test/global-teardown.ts',
+  setupFilesAfterEnv: ['<rootDir>/../test/setup-tests.ts'],
+  preset: 'ts-jest',
+  maxWorkers: 1,
 };
