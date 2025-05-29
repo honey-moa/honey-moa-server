@@ -1,4 +1,5 @@
 import { UserEntity } from '@features/user/domain/user.entity';
+import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import {
   CreateUserConnectionProps,
   UserConnectionProps,
@@ -57,6 +58,14 @@ export class UserConnectionEntity extends Entity<UserConnectionProps> {
 
   get requestedId(): AggregateID {
     return this.props.requestedId;
+  }
+
+  get requesterUser(): HydratedUserEntityProps | undefined {
+    return this.props.requesterUser;
+  }
+
+  get requestedUser(): HydratedUserEntityProps | undefined {
+    return this.props.requestedUser;
   }
 
   get status(): UserConnectionStatusUnion {

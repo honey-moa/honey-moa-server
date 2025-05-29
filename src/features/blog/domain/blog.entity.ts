@@ -4,16 +4,20 @@ import {
   BlogProps,
   CreateBlogProps,
   HydratedBlogEntityProps,
+  UpdateBlogProps,
 } from '@features/blog/domain/blog.entity-interface';
+import {
+  BlogValidationError,
+  NotABlogMemberError,
+} from '@features/blog/domain/blog.errors';
 import { BlogBackgroundImagePathUpdatedDomainEvent } from '@features/blog/domain/events/blog-background-image-updated.domain-event';
 import { BlogCreatedDomainEvent } from '@features/blog/domain/events/blog-created.domain-event';
 import { BlogDeletedDomainEvent } from '@features/blog/domain/events/blog-deleted.domain-event';
+import { BlogUpdatedDomainEvent } from '@features/blog/domain/events/blog-updated.domain-event';
 import { UserEntity } from '@features/user/domain/user.entity';
 import { HydratedUserEntityProps } from '@features/user/domain/user.entity-interface';
 import { AggregateRoot } from '@libs/ddd/aggregate-root.base';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors/exceptions/http-internal-server-error.exception';
-import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';
 import { FileProps } from '@libs/types/type';
 import { isNil } from '@libs/utils/util';
@@ -28,6 +32,21 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     'image/png',
     'image/jpeg',
   ];
+
+  static readonly BLOG_D_DAY_START_DATE_LENGTH = {
+    MIN: 1,
+    MAX: 20,
+  } as const;
+
+  static readonly BLOG_DESCRIPTION_LENGTH = {
+    MIN: 1,
+    MAX: 255,
+  } as const;
+
+  static readonly BLOG_NAME_LENGTH = {
+    MIN: 1,
+    MAX: 30,
+  } as const;
 
   static create(create: CreateBlogProps): BlogEntity {
     const id = getTsid().toBigInt();
@@ -111,32 +130,49 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     return this.memberIds.includes(userId);
   }
 
-  editName(name: string) {
-    if (!Guard.lengthIsBetween(name, 1, 30)) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: 'name must be between 1 and 30 characters',
-      });
+  update(update: UpdateBlogProps, userId: AggregateID) {
+    const updatedProps: Partial<BlogProps> = {};
+
+    if (!this.isMember(userId)) {
+      throw new NotABlogMemberError();
     }
 
-    this.props.name = name;
-  }
-
-  editDescription(description: string) {
-    if (!Guard.lengthIsBetween(description, 1, 255)) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: 'description must be between 1 and 255 characters',
-      });
+    if (!isNil(update.name)) {
+      this.props.name = update.name;
+      updatedProps.name = update.name;
     }
 
-    this.props.description = description;
+    if (!isNil(update.description)) {
+      this.props.description = update.description;
+      updatedProps.description = update.description;
+    }
+
+    if (!isNil(update.dDayStartDate)) {
+      this.props.dDayStartDate = update.dDayStartDate;
+      updatedProps.dDayStartDate = update.dDayStartDate;
+    }
+
+    if (!Guard.isEmpty(updatedProps)) {
+      this.validate();
+
+      this.addEvent(
+        new BlogUpdatedDomainEvent({
+          aggregateId: this.id,
+          ...updatedProps,
+          userId,
+        }),
+      );
+    }
   }
 
   updateBackgroundImage(
     backgroundImageFile: FileProps | null,
     userId: AggregateID,
   ) {
+    if (!this.isMember(userId)) {
+      throw new NotABlogMemberError();
+    }
+
     if (isNil(backgroundImageFile)) {
       if (backgroundImageFile === this.props.backgroundImagePath) {
         return;
@@ -176,17 +212,6 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
     this.props.backgroundImagePath = backgroundImagePath;
   }
 
-  editDDayStartDate(dDayStartDate: string) {
-    if (!Guard.lengthIsBetween(dDayStartDate, 1, 20)) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: 'dDayStartDate must be between 1 and 20 characters',
-      });
-    }
-
-    this.props.dDayStartDate = dDayStartDate;
-  }
-
   hydrateMember(user: UserEntity) {
     if (!this.props.members) this.props.members = [];
 
@@ -202,10 +227,43 @@ export class BlogEntity extends AggregateRoot<BlogProps> {
       !Guard.isPositiveBigInt(this.props.createdBy) ||
       !Guard.isPositiveBigInt(this.props.connectionId)
     ) {
-      throw new HttpInternalServerErrorException({
-        code: COMMON_ERROR_CODE.SERVER_ERROR,
-        ctx: 'createdBy 혹은 connectionId가 PositiveInt가 아님',
-      });
+      throw new BlogValidationError(
+        'createdBy 혹은 connectionId가 PositiveInt가 아님',
+      );
+    }
+
+    if (
+      !Guard.lengthIsBetween(
+        this.props.description,
+        BlogEntity.BLOG_DESCRIPTION_LENGTH.MIN,
+        BlogEntity.BLOG_DESCRIPTION_LENGTH.MAX,
+      )
+    ) {
+      throw new BlogValidationError(
+        'description must be between 1 and 255 characters',
+      );
+    }
+
+    if (
+      !Guard.lengthIsBetween(
+        this.props.name,
+        BlogEntity.BLOG_NAME_LENGTH.MIN,
+        BlogEntity.BLOG_NAME_LENGTH.MAX,
+      )
+    ) {
+      throw new BlogValidationError('name must be between 1 and 30 characters');
+    }
+
+    if (
+      !Guard.lengthIsBetween(
+        this.props.dDayStartDate,
+        BlogEntity.BLOG_D_DAY_START_DATE_LENGTH.MIN,
+        BlogEntity.BLOG_D_DAY_START_DATE_LENGTH.MAX,
+      )
+    ) {
+      throw new BlogValidationError(
+        'dDayStartDate must be between 1 and 20 characters',
+      );
     }
   }
 }

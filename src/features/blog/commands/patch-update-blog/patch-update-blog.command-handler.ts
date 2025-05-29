@@ -3,10 +3,8 @@ import { BlogEntity } from '@features/blog/domain/blog.entity';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { AggregateID } from '@libs/ddd/entity.base';
-import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
-import { USER_CONNECTION_ERROR_CODE } from '@libs/exceptions/types/errors/user-connection/user-connection-error-code.constant';
 import { isNil } from '@libs/utils/util';
 import { Transactional } from '@nestjs-cls/transactional';
 import { Inject } from '@nestjs/common';
@@ -40,23 +38,13 @@ export class PatchUpdateBlogCommandHandler
       });
     }
 
-    if (!blog.isMember(userId)) {
-      throw new HttpForbiddenException({
-        code: USER_CONNECTION_ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION,
-      });
-    }
+    const updateFields = {
+      ...(name && { name }),
+      ...(description && { description }),
+      ...(dDayStartDate && { dDayStartDate }),
+    };
 
-    if (!isNil(description)) {
-      blog.editDescription(description);
-    }
-
-    if (!isNil(dDayStartDate)) {
-      blog.editDDayStartDate(dDayStartDate);
-    }
-
-    if (!isNil(name)) {
-      blog.editName(name);
-    }
+    blog.update(updateFields, userId);
 
     if (backgroundImageFile !== undefined) {
       this.deleteBackgroundImage(blog, userId);

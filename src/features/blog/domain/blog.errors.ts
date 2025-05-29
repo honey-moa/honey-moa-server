@@ -12,3 +12,11 @@ export class BlogAlreadyExistsError extends DomainException {
 export class NotABlogMemberError extends DomainException {
   readonly code = ERROR_CODE.YOU_ARE_NOT_PART_OF_A_CONNECTION;
 }
+
+export class BlogValidationError extends DomainException {
+  readonly code = ERROR_CODE.BLOG_VALIDATION_ERROR;
+
+  constructor(message?: string) {
+    super(message ?? 'Blog validation error');
+  }
+}

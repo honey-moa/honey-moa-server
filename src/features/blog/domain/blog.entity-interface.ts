@@ -25,6 +25,11 @@ export interface CreateBlogProps {
   memberIds: AggregateID[];
 }
 
+export interface UpdateBlogProps
+  extends Partial<
+    Pick<CreateBlogProps, 'name' | 'description' | 'dDayStartDate'>
+  > {}
+
 export interface HydratedBlogEntityProps extends BaseEntityProps {
   name: string;
   members?: HydratedUserEntityProps[];

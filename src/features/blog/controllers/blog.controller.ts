@@ -4,7 +4,9 @@ import { PatchUpdateBlogCommand } from '@features/blog/commands/patch-update-blo
 import { ApiBlog } from '@features/blog/controllers/blog.swagger';
 import {
   BlogAlreadyExistsError,
+  BlogValidationError,
   CannotCreateBlogWithoutAcceptedConnectionError,
+  NotABlogMemberError,
 } from '@features/blog/domain/blog.errors';
 import { CreateBlogRequestBodyDto } from '@features/blog/dtos/request/create-blog.request-body-dto';
 import { PatchUpdateBlogRequestBodyDto } from '@features/blog/dtos/request/patch-update-blog.request-body-dto';
@@ -18,6 +20,7 @@ import { IdResponseDto } from '@libs/api/dtos/response/id.response-dto';
 import { NotEmptyObjectPipe } from '@libs/api/pipes/not-empty-object.pipe';
 import { ParsePositiveBigIntPipe } from '@libs/api/pipes/parse-positive-int.pipe';
 import { AggregateID } from '@libs/ddd/entity.base';
+import { HttpBadRequestException } from '@libs/exceptions/client-errors/exceptions/http-bad-request.exception';
 import { HttpConflictException } from '@libs/exceptions/client-errors/exceptions/http-conflict.exception';
 import { HttpForbiddenException } from '@libs/exceptions/client-errors/exceptions/http-forbidden.exception';
 import { SetGuardType } from '@libs/guards/decorators/set-guard-type.decorator';
@@ -148,6 +151,23 @@ export class BlogController {
           : undefined,
     });
 
-    await this.commandBus.execute(command);
+    try {
+      await this.commandBus.execute(command);
+    } catch (err) {
+      if (err instanceof NotABlogMemberError) {
+        throw new HttpForbiddenException({
+          code: err.code,
+        });
+      }
+
+      if (err instanceof BlogValidationError) {
+        throw new HttpBadRequestException({
+          code: err.code,
+          customMessage: err.message,
+        });
+      }
+
+      throw err;
+    }
   }
 }
