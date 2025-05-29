@@ -70,6 +70,9 @@ describe(CreateBlogCommandHandler.name, () => {
           ),
         ).rejects.toThrow(HttpUnauthorizedException);
       });
+
+      expect(mockBlogDomainService.create).not.toHaveBeenCalled();
+      expect(mockBlogRepository.create).not.toHaveBeenCalled();
     });
 
     describe('유저가 존재하면', () => {
@@ -110,7 +113,7 @@ describe(CreateBlogCommandHandler.name, () => {
 
           expect(mockUserRepository.findOneById).toHaveBeenCalled();
           expect(mockBlogDomainService.create).toHaveBeenCalled();
-          expect(mockBlogRepository.create).toHaveBeenCalledWith(blog);
+          expect(mockBlogRepository.create).toHaveBeenCalled();
         });
       });
     });

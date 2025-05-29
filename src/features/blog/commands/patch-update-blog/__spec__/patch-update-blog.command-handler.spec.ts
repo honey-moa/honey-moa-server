@@ -57,6 +57,8 @@ describe(PatchUpdateBlogCommandHandler.name, () => {
           ),
         ).rejects.toThrow(HttpNotFoundException);
       });
+
+      expect(mockBlogRepository.update).not.toHaveBeenCalled();
     });
 
     describe('블로그가 존재하면', () => {
@@ -80,6 +82,8 @@ describe(PatchUpdateBlogCommandHandler.name, () => {
               }),
             ),
           ).rejects.toBeInstanceOf(NotABlogMemberError);
+
+          expect(mockBlogRepository.update).not.toHaveBeenCalled();
         });
       });
 
@@ -129,6 +133,8 @@ describe(PatchUpdateBlogCommandHandler.name, () => {
               (domainEvent) => domainEvent instanceof BlogUpdatedDomainEvent,
             ),
           ).toBe(true);
+
+          expect(mockBlogRepository.update).toHaveBeenCalled();
         });
       });
     });
