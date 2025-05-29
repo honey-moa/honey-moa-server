@@ -29,6 +29,9 @@ const mockCleanTransactionConnection = jest
   .spyOn(RequestContextService, 'cleanTransactionConnection')
   .mockImplementation(() => {});
 
+/**
+ * @description RequestContextService를 호출하는 테스트에서 사용
+ */
 export const createMockRequestContextService = () => {
   return {
     getContext: mockRequestContext,
