@@ -5,19 +5,16 @@ import { BlogReadModel } from '@features/blog/read-models/blog.read-model';
 import { userFactory } from '@features/user/domain/__spec__/user.factory';
 import { userConnectionFactory } from '@features/user/user-connection/domain/__spec__/user-connection.factory';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
-import {} from '@libs/application/context/app-request.context';
 import { TestPrismaService } from '@libs/core/prisma/__spec__/services/test-prisma.service';
-import { TestPrismaModule } from '@libs/core/prisma/__spec__/test-prisma.module';
 import { generateEntityId } from '@libs/ddd/entity.base';
 import { HttpNotFoundException } from '@libs/exceptions/client-errors/exceptions/http-not-found.exception';
-import {
-  ClsPluginTransactional,
-  TransactionHost,
-} from '@nestjs-cls/transactional';
+import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { Test, TestingModule } from '@nestjs/testing';
-import { createMockRequestContextService } from '@tests/mock/utils/mock.util';
-import { ClsModule } from 'nestjs-cls';
+import {
+  createMockRequestContextService,
+  importClsModuleForTest,
+} from '@tests/mock/utils/mock.util';
 
 describe(FindOneBlogByUserIdQueryHandler.name, () => {
   let findOneBlogByUserIdQueryHandler: FindOneBlogByUserIdQueryHandler;
@@ -27,18 +24,7 @@ describe(FindOneBlogByUserIdQueryHandler.name, () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        ClsModule.forRoot({
-          plugins: [
-            new ClsPluginTransactional({
-              imports: [TestPrismaModule],
-              adapter: new TransactionalAdapterPrisma({
-                prismaInjectionToken: TestPrismaService,
-              }),
-            }),
-          ],
-        }),
-      ],
+      imports: [importClsModuleForTest()],
       providers: [FindOneBlogByUserIdQueryHandler],
     }).compile();
 

@@ -5,20 +5,17 @@ import { BlogRepository } from '@features/blog/repositories/blog.repository';
 import { BlogRepositoryPort } from '@features/blog/repositories/blog.repository-port';
 import { BLOG_REPOSITORY_DI_TOKEN } from '@features/blog/tokens/di.token';
 import { userFactory } from '@features/user/domain/__spec__/user.factory';
+import { UserEntity } from '@features/user/domain/user.entity';
 import { userConnectionFactory } from '@features/user/user-connection/domain/__spec__/user-connection.factory';
 import { UserConnectionEntity } from '@features/user/user-connection/domain/user-connection.entity';
 import { UserConnectionStatus } from '@features/user/user-connection/types/user.constant';
 import { TestPrismaService } from '@libs/core/prisma/__spec__/services/test-prisma.service';
-import { TestPrismaModule } from '@libs/core/prisma/__spec__/test-prisma.module';
-import {
-  ClsPluginTransactional,
-  TransactionHost,
-} from '@nestjs-cls/transactional';
+import { TransactionHost } from '@nestjs-cls/transactional';
 import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Test, TestingModule } from '@nestjs/testing';
 import { mockEventEmitter } from '@tests/mock/mock.infra';
-import { ClsModule } from 'nestjs-cls';
+import { importClsModuleForTest } from '@tests/mock/utils/mock.util';
 
 describe(BlogRepository.name, () => {
   let blogRepository: BlogRepositoryPort;
@@ -26,18 +23,7 @@ describe(BlogRepository.name, () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        ClsModule.forRoot({
-          plugins: [
-            new ClsPluginTransactional({
-              imports: [TestPrismaModule],
-              adapter: new TransactionalAdapterPrisma({
-                prismaInjectionToken: TestPrismaService,
-              }),
-            }),
-          ],
-        }),
-      ],
+      imports: [importClsModuleForTest()],
       providers: [
         BlogMapper,
         {
@@ -68,21 +54,30 @@ describe(BlogRepository.name, () => {
   });
 
   describe(BlogRepository.prototype.findOneById.name, () => {
+    let requesterUser: UserEntity;
+    let requestedUser: UserEntity;
+
+    let userConnection: UserConnectionEntity;
+
+    beforeEach(async () => {
+      [requesterUser, requestedUser] = await userFactory.buildListAndInsert(
+        prisma,
+        2,
+        {
+          isEmailVerified: true,
+        },
+      );
+
+      userConnection = await userConnectionFactory.buildAndInsert(prisma, {
+        status: UserConnectionStatus.ACCEPTED,
+        requestedUser: requestedUser.hydrateProps,
+        requesterUser: requesterUser.hydrateProps,
+      });
+    });
+
     describe('블로그를 조회하면', () => {
       describe('블로그가 존재하지 않으면', () => {
         it('undefined를 반환한다.', async () => {
-          const [requesterUser, requestedUser] =
-            await userFactory.buildListAndInsert(prisma, 2, {
-              isEmailVerified: true,
-            });
-          const userConnection = await userConnectionFactory.buildAndInsert(
-            prisma,
-            {
-              status: UserConnectionStatus.ACCEPTED,
-              requestedUser: requestedUser.hydrateProps,
-              requesterUser: requesterUser.hydrateProps,
-            },
-          );
           const blog = await blogFactory.buildAndInsert(prisma, {
             memberIds: [requesterUser.id, requestedUser.id],
             connectionId: userConnection.id,
@@ -98,18 +93,6 @@ describe(BlogRepository.name, () => {
 
       describe('블로그가 존재하면', () => {
         it(`${BlogEntity.name}를 반환한다.`, async () => {
-          const [requesterUser, requestedUser] =
-            await userFactory.buildListAndInsert(prisma, 2, {
-              isEmailVerified: true,
-            });
-          const userConnection = await userConnectionFactory.buildAndInsert(
-            prisma,
-            {
-              status: UserConnectionStatus.ACCEPTED,
-              requestedUser: requestedUser.hydrateProps,
-              requesterUser: requesterUser.hydrateProps,
-            },
-          );
           const blog = await blogFactory.buildAndInsert(prisma, {
             memberIds: [requesterUser.id, requestedUser.id],
             connectionId: userConnection.id,
@@ -130,6 +113,7 @@ describe(BlogRepository.name, () => {
               await userFactory.buildListAndInsert(prisma, 2, {
                 isEmailVerified: true,
               });
+
             const userConnection = await userConnectionFactory.buildAndInsert(
               prisma,
               {
@@ -138,6 +122,7 @@ describe(BlogRepository.name, () => {
                 requesterUser: requesterUser.hydrateProps,
               },
             );
+
             await blogFactory.buildAndInsert(prisma, {
               memberIds: [requesterUser.id, requestedUser.id],
               connectionId: userConnection.id,
@@ -167,6 +152,7 @@ describe(BlogRepository.name, () => {
               );
               userConnections.push(userConnection);
             }
+
             const blogs: BlogEntity[] = [];
             for (let i = 0; i < userConnections.length; i++) {
               const blog = await blogFactory.buildAndInsert(prisma, {

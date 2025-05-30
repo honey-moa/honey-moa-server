@@ -2,6 +2,12 @@ import {
   AppRequestContext,
   RequestContextService,
 } from '@libs/application/context/app-request.context';
+import { TestPrismaService } from '@libs/core/prisma/__spec__/services/test-prisma.service';
+import { TestPrismaModule } from '@libs/core/prisma/__spec__/test-prisma.module';
+import { ClsPluginTransactional } from '@nestjs-cls/transactional';
+import { TransactionalAdapterPrisma } from '@nestjs-cls/transactional-adapter-prisma';
+import { DynamicModule } from '@nestjs/common';
+import { ClsModule } from 'nestjs-cls';
 
 const mockRequestContext = jest
   .spyOn(RequestContextService, 'getContext')
@@ -42,3 +48,15 @@ export const createMockRequestContextService = () => {
     cleanTransactionConnection: mockCleanTransactionConnection,
   };
 };
+
+export const importClsModuleForTest = (): DynamicModule =>
+  ClsModule.forRoot({
+    plugins: [
+      new ClsPluginTransactional({
+        imports: [TestPrismaModule],
+        adapter: new TransactionalAdapterPrisma({
+          prismaInjectionToken: TestPrismaService,
+        }),
+      }),
+    ],
+  });
