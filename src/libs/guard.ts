@@ -43,7 +43,7 @@ export class Guard {
     min: number,
     max?: number,
   ): boolean {
-    if (Guard.isEmpty(value)) {
+    if (value !== '' && Guard.isEmpty(value)) {
       throw new HttpInternalServerErrorException({
         ctx: 'Cannot check length of a value. Provided value is empty',
         code: COMMON_ERROR_CODE.SERVER_ERROR,
@@ -53,7 +53,7 @@ export class Guard {
       typeof value === 'number'
         ? Number(value).toString().length
         : value.length;
-    if (valueLength >= min && max ? valueLength <= max : true) {
+    if (valueLength >= min && (max !== undefined ? valueLength <= max : true)) {
       return true;
     }
     return false;

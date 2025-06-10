@@ -4,7 +4,7 @@ import { Entity } from '@libs/ddd/entity.base';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 export abstract class AggregateRoot<EntityProps> extends Entity<EntityProps> {
-  _domainEvents: DomainEvent[] = [];
+  private _domainEvents: DomainEvent[] = [];
 
   get domainEvents(): DomainEvent[] {
     return this._domainEvents;

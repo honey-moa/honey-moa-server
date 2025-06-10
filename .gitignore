@@ -68,3 +68,6 @@ appspec*
 
 # docker
 docker-compose.*.yaml
+
+#vscode
+.vscode/*

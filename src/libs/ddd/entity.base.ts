@@ -2,6 +2,7 @@ import { HttpInternalServerErrorException } from '@libs/exceptions/server-errors
 import { COMMON_ERROR_CODE } from '@libs/exceptions/types/errors/common/common-error-code.constant';
 import { Guard } from '@libs/guard';
 import { convertPropsToObject } from '@libs/utils/util';
+import { getTsid } from 'tsid-ts';
 
 export type AggregateID = bigint;
 
@@ -17,6 +18,10 @@ export interface CreateEntityProps<T> {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export const generateEntityId = (): AggregateID => {
+  return getTsid().toBigInt();
+};
 
 export abstract class Entity<EntityProps> {
   constructor({

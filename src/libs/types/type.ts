@@ -43,3 +43,16 @@ export type FileProps = {
   capacity: number;
   buffer: Buffer;
 };
+
+export type Exclusive<T, K extends keyof T> = {
+  [P in K]: {
+    [Q in P]: T[P];
+  } & {
+    [Q in Exclude<K, P>]?: never;
+  };
+}[K];
+
+export type Override<
+  Type,
+  NewType extends { [key in keyof Type]?: NewType[key] },
+> = Omit<Type, keyof NewType> & NewType;

@@ -3,4 +3,5 @@ import { ErrorMessage } from '@libs/types/type';
 
 export const BLOG_ERROR_MESSAGE: ErrorMessage<typeof BLOG_ERROR_CODE> = {
   [BLOG_ERROR_CODE.YOU_ALREADY_HAVE_A_BLOG]: 'You already have a blog',
+  [BLOG_ERROR_CODE.BLOG_VALIDATION_ERROR]: 'Blog validation error',
 } as const;
