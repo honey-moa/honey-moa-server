@@ -32,7 +32,7 @@ model User {
   chatMessages         ChatMessage[]
   blogPostComments     BlogPostComment[]
 
-  @@unique([email, loginType], name: "uq_user_email_login_type")
+  @@index([email, loginType], name: "idx_user_email_login_type")
   @@map("users")
 }
 
